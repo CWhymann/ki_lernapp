@@ -1,1 +1,44 @@
-<p>bias works!</p>
+<div class="max-w-3xl">
+  <h1 class="text-2xl font-bold text-cyan-300 mb-4">Bias</h1>
+
+  <p class="text-base text-slate-300 mb-4">
+    Eine KI lernt aus Texten, die Menschen geschrieben haben - inklusive aller Vorurteile und
+    Ungleichgewichte, die darin stecken. Wenn in den Trainingsdaten bestimmte Berufe häufiger mit
+    einem Geschlecht, einer Herkunft oder einer Gruppe verknüpft wurden, kann die KI dieses Muster
+    übernehmen. Das nennt man Bias.
+  </p>
+
+  <p class="text-base text-slate-300 mb-8">
+    Bias ist selten offensichtlich - er zeigt sich oft nur in kleinen Details wie Wortwahl oder
+    impliziten Annahmen. Deshalb arbeiten KI-Entwickler gezielt daran, Trainingsdaten auszugleichen
+    und Antworten zu prüfen.
+  </p>
+
+  <div class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+    <h2 class="text-lg font-semibold text-cyan-300 mb-3">Probier es aus</h2>
+    <p class="text-sm text-slate-400 mb-4">
+      Wähl einen Beruf und vergleiche eine unausgeglichene mit einer ausgeglichenen KI-Antwort auf
+      dieselbe neutrale Frage "Beschreib mir diesen Beruf".
+    </p>
+
+    <select
+      [(ngModel)]="selectedIndex"
+      class="w-full rounded-md bg-slate-900 border border-slate-700 text-slate-100 p-3 text-base focus:outline-none focus:border-cyan-400"
+    >
+      @for (example of examples; track $index) {
+        <option [value]="$index">{{ example.role }}</option>
+      }
+    </select>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+      <div class="p-4 rounded-md bg-slate-900 border border-orange-500/30">
+        <p class="text-sm text-orange-400 mb-2">Mit Bias</p>
+        <p class="text-base text-slate-200">{{ selectedExample().biasedAnswer }}</p>
+      </div>
+      <div class="p-4 rounded-md bg-slate-900 border border-cyan-500/30">
+        <p class="text-sm text-cyan-400 mb-2">Ausgeglichen</p>
+        <p class="text-base text-slate-200">{{ selectedExample().balancedAnswer }}</p>
+      </div>
+    </div>
+  </div>
+</div>
