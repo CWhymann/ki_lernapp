@@ -1,13 +1,13 @@
 <div class="max-w-3xl">
   <h1 class="text-2xl font-bold text-cyan-300 mb-4">Prompting</h1>
 
-  <p class="text-slate-300 mb-4">
+  <p class="text-base text-slate-300 mb-4">
     Ein Prompt ist deine Anfrage an eine KI. Wie du ihn formulierst, entscheidet massgeblich über
     die Qualität der Antwort. Eine KI kann nicht raten, was du meinst - sie arbeitet nur mit dem,
     was du ihr gibst.
   </p>
 
-  <p class="text-slate-300 mb-8">
+  <p class="text-base text-slate-300 mb-8">
     Wichtige Bausteine eines guten Prompts: Kontext (worum geht es), Ziel (was soll rauskommen),
     Format (Liste, Absatz, Tabelle) und Zielgruppe (für wen ist die Antwort gedacht).
   </p>
@@ -18,12 +18,24 @@
       Schreib einen Prompt, mit dem du eine KI bitten würdest, dir eine Reise zu planen.
     </p>
 
-    <textarea
-      [(ngModel)]="userPrompt"
-      rows="3"
-      class="w-full rounded-md bg-slate-900 border border-slate-700 text-slate-100 p-3 focus:outline-none focus:border-cyan-400"
-      placeholder="Dein Prompt..."
-    ></textarea>
+    <div class="relative">
+      <textarea
+        [(ngModel)]="userPrompt"
+        rows="3"
+        class="w-full rounded-md bg-slate-900 border border-slate-700 text-slate-100 p-3 pr-10 focus:outline-none focus:border-cyan-400 text-base"
+        placeholder="Dein Prompt..."
+      ></textarea>
+
+      @if (userPrompt()) {
+        <button
+          (click)="clearPrompt()"
+          class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full text-slate-400 hover:text-cyan-300 hover:bg-slate-800 transition-colors"
+          aria-label="Feld leeren"
+        >
+          ✕
+        </button>
+      }
+    </div>
 
     <button
       (click)="checkPrompt()"

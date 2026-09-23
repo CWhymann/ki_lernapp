@@ -38,4 +38,9 @@ export class Prompting {
       );
     }
   }
+
+  clearPrompt() {
+    this.userPrompt.set('');
+    this.feedback.set(null);
+  }
 }

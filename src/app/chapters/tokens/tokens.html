@@ -1,1 +1,54 @@
-<p>tokens works!</p>
+<div class="max-w-3xl">
+  <h1 class="text-2xl font-bold text-cyan-300 mb-4">Tokens</h1>
+
+  <p class="text-base text-slate-300 mb-4">
+    Eine KI liest keinen Text am Stück, sondern zerlegt ihn in sogenannte Tokens - kleine Bausteine,
+    die einzelne Wörter, Wortteile oder Satzzeichen sein können. Jeder Token wird als Zahl
+    verarbeitet, mit der die KI rechnet.
+  </p>
+
+  <p class="text-base text-slate-300 mb-8">
+    Das ist auch der Grund, warum lange Texte "mehr kosten" und warum ungewöhnliche Wörter (z. B.
+    Fachbegriffe oder Namen) manchmal seltsam verarbeitet werden - sie werden in mehr, kleinere
+    Tokens zerlegt als gebräuchliche Wörter.
+  </p>
+
+  <div class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+    <h2 class="text-lg font-semibold text-cyan-300 mb-3">Probier es aus</h2>
+    <p class="text-sm text-slate-400 mb-4">
+      Schreib einen eigenen Satz und sieh, wie er (vereinfacht) in Tokens zerlegt würde.
+    </p>
+
+    <div class="relative">
+      <textarea
+        [(ngModel)]="inputText"
+        rows="2"
+        class="w-full rounded-md bg-slate-900 border border-slate-700 text-slate-100 p-3 pr-10 focus:outline-none focus:border-cyan-400 text-base"
+        placeholder="Dein Satz..."
+      ></textarea>
+
+      @if (inputText()) {
+        <button
+          (click)="clearText()"
+          class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full text-slate-400 hover:text-cyan-300 hover:bg-slate-800 transition-colors"
+          aria-label="Feld leeren"
+        >
+          ✕
+        </button>
+      }
+    </div>
+
+    <div class="mt-4 flex flex-wrap gap-2">
+      @for (token of tokenList(); track $index) {
+        <span
+          class="px-3 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-base"
+          >{{ token }}</span
+        >
+      }
+    </div>
+
+    <p class="mt-4 text-sm text-slate-400 border-t border-slate-700 pt-4">
+      {{ wordCount() }} Wörter wurden zu {{ tokenCount() }} Tokens.
+    </p>
+  </div>
+</div>
