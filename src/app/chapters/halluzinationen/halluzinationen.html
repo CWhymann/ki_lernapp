@@ -1,1 +1,56 @@
-<p>halluzinationen works!</p>
+<div class="max-w-3xl">
+  <h1 class="text-2xl font-bold text-cyan-300 mb-4">Halluzinationen</h1>
+
+  <p class="text-base text-slate-300 mb-4">
+    Eine KI kann Dinge "erfinden", die falsch sind - aber genauso selbstbewusst klingen wie richtige
+    Aussagen. Das nennt man Halluzination. Der Grund: eine KI weiss nicht wirklich, ob etwas wahr
+    ist. Sie erzeugt Text, der statistisch plausibel klingt.
+  </p>
+
+  <p class="text-base text-slate-300 mb-8">
+    Deshalb ist es wichtig, wichtige Fakten aus KI-Antworten zu überprüfen, besonders bei Namen,
+    Daten, Zahlen und Zitaten - genau da passieren Halluzinationen am häufigsten.
+  </p>
+
+  <div class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+    <h2 class="text-lg font-semibold text-cyan-300 mb-3">Probier es aus</h2>
+    <p class="text-sm text-slate-400 mb-6">
+      Rate bei jeder Aussage, ob sie stimmt oder erfunden ist. Alle klingen bewusst gleich
+      selbstbewusst.
+    </p>
+
+    <div class="flex flex-col gap-5">
+      @for (claim of claims; track $index) {
+        <div class="border-t border-slate-700 pt-5 first:border-t-0 first:pt-0">
+          <p class="text-base text-slate-200 mb-3">{{ claim.text }}</p>
+
+          @if (!isAnswered($index)) {
+            <div class="flex gap-3">
+              <button
+                (click)="answer($index, true)"
+                class="px-4 py-2 rounded-md bg-slate-900 border border-slate-700 text-slate-200 hover:border-cyan-400 hover:text-cyan-300 transition-colors"
+              >
+                Stimmt
+              </button>
+              <button
+                (click)="answer($index, false)"
+                class="px-4 py-2 rounded-md bg-slate-900 border border-slate-700 text-slate-200 hover:border-cyan-400 hover:text-cyan-300 transition-colors"
+              >
+                Erfunden
+              </button>
+            </div>
+          } @else {
+            <p
+              class="text-base"
+              [class.text-cyan-300]="wasCorrect($index)"
+              [class.text-orange-400]="!wasCorrect($index)"
+            >
+              {{ wasCorrect($index) ? 'Richtig geraten.' : 'Falsch geraten.' }}
+              {{ claim.explanation }}
+            </p>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>
