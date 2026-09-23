@@ -12,7 +12,9 @@
     und du brauchst etwas freien Speicherplatz und RAM.
   </p>
 
-  <div class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+  <div
+    class="p-6 rounded-xl bg-slate-800/50 border border-slate-700 shadow-[0_0_25px_rgba(34,211,238,0.1)]"
+  >
     <h2 class="text-lg font-semibold text-cyan-300 mb-3">Checkliste zum Einrichten</h2>
     <p class="text-sm text-slate-400 mb-6">
       {{ doneCount() }} von {{ steps.length }} Schritten erledigt.
@@ -25,10 +27,11 @@
           class="flex items-start gap-3 text-left p-3 rounded-md border border-slate-700 hover:border-cyan-500/40 transition-colors"
         >
           <div
-            class="w-6 h-6 mt-0.5 shrink-0 rounded-md border-2 flex items-center justify-center text-sm"
+            class="w-6 h-6 mt-0.5 shrink-0 rounded-md border-2 flex items-center justify-center text-sm transition-all"
             [class.bg-cyan-400]="checked()[$index]"
             [class.border-cyan-300]="checked()[$index]"
             [class.text-slate-950]="checked()[$index]"
+            [class.shadow-\[0_0_15px_rgba\(34\,211\,238\,0\.5\)\]]="checked()[$index]"
             [class.border-slate-600]="!checked()[$index]"
           >
             @if (checked()[$index]) {

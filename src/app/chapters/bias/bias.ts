@@ -1,5 +1,4 @@
 import { Component, signal, computed } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 interface BiasExample {
   role: string;
@@ -9,7 +8,7 @@ interface BiasExample {
 
 @Component({
   selector: 'app-bias',
-  imports: [FormsModule],
+  imports: [],
   templateUrl: './bias.html',
   styleUrl: './bias.css',
 })
@@ -36,6 +35,16 @@ export class Bias {
   ];
 
   selectedIndex = signal(0);
+  dropdownOpen = signal(false);
 
   selectedExample = computed(() => this.examples[this.selectedIndex()]);
+
+  toggleDropdown() {
+    this.dropdownOpen.update((v) => !v);
+  }
+
+  selectOption(index: number) {
+    this.selectedIndex.set(index);
+    this.dropdownOpen.set(false);
+  }
 }

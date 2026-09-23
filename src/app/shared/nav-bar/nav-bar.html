@@ -1,5 +1,15 @@
+<button
+  (click)="toggleMenu()"
+  class="md:hidden fixed top-4 right-4 z-50 w-11 h-11 flex flex-col items-center justify-center gap-1.5 rounded-full bg-slate-950 border border-cyan-500/30"
+  aria-label="Menü öffnen"
+>
+  <span class="w-6 h-0.5 bg-cyan-300"></span>
+  <span class="w-6 h-0.5 bg-cyan-300"></span>
+  <span class="w-6 h-0.5 bg-cyan-300"></span>
+</button>
+
 <nav
-  class="fixed top-0 left-0 h-screen w-64 bg-slate-950 border-r border-cyan-500/20 flex flex-col p-6 z-50"
+  class="hidden md:flex fixed top-0 left-0 h-screen w-64 bg-slate-950 border-r border-cyan-500/20 flex-col p-6 z-50"
 >
   <a routerLink="/" class="mb-8 px-4 text-xl font-bold text-cyan-400 tracking-wider">KI·LERNAPP</a>
 
@@ -14,3 +24,30 @@
     }
   </div>
 </nav>
+
+@if (isOpen()) {
+  <div (click)="closeMenu()" class="md:hidden fixed inset-0 z-40 bg-black/60"></div>
+
+  <div
+    class="md:hidden fixed top-4 left-4 w-60 z-50 bg-slate-950 border border-cyan-500/30 rounded-2xl shadow-[0_0_30px_rgba(34,211,238,0.15)] flex flex-col p-6"
+  >
+    <a
+      routerLink="/"
+      (click)="closeMenu()"
+      class="mb-10 px-4 text-xl font-bold text-cyan-400 tracking-wider"
+      >KI·LERNAPP</a
+    >
+
+    <div class="flex flex-col gap-2">
+      @for (chapter of chapters; track chapter.path) {
+        <a
+          [routerLink]="chapter.path"
+          (click)="closeMenu()"
+          routerLinkActive="bg-cyan-500/10 text-cyan-300 border-cyan-400"
+          class="px-4 py-3 rounded-xl text-base text-slate-300 border border-transparent hover:text-cyan-300 hover:border-cyan-500/30 transition-colors"
+          >{{ chapter.label }}</a
+        >
+      }
+    </div>
+  </div>
+}

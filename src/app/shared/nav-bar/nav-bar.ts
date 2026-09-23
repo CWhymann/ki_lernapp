@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
@@ -8,6 +8,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './nav-bar.css',
 })
 export class NavBar {
+  isOpen = signal(false);
+
   chapters = [
     { path: '/prompting', label: 'Prompting' },
     { path: '/training', label: 'Training' },
@@ -17,4 +19,12 @@ export class NavBar {
     { path: '/neuronale-netze', label: 'Neuronale Netze' },
     { path: '/ki-einrichten', label: 'KI einrichten' },
   ];
+
+  toggleMenu() {
+    this.isOpen.update((v) => !v);
+  }
+
+  closeMenu() {
+    this.isOpen.set(false);
+  }
 }
