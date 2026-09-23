@@ -1,1 +1,52 @@
-<p>ki-einrichten works!</p>
+<div class="max-w-3xl">
+  <h1 class="text-2xl font-bold text-cyan-300 mb-4">KI einrichten</h1>
+
+  <p class="text-base text-slate-300 mb-4">
+    Du musst nicht zwingend eine Cloud-KI nutzen - es gibt Möglichkeiten, Sprachmodelle direkt auf
+    dem eigenen Rechner laufen zu lassen. Vorteil: komplette Kontrolle über deine Daten, keine
+    laufenden Kosten, funktioniert offline.
+  </p>
+
+  <p class="text-base text-slate-300 mb-8">
+    Nachteil: lokale Modelle sind meist kleiner und weniger leistungsfähig als grosse Cloud-Modelle,
+    und du brauchst etwas freien Speicherplatz und RAM.
+  </p>
+
+  <div class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+    <h2 class="text-lg font-semibold text-cyan-300 mb-3">Checkliste zum Einrichten</h2>
+    <p class="text-sm text-slate-400 mb-6">
+      {{ doneCount() }} von {{ steps.length }} Schritten erledigt.
+    </p>
+
+    <div class="flex flex-col gap-4">
+      @for (step of steps; track $index) {
+        <button
+          (click)="toggle($index)"
+          class="flex items-start gap-3 text-left p-3 rounded-md border border-slate-700 hover:border-cyan-500/40 transition-colors"
+        >
+          <div
+            class="w-6 h-6 mt-0.5 shrink-0 rounded-md border-2 flex items-center justify-center text-sm"
+            [class.bg-cyan-400]="checked()[$index]"
+            [class.border-cyan-300]="checked()[$index]"
+            [class.text-slate-950]="checked()[$index]"
+            [class.border-slate-600]="!checked()[$index]"
+          >
+            @if (checked()[$index]) {
+              ✓
+            }
+          </div>
+          <div>
+            <p
+              class="text-base font-medium"
+              [class.text-cyan-300]="checked()[$index]"
+              [class.text-slate-200]="!checked()[$index]"
+            >
+              {{ step.title }}
+            </p>
+            <p class="text-sm text-slate-400 mt-1">{{ step.description }}</p>
+          </div>
+        </button>
+      }
+    </div>
+  </div>
+</div>
