@@ -1,1 +1,38 @@
-<p>training works!</p>
+<div class="max-w-3xl">
+  <h1 class="text-2xl font-bold text-cyan-300 mb-4">Training</h1>
+
+  <p class="text-slate-300 mb-4">
+    Eine KI "lernt" nicht wie ein Mensch, sondern erkennt statistische Muster in riesigen Mengen an
+    Beispieldaten. Je mehr passende und vielfältige Daten sie sieht, desto besser kann sie Muster
+    verallgemeinern - bis zu einem gewissen Punkt.
+  </p>
+
+  <p class="text-slate-300 mb-8">
+    Wichtig: Mehr Daten heisst nicht automatisch bessere Ergebnisse. Schlechte, einseitige oder
+    fehlerhafte Daten führen zu einer schlechten KI, egal wie viele es sind. Qualität schlägt
+    Quantität.
+  </p>
+
+  <div class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+    <h2 class="text-lg font-semibold text-cyan-300 mb-3">Probier es aus</h2>
+    <p class="text-sm text-slate-400 mb-4">
+      Stell dir vor, du trainierst eine KI. Bewege den Regler und beobachte, wie sich die
+      Trefferquote mit mehr Trainingsdaten verändert.
+    </p>
+
+    <input type="range" min="1" max="100" [(ngModel)]="dataAmount" class="w-full accent-cyan-400" />
+
+    <div class="flex justify-between text-sm text-slate-500 mt-1">
+      <span>wenig Daten</span>
+      <span>viele Daten</span>
+    </div>
+    <div class="mt-6">
+      <div class="w-full h-3 rounded-full bg-slate-900 overflow-hidden">
+        <div class="h-full bg-cyan-400 transition-all" [style.width.%]="accuracy()"></div>
+      </div>
+      <p class="text-sm text-slate-300 mt-2">Trefferquote: {{ accuracy() }}%</p>
+    </div>
+
+    <p class="mt-4 text-base text-slate-200 border-t border-slate-700 pt-4">{{ qualityNote() }}</p>
+  </div>
+</div>
