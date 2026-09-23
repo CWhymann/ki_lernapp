@@ -1,1 +1,39 @@
-<p>prompting works!</p>
+<div class="max-w-3xl">
+  <h1 class="text-2xl font-bold text-cyan-300 mb-4">Prompting</h1>
+
+  <p class="text-slate-300 mb-4">
+    Ein Prompt ist deine Anfrage an eine KI. Wie du ihn formulierst, entscheidet massgeblich über
+    die Qualität der Antwort. Eine KI kann nicht raten, was du meinst - sie arbeitet nur mit dem,
+    was du ihr gibst.
+  </p>
+
+  <p class="text-slate-300 mb-8">
+    Wichtige Bausteine eines guten Prompts: Kontext (worum geht es), Ziel (was soll rauskommen),
+    Format (Liste, Absatz, Tabelle) und Zielgruppe (für wen ist die Antwort gedacht).
+  </p>
+
+  <div class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+    <h2 class="text-lg font-semibold text-cyan-300 mb-3">Probier es aus</h2>
+    <p class="text-sm text-slate-400 mb-4">
+      Schreib einen Prompt, mit dem du eine KI bitten würdest, dir eine Reise zu planen.
+    </p>
+
+    <textarea
+      [(ngModel)]="userPrompt"
+      rows="3"
+      class="w-full rounded-md bg-slate-900 border border-slate-700 text-slate-100 p-3 focus:outline-none focus:border-cyan-400"
+      placeholder="Dein Prompt..."
+    ></textarea>
+
+    <button
+      (click)="checkPrompt()"
+      class="mt-3 px-4 py-2 rounded-md bg-cyan-500/20 border border-cyan-400 text-cyan-300 hover:bg-cyan-500/30 transition-colors"
+    >
+      Prompt prüfen
+    </button>
+
+    @if (feedback()) {
+      <p class="mt-4 text-sm text-slate-200 border-t border-slate-700 pt-4">{{ feedback() }}</p>
+    }
+  </div>
+</div>
