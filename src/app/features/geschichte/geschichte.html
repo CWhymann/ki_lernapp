@@ -1,0 +1,105 @@
+<section
+  class="relative isolate min-h-dvh bg-slate-950 font-mono text-slate-100"
+  [class]="'story story--' + szene().ton"
+>
+  <div class="story-grid" aria-hidden="true"></div>
+
+  <div
+    class="relative z-10 mx-auto flex min-h-dvh w-full max-w-5xl flex-col gap-6 px-6 py-6 md:px-12 md:py-10"
+  >
+    <header class="flex items-center justify-between gap-4 text-sm md:text-base">
+      <a routerLink="/" class="story-link">&larr; Start</a>
+      <p class="text-slate-400">// SZENE {{ index() + 1 }} / {{ szenen.length }}</p>
+    </header>
+
+    <div class="flex gap-2" aria-hidden="true">
+      @for (eintrag of szenen; track eintrag.id; let i = $index) {
+        <span class="seg" [class.seg--done]="i <= index()"></span>
+      }
+    </div>
+
+    <main class="flex flex-1 flex-col justify-center py-6" aria-live="polite">
+      @for (eintrag of szenen; track eintrag.id; let i = $index) {
+        @if (i === index()) {
+          <article class="scene flex flex-col gap-6">
+            <p class="label text-sm font-bold uppercase tracking-widest md:text-base">
+              // {{ eintrag.kapitel }}
+            </p>
+
+            <h1 class="title">{{ eintrag.titel }}</h1>
+
+            <div
+              class="flex max-w-3xl flex-col gap-4 text-base leading-relaxed text-slate-200 md:text-xl"
+            >
+              @for (absatz of eintrag.erzaehlung; track absatz) {
+                <p>{{ absatz }}</p>
+              }
+            </div>
+
+            @if (eintrag.video) {
+              <aside class="video-box max-w-3xl">
+                <p class="video-tag">Laut Video</p>
+                <p class="mt-2 text-base leading-relaxed text-slate-200 md:text-lg">
+                  {{ eintrag.video }}
+                </p>
+              </aside>
+            }
+
+            <aside class="term max-w-3xl">
+              <p class="term-name">{{ eintrag.begriff.name }}</p>
+              <p class="mt-1 text-base leading-relaxed text-slate-300">
+                {{ eintrag.begriff.text }}
+              </p>
+            </aside>
+
+            @if (eintrag.quellen) {
+              <nav class="max-w-3xl" aria-label="Quellen">
+                <p class="term-name">Quellen</p>
+                <ul class="mt-2 flex flex-col gap-2 text-base">
+                  @for (quelle of eintrag.quellen; track quelle.url) {
+                    <li>
+                      <a
+                        [href]="quelle.url"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="story-link"
+                        >{{ quelle.label }}</a
+                      >
+                    </li>
+                  }
+                </ul>
+              </nav>
+            }
+          </article>
+        }
+      }
+    </main>
+
+    <footer class="flex flex-col-reverse gap-4 sm:flex-row sm:justify-between">
+      <button
+        type="button"
+        (click)="zurueck()"
+        [disabled]="istErste()"
+        class="inline-flex min-h-12 items-center justify-center border border-cyan-400 bg-slate-950/60 px-7 py-3 text-base font-bold uppercase tracking-widest text-cyan-300 transition-shadow hover:shadow-[0_0_28px_rgba(34,211,238,0.6)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
+      >
+        Zurück
+      </button>
+
+      @if (istLetzte()) {
+        <a
+          routerLink="/dashboard"
+          class="inline-flex min-h-12 items-center justify-center border border-emerald-400 bg-emerald-400 px-7 py-3 text-base font-bold uppercase tracking-widest text-slate-950 shadow-[0_0_24px_rgba(57,255,136,0.5)] transition-shadow hover:shadow-[0_0_42px_rgba(57,255,136,0.85)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+          >Zum Dashboard</a
+        >
+      } @else {
+        <button
+          type="button"
+          (click)="weiter()"
+          class="inline-flex min-h-12 items-center justify-center border border-emerald-400 bg-emerald-400 px-7 py-3 text-base font-bold uppercase tracking-widest text-slate-950 shadow-[0_0_24px_rgba(57,255,136,0.5)] transition-shadow hover:shadow-[0_0_42px_rgba(57,255,136,0.85)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+        >
+          Weiter
+        </button>
+      }
+    </footer>
+  </div>
+</section>

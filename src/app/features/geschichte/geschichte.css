@@ -1,0 +1,139 @@
+:host {
+  --neon-green: #39ff88;
+  --neon-pink: #ff2d95;
+  --neon-cyan: #22d3ee;
+  display: block;
+}
+
+.story {
+  --tone: var(--neon-cyan);
+}
+
+.story--green {
+  --tone: var(--neon-green);
+}
+
+.story--pink {
+  --tone: var(--neon-pink);
+}
+
+.story--cyan {
+  --tone: var(--neon-cyan);
+}
+
+.story-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(
+      ellipse at 50% 0%,
+      color-mix(in srgb, var(--tone) 22%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+  background-size:
+    auto,
+    48px 48px,
+    48px 48px;
+}
+
+.story-link {
+  color: var(--neon-cyan);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.story-link:hover {
+  color: #fff;
+}
+
+.story-link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.seg {
+  flex: 1;
+  height: 0.25rem;
+  background: rgba(148, 163, 184, 0.25);
+  transition:
+    background 0.3s,
+    box-shadow 0.3s;
+}
+
+.seg--done {
+  background: var(--tone);
+  box-shadow: 0 0 10px var(--tone);
+}
+
+.scene {
+  animation: scene-in 0.45s ease-out both;
+}
+
+.label {
+  margin: 0;
+  color: var(--tone);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.875rem, 6vw, 4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  overflow-wrap: break-word;
+  color: #fff;
+  text-shadow: 0 0 14px color-mix(in srgb, var(--tone) 70%, transparent);
+}
+
+.video-box {
+  padding: 1rem 1.25rem;
+  border: 1px dashed var(--neon-pink);
+  background: rgba(255, 45, 149, 0.08);
+}
+
+.video-tag,
+.term-name {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.video-tag {
+  color: #f9a8d4;
+}
+
+.term {
+  padding: 1rem 1.25rem;
+  border-left: 3px solid var(--tone);
+  background: rgba(2, 6, 23, 0.7);
+}
+
+.term-name {
+  color: var(--tone);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene {
+    animation: none;
+  }
+
+  .seg {
+    transition: none;
+  }
+}
+
+@keyframes scene-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
