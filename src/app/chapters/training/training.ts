@@ -10,9 +10,11 @@ import { FormsModule } from '@angular/forms';
 export class Training {
   dataAmount = signal(10);
 
+  /**
+   * Simuliert abnehmenden Grenznutzen: viel Zuwachs am Anfang, Abflachen bei hohen Werten.
+   */
   accuracy = computed(() => {
     const amount = this.dataAmount();
-    // simuliert abnehmenden Grenznutzen: viel Zuwachs am Anfang, Abflachen bei hohen Werten
     const value = 100 * (1 - Math.exp(-amount / 35));
     return Math.round(value);
   });

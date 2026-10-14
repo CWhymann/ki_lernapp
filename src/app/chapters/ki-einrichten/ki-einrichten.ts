@@ -72,8 +72,6 @@ export class KiEinrichten {
   constructor() {
     this.destroyRef.onDestroy(() => (this.destroyed = true));
   }
-
-  // ---------- 1: Cloud oder lokal ----------
   offline = signal(false);
 
   comparison: ComparisonRow[] = [
@@ -102,8 +100,6 @@ export class KiEinrichten {
   toggleOffline() {
     this.offline.update((value) => !value);
   }
-
-  // ---------- 2: Hardware-Labor ----------
   ram = signal(16);
   vram = signal(8);
   quantIndex = signal(2);
@@ -234,8 +230,6 @@ export class KiEinrichten {
   onVram(event: Event) {
     this.vram.set(Number((event.target as HTMLInputElement).value));
   }
-
-  // ---------- 3: Installations-Mission ----------
   steps: TerminalStep[] = [
     {
       title: 'Ollama installieren und prüfen',
@@ -342,8 +336,6 @@ export class KiEinrichten {
   private sleep(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
-
-  // ---------- 4: API-Snippet ----------
   apiSnippet = `const response = await fetch('http://localhost:11434/api/generate', {
   method: 'POST',
   body: JSON.stringify({ model: 'llama3.2', prompt: 'Hallo!', stream: false }),
@@ -393,8 +385,6 @@ console.log(data.response);`;
         'Die Adresse für den eigenen Rechner. Anfragen an localhost verlassen deinen Rechner nicht.',
     },
   ];
-
-  // ---------- 5: Quiz ----------
   quiz: QuizQuestion[] = [
     {
       question: 'Du schickst eine Frage an dein lokales Modell. Wohin gehen deine Daten?',

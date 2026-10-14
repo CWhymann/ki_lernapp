@@ -38,12 +38,12 @@
         <div (click)="toggleDropdown()" class="fixed inset-0 z-10"></div>
 
         <div
-          class="absolute mt-2 w-full rounded-2xl bg-slate-900 border border-cyan-500/30 shadow-[0_0_25px_rgba(34,211,238,0.15)] overflow-hidden z-20"
+          class="absolute mt-2 w-full rounded-2xl bg-slate-900 border border-cyan-500/30 shadow-[0_0_25px_rgba(34,211,238,0.15)] z-20"
         >
           @for (example of examples; track $index) {
             <button
               (click)="selectOption($index)"
-              class="w-full text-left px-4 py-3 text-base transition-colors"
+              class="w-full text-left px-4 py-3 text-base transition-colors first:rounded-t-2xl last:rounded-b-2xl"
               [class.bg-cyan-500/10]="$index === selectedIndex()"
               [class.text-cyan-300]="$index === selectedIndex()"
               [class.text-slate-300]="$index !== selectedIndex()"

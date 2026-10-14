@@ -29,8 +29,11 @@
       <span>viele Daten</span>
     </div>
     <div class="mt-6">
-      <div class="w-full h-3 rounded-full bg-slate-900 overflow-hidden">
-        <div class="h-full bg-cyan-400 transition-all" [style.width.%]="accuracy()"></div>
+      <div class="w-full h-3 rounded-full bg-slate-900">
+        <div
+          class="h-full rounded-full bg-cyan-400 transition-all"
+          [style.width.%]="accuracy()"
+        ></div>
       </div>
       <p class="text-sm text-slate-300 mt-2">Trefferquote: {{ accuracy() }}%</p>
     </div>
