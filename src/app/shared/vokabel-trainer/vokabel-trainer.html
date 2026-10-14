@@ -55,7 +55,9 @@
         @if (!umgedreht()) {
           <span class="karten-inhalt flex flex-col gap-2">
             <span class="text-sm text-slate-400">Begriff</span>
-            <span class="text-2xl font-bold text-cyan-200 break-words">{{ karte.begriff }}</span>
+            <span class="text-2xl font-bold text-cyan-200 wrap-break-word">{{
+              karte.begriff
+            }}</span>
           </span>
         } @else {
           <span class="karten-inhalt flex flex-col gap-2">
