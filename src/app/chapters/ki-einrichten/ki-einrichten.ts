@@ -1,4 +1,5 @@
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import { Glossary, GlossaryTerm } from '../../shared/glossary/glossary';
 
 interface ComparisonRow {
   topic: string;
@@ -60,7 +61,7 @@ interface QuizQuestion {
 
 @Component({
   selector: 'app-ki-einrichten',
-  imports: [],
+  imports: [Glossary],
   templateUrl: './ki-einrichten.html',
   styleUrl: './ki-einrichten.css',
 })
@@ -349,6 +350,49 @@ export class KiEinrichten {
 });
 const data = await response.json();
 console.log(data.response);`;
+
+  glossary: GlossaryTerm[] = [
+    {
+      name: 'Parameter',
+      explanation:
+        'Die Zahlen, in denen ein Modell sein Wissen speichert. „8 Mrd.“ heißt 8 Milliarden davon. Mehr Parameter bedeuten meist bessere Antworten, aber auch mehr Speicherbedarf.',
+    },
+    {
+      name: 'Quantisierung',
+      explanation:
+        'Die Zahlen im Modell werden gröber gespeichert, zum Beispiel mit 4 statt 16 Bit. Das Modell wird dadurch viel kleiner und verliert nur etwas Genauigkeit.',
+    },
+    {
+      name: 'RAM',
+      explanation:
+        'Der Arbeitsspeicher deines Rechners. Dort liegt alles, womit gerade gearbeitet wird, auch ein geladenes KI-Modell.',
+    },
+    {
+      name: 'VRAM',
+      explanation:
+        'Der Speicher deiner Grafikkarte. Läuft ein Modell komplett darin, ist es deutlich schneller als im normalen RAM.',
+    },
+    {
+      name: 'Ollama',
+      explanation:
+        'Ein kostenloses Programm, das KI-Modelle herunterlädt und auf deinem Rechner startet.',
+    },
+    {
+      name: 'Terminal',
+      explanation:
+        'Ein Textfenster, in dem du Befehle eintippst, statt mit der Maus zu klicken. Unter Windows heißt es PowerShell.',
+    },
+    {
+      name: 'API',
+      explanation:
+        'Eine Schnittstelle, über die ein Programm mit einem anderen spricht. So kann deine App Fragen an das Modell schicken und die Antwort zurückbekommen.',
+    },
+    {
+      name: 'localhost',
+      explanation:
+        'Die Adresse für den eigenen Rechner. Anfragen an localhost verlassen deinen Rechner nicht.',
+    },
+  ];
 
   // ---------- 5: Quiz ----------
   quiz: QuizQuestion[] = [

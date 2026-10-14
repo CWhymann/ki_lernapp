@@ -1,0 +1,23 @@
+<section class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+  <h2 class="text-xl font-semibold text-cyan-300 mb-2">Fachbegriffe kurz erklärt</h2>
+  <p class="text-sm text-slate-400 mb-4">Klick auf einen Begriff, um seine Erklärung zu öffnen.</p>
+
+  <div class="grid gap-3 sm:grid-cols-2">
+    @for (term of terms(); track term.name; let i = $index) {
+      <button
+        (click)="toggle(i)"
+        [attr.aria-expanded]="openIndex() === i"
+        [class]="
+          openIndex() === i
+            ? 'text-left p-4 rounded-md border-2 border-cyan-300 bg-cyan-400/10 shadow-[0_0_15px_rgba(34,211,238,0.3)] transition-all'
+            : 'text-left p-4 rounded-md border border-slate-700 hover:border-cyan-500/50 transition-all'
+        "
+      >
+        <span class="text-base font-semibold text-cyan-200">{{ term.name }}</span>
+        @if (openIndex() === i) {
+          <span class="block text-base text-slate-300 mt-2">{{ term.explanation }}</span>
+        }
+      </button>
+    }
+  </div>
+</section>
