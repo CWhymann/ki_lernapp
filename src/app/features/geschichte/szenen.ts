@@ -1,22 +1,15 @@
-/** Farbton einer Szene. */
 export type Ton = 'green' | 'pink' | 'cyan';
 
-/** Ein Fachbegriff mit kurzer Erklärung. */
 export interface Begriff {
   name: string;
   text: string;
 }
 
-/** Eine Quelle mit Link. */
 export interface Quelle {
   label: string;
   url: string;
 }
 
-/**
- * Eine Szene der Geschichte.
- * `erzaehlung` enthält, was Berichte bestätigen, `video` die Darstellung aus dem Video.
- */
 export interface Szene {
   id: string;
   kapitel: string;
@@ -28,7 +21,6 @@ export interface Szene {
   quellen?: Quelle[];
 }
 
-/** Alle Szenen der Geschichte in der Reihenfolge, in der sie erzählt werden. */
 export const SZENEN: Szene[] = [
   {
     id: 'agenten',

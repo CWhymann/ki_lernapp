@@ -2,10 +2,6 @@ import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SZENEN } from './szenen';
 
-/**
- * Einstiegsgeschichte über den Ausbruch von KI-Agenten, Szene für Szene durchklickbar.
- * Mit den Pfeiltasten links und rechts lässt sich ebenfalls blättern.
- */
 @Component({
   selector: 'app-geschichte',
   imports: [RouterLink],
@@ -23,12 +19,12 @@ export class Geschichte {
   readonly istErste = computed(() => this.index() === 0);
   readonly istLetzte = computed(() => this.index() === this.szenen.length - 1);
 
-  /** Geht zur nächsten Szene, an der letzten bleibt die Anzeige stehen. */
+  /** Moves to the next scene and stays on the last one. */
   weiter(): void {
     this.index.update((aktuell) => Math.min(aktuell + 1, this.szenen.length - 1));
   }
 
-  /** Geht zur vorherigen Szene, an der ersten bleibt die Anzeige stehen. */
+  /** Moves to the previous scene and stays on the first one. */
   zurueck(): void {
     this.index.update((aktuell) => Math.max(aktuell - 1, 0));
   }

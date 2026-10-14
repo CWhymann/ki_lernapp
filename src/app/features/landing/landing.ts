@@ -8,54 +8,31 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-/** Farbton einer Kachel. */
 type Tone = 'green' | 'pink' | 'cyan';
 
-/** Eine Kachel mit Text und Farbton. */
 interface Tile {
   text: string;
   tone: Tone;
 }
 
-/** Eine laufende Reihe aus Kacheln mit Richtung und Dauer eines Durchlaufs in Sekunden. */
 interface Lane {
   tiles: Tile[];
   direction: 'left' | 'right';
   duration: number;
 }
 
-/** Zeichen, die im Matrix-Regen fallen. */
 const GLYPHS =
   'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789<>/{}[]=+*';
-
-/** Farben der Regenspalten, Grün ist am häufigsten. */
 const RAIN_COLORS = ['#39ff88', '#39ff88', '#39ff88', '#22d3ee', '#ff2d95'];
-
-/** Schriftgröße und Spaltenbreite des Regens in Pixeln. */
 const GLYPH_SIZE = 16;
-
-/** Mindestabstand zwischen zwei Regen-Bildern in Millisekunden. */
 const FRAME_MS = 50;
-
-/** Halbtransparente Deckschicht, die den Regen ausblendet. */
 const FADE = 'rgba(2, 6, 23, 0.1)';
-
-/** Hintergrundfarbe der Zeichenfläche. */
 const BACKGROUND = '#020617';
-
-/** Anzahl vorab gezeichneter Bilder, wenn Bewegung reduziert ist. */
 const STATIC_FRAMES = 80;
-
-/** Anzahl der Reihen mit Kacheln. */
 const LANE_COUNT = 11;
-
-/** Anzahl unterschiedlicher Kacheln pro Reihe. */
 const TILES_PER_LANE = 6;
-
-/** Wie oft die Kacheln einer Reihe hintereinander stehen, damit der Durchlauf lückenlos ist. */
 const COPY_COUNT = 4;
 
-/** Alle Kacheltexte der Landing Page. */
 const TILES: Tile[] = [
   { text: 'STEALTH-MODUS AKTIV', tone: 'green' },
   { text: 'FLAGGE GEFUNDEN', tone: 'green' },
@@ -77,9 +54,6 @@ const TILES: Tile[] = [
   { text: 'AUFSEHER: SCORER', tone: 'cyan' },
 ];
 
-/**
- * Landing Page der KI-LernApp mit Matrix-Regen und schräg laufenden Kacheln.
- */
 @Component({
   selector: 'app-landing',
   imports: [RouterLink],
@@ -108,8 +82,8 @@ export class Landing {
   }
 
   /**
-   * Startet den Matrix-Regen auf der Zeichenfläche und räumt beim Verlassen der Seite auf.
-   * Bei reduzierter Bewegung wird nur ein Standbild gezeichnet.
+   * Starts the matrix rain on the canvas and cleans up when the page is left.
+   * With reduced motion enabled, only a still frame is drawn.
    */
   private startRain(): void {
     const canvas = this.canvas().nativeElement;
