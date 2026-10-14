@@ -1,0 +1,88 @@
+<section class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+  <h2 class="text-lg font-semibold text-cyan-300 mb-3">{{ titel() }}</h2>
+
+  @if (!gestartet()) {
+    <p class="text-sm text-slate-400 mb-4">
+      Lies den Begriff, dreh die Karte um und schätze dich selbst ein. Begriffe, die du noch nicht
+      sicher kannst, kommen erneut.
+    </p>
+    <button
+      type="button"
+      (click)="start()"
+      class="px-4 py-2 rounded-md bg-cyan-500/20 border border-cyan-400 text-cyan-300 hover:bg-cyan-500/30 transition-colors"
+    >
+      Trainer starten
+    </button>
+  } @else if (fertig()) {
+    <p class="text-2xl font-bold text-cyan-300">Alle {{ karten().length }} Begriffe gewusst.</p>
+    <button
+      type="button"
+      (click)="start()"
+      class="mt-4 px-4 py-2 rounded-md border border-slate-600 text-base text-slate-300 hover:border-cyan-500/50 transition-colors"
+    >
+      Nochmal üben
+    </button>
+  } @else {
+    @if (aktuelle(); as karte) {
+      <p class="text-sm text-slate-400 mb-2" aria-live="polite">
+        Karte {{ index() + 1 }} von {{ runde().length }} · Gewusst: {{ gewusst().length }} von
+        {{ karten().length }}
+      </p>
+      <div
+        class="h-2 w-full rounded-full bg-slate-700 mb-4"
+        role="progressbar"
+        aria-label="Fortschritt"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        [attr.aria-valuenow]="fortschritt()"
+      >
+        <div
+          class="h-2 rounded-full bg-cyan-400 transition-all"
+          [style.width.%]="fortschritt()"
+        ></div>
+      </div>
+
+      <button
+        type="button"
+        (click)="umdrehen()"
+        class="w-full min-h-40 p-6 rounded-xl border-2 flex items-center justify-center text-center transition-colors"
+        [class]="
+          umgedreht()
+            ? 'border-cyan-300 bg-cyan-400/10'
+            : 'border-slate-600 hover:border-cyan-500/50'
+        "
+      >
+        @if (!umgedreht()) {
+          <span class="karten-inhalt flex flex-col gap-2">
+            <span class="text-sm text-slate-400">Begriff</span>
+            <span class="text-2xl font-bold text-cyan-200 break-words">{{ karte.begriff }}</span>
+          </span>
+        } @else {
+          <span class="karten-inhalt flex flex-col gap-2">
+            <span class="text-sm text-slate-400">Erklärung</span>
+            <span class="text-base text-slate-100">{{ karte.erklaerung }}</span>
+          </span>
+        }
+      </button>
+
+      @if (umgedreht()) {
+        <div class="mt-4 flex flex-col gap-3 sm:flex-row">
+          <button
+            type="button"
+            (click)="bewerten(true)"
+            class="flex-1 px-4 py-2 rounded-md border-2 border-emerald-400 bg-emerald-400/10 text-base font-semibold text-emerald-300"
+          >
+            Gewusst
+          </button>
+          <button
+            type="button"
+            (click)="bewerten(false)"
+            class="flex-1 px-4 py-2 rounded-md border-2 border-amber-400 bg-amber-400/10 text-base font-semibold text-amber-300"
+          >
+            Noch üben
+          </button>
+        </div>
+      }
+    }
+  }
+</section>
