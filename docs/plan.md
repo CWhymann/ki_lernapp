@@ -7,12 +7,16 @@
 - Kapitel "KI einrichten" ist überarbeitet (Hardware-Labor, Installations-Mission, Quiz)
 - Glossar-Komponente unter src/app/shared/glossary ist eingebunden
 
+## Erledigt
+
+- ki-einrichten.ts: Zeilen mit normalen Kommentaren entfernt (Regel: nur JSDoc in JS/TS-Dateien)
+- ki-einrichten.css: Inhalt gegen die Regeln geprüft (kein !important, keine Kommentare)
+- Schriftgrößen in allen Kapiteln auf mindestens 14px geprüft
+- Overflow in allen Kapiteln geprüft, overflow-hidden entfernt
+
 ## Offene Punkte
 
-- ki-einrichten.ts: Zeilen mit normalen Kommentaren entfernen (Regel: nur JSDoc in JS/TS-Dateien)
-- ki-einrichten.css: Inhalt gegen die Regeln prüfen (keine Symptom-Lösungen, kein !important)
-- Schriftgrößen in allen Kapiteln auf mindestens 14px prüfen
-- Overflow in allen Kapiteln prüfen, overflow-hidden entfernen
+- Keine
 
 ## Später
 
