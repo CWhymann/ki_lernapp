@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { Landing } from './features/landing/landing';
 import { Dashboard } from './features/dashboard/dashboard';
+import { Geschichte } from './features/geschichte/geschichte';
 import { Shell } from './shared/shell/shell';
 import { Prompting } from './chapters/prompting/prompting';
 import { Training } from './chapters/training/training';
@@ -12,6 +13,7 @@ import { KiEinrichten } from './chapters/ki-einrichten/ki-einrichten';
 
 export const routes: Routes = [
   { path: '', component: Landing, pathMatch: 'full' },
+  { path: 'geschichte', component: Geschichte },
   {
     path: '',
     component: Shell,
