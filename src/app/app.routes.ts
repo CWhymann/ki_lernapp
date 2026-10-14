@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
+import { Landing } from './features/landing/landing';
 import { Dashboard } from './features/dashboard/dashboard';
+import { Shell } from './shared/shell/shell';
 import { Prompting } from './chapters/prompting/prompting';
 import { Training } from './chapters/training/training';
 import { Tokens } from './chapters/tokens/tokens';
@@ -9,12 +11,19 @@ import { NeuronaleNetze } from './chapters/neuronale-netze/neuronale-netze';
 import { KiEinrichten } from './chapters/ki-einrichten/ki-einrichten';
 
 export const routes: Routes = [
-  { path: '', component: Dashboard },
-  { path: 'prompting', component: Prompting },
-  { path: 'training', component: Training },
-  { path: 'tokens', component: Tokens },
-  { path: 'halluzinationen', component: Halluzinationen },
-  { path: 'bias', component: Bias },
-  { path: 'neuronale-netze', component: NeuronaleNetze },
-  { path: 'ki-einrichten', component: KiEinrichten },
+  { path: '', component: Landing, pathMatch: 'full' },
+  {
+    path: '',
+    component: Shell,
+    children: [
+      { path: 'dashboard', component: Dashboard },
+      { path: 'prompting', component: Prompting },
+      { path: 'training', component: Training },
+      { path: 'tokens', component: Tokens },
+      { path: 'halluzinationen', component: Halluzinationen },
+      { path: 'bias', component: Bias },
+      { path: 'neuronale-netze', component: NeuronaleNetze },
+      { path: 'ki-einrichten', component: KiEinrichten },
+    ],
+  },
 ];
