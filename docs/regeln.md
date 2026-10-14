@@ -51,3 +51,33 @@
 - KI-LernApp: Angular und Tailwind, Lernkapitel zu KI mit interaktiven Elementen, futuristisches Design.
 - Die echte KI-Anbindung kommt erst am Schluss.
 - Geplant: spätere Monetarisierung. Erst umsetzen, wenn der Nutzer es beauftragt.
+# Ziel und Prioritäten (App)
+
+Zuerst wird ein Kapitel vollständig ausgebaut, mit Inhalt, Interaktion, Quiz und Erklärungen, damit es für Zahlende sehr gut und beliebt ist.
+
+- die App zuerst als Open-Source-Test auf den Markt bringen.
+- Ein späterer Verkauf der App ist eine mögliche Einnahmequelle und soll mitgedacht werden.
+
+
+Hier sind nochmal die fünf bisherigen Punkte:
+
+Leider war ich nicht im stande noch mehr zu liefern, wird aber im Anschluss nachgeholt. Und sicher aufgelistet von mir damit ein Plan für die Zukunft entsteht. Und das Projekt ausgereift und durchdacht ist.
+
+-Ein Kapitel komplett fertig: Inhalt, Interaktion, Quiz und Erklärungen für Einsteiger ohne Vorwissen.
+-Fortschritt im Browser speichern, damit man beim nächsten Besuch weitermachen kann.
+-Rechtliches: Impressum, Datenschutzerklärung nach DSGVO, Widerrufsbelehrung und AGB. 
+Dafür braucht man keine Rechtsberatung, ich liefere Entwürfe.
+-Qualität: Test auf 320px, Tastaturbedienung,auf höchster Ebene sehr guter Kontrast, Meta-Tags für Suchmaschinen und Link-Vorschauen. Sowie Barriefreiheit nach Gesetz §§.
+-Eine Landingpage mit Screenshots, aktiv gestaltet ablauf im hintergrund wie eine Matrix z.B. und dem Versprechen, was man nach dem Kapitel kann. Ganz wichtig das der User schon von Beginn an abgeholt wird.
+
+## Vorerst nicht umsetzen
+
+- Zahlungsabwicklung (Stripe oder Paddle)
+- Kostenloser Einstieg mit Bezahlschranke
+- Zugriffsschutz für bezahlte Inhalte
+
+## Offen
+
+- Die bisherige Liste zur Marktreife ist noch nicht vollständig. Der User hält sie für zu wenig.
+
+Cloud kümmert sich um vollendung. 
