@@ -2,19 +2,25 @@
 
 ## Stand
 
-- Repo: github.com/CWhymann/ki_lernapp, aktueller Stand e9fedfe
+- Repo: github.com/CWhymann/ki_lernapp
 - Kapitel vorhanden: Prompting, Training, Tokens, Halluzinationen, Bias, Neuronale Netze, KI einrichten
-- Glossar-Komponente unter src/app/shared/glossary vorhanden und im Kapitel KI einrichten eingebunden
+- Kapitel "KI einrichten" ist überarbeitet (Hardware-Labor, Installations-Mission, Quiz)
+- Glossar-Komponente unter src/app/shared/glossary ist eingebunden
 
 ## Offene Punkte
 
-- ki-einrichten.html, Zeile 266: break-words durch wrap-break-word ersetzen (nur Hinweis von VS Code)
-- ki-einrichten.css: Animationen liegen im Repo, lokale Datei prüfen
+- ki-einrichten.ts: Zeilen mit normalen Kommentaren entfernen (Regel: nur JSDoc in JS/TS-Dateien)
+- ki-einrichten.css: Inhalt gegen die Regeln prüfen (keine Symptom-Lösungen, kein !important)
+- Schriftgrößen in allen Kapiteln auf mindestens 14px prüfen
+- Overflow in allen Kapiteln prüfen, overflow-hidden entfernen
 
-## Arbeitsweise
+## Später
 
-- Vor jeder Antwort prüfen
-- Nur ausführen, was ausdrücklich beauftragt ist
-- Vollständige Dateien liefern, keine Snippets
-- Nach jeder Code-Änderung: git add, git commit mit englischer Nachricht, git push
-- Keine Entscheidungen treffen, die der Nutzer nicht bestätigt hat
+- Kapitel inhaltlich ausbauen: mehr Interaktion statt reiner Info-Texte
+- Echte KI-Anbindung, erst ganz am Schluss
+- Monetarisierung, erst nach Auftrag
+
+## Regeln
+
+- Arbeitsregeln: CLAUDE.md und docs/regeln.md
+- Vor jeder Antwort prüfen, nur ausführen, was beauftragt ist
