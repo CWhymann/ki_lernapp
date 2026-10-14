@@ -1,5 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Vokabel, VokabelTrainer } from '../../shared/vokabel-trainer/vokabel-trainer';
 
 interface QuizQuestion {
   question: string;
@@ -15,7 +16,7 @@ interface Example {
 
 @Component({
   selector: 'app-prompting',
-  imports: [FormsModule],
+  imports: [FormsModule, VokabelTrainer],
   templateUrl: './prompting.html',
   styleUrl: './prompting.css',
 })
@@ -61,6 +62,42 @@ export class Prompting {
     {
       id: 'stark',
       prompt: 'Schreib für Kinder von 8 bis 10 Jahren drei kurze Sätze über Hunde. Format: Liste.',
+    },
+  ];
+
+  vokabeln: Vokabel[] = [
+    {
+      begriff: 'Prompt',
+      erklaerung: 'Die Anfrage oder Anweisung, die du an eine KI schickst.',
+    },
+    {
+      begriff: 'Kontext',
+      erklaerung: 'Hintergrundinfos, die der KI sagen, worum es geht.',
+    },
+    {
+      begriff: 'Zielgruppe',
+      erklaerung: 'Die Menschen, für die die Antwort gedacht ist.',
+    },
+    {
+      begriff: 'Format',
+      erklaerung: 'Die Form der Antwort, zum Beispiel Liste, Tabelle oder Absatz.',
+    },
+    {
+      begriff: 'Rolle',
+      erklaerung: 'Die Figur, in die die KI schlüpfen soll, zum Beispiel „Du bist Reiseberater“.',
+    },
+    {
+      begriff: 'Beispiel (Few-Shot)',
+      erklaerung: 'Ein Muster, das du der KI zeigst, damit sie den gewünschten Stil übernimmt.',
+    },
+    {
+      begriff: 'Systemprompt',
+      erklaerung:
+        'Grundanweisungen, die für ein ganzes Gespräch oder eine App gelten und vorab festgelegt werden.',
+    },
+    {
+      begriff: 'Halluzination',
+      erklaerung: 'Eine Antwort, die sicher klingt, aber falsche Fakten enthält.',
     },
   ];
 
