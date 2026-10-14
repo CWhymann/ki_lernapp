@@ -1,55 +1,374 @@
-<div class="max-w-3xl">
-  <h1 class="text-2xl font-bold text-cyan-300 mb-4">KI einrichten</h1>
+<div class="max-w-3xl flex flex-col gap-10">
+  <!-- HERO -->
+  <header
+    class="hero-glow relative overflow-hidden p-6 rounded-xl border border-cyan-500/30 bg-slate-900/60"
+  >
+    <p class="text-sm tracking-widest uppercase text-cyan-400 mb-2">Kapitel · KI einrichten</p>
+    <h1 class="text-3xl font-bold text-cyan-300 mb-4">
+      Deine eigene KI. Auf deinem Rechner. Für immer.
+    </h1>
+    <p class="text-base text-slate-300 mb-3">
+      Cloud-KIs wie ChatGPT oder Claude laufen auf den Servern der Hersteller und lassen sich nicht
+      herunterladen. Dafür gibt es offene Modelle: Du lädst sie einmal herunter und nutzt sie danach
+      ohne Abo, ohne Konto und sogar ohne Internet.
+    </p>
+    <p class="text-sm text-slate-400">
+      In diesem Kapitel baust du dir dein eigenes KI-Setup: erst verstehen, dann dein Hardware-Labor
+      testen, dann installieren, dann ausprobieren.
+    </p>
+    <div class="scanline"></div>
+  </header>
 
-  <p class="text-base text-slate-300 mb-4">
-    Du musst nicht zwingend eine Cloud-KI nutzen - es gibt Möglichkeiten, Sprachmodelle direkt auf
-    dem eigenen Rechner laufen zu lassen. Vorteil: komplette Kontrolle über deine Daten, keine
-    laufenden Kosten, funktioniert offline.
-  </p>
-
-  <p class="text-base text-slate-300 mb-8">
-    Nachteil: lokale Modelle sind meist kleiner und weniger leistungsfähig als grosse Cloud-Modelle,
-    und du brauchst etwas freien Speicherplatz und RAM.
-  </p>
-
-  <div
+  <!-- 1: CLOUD ODER LOKAL -->
+  <section
     class="p-6 rounded-xl bg-slate-800/50 border border-slate-700 shadow-[0_0_25px_rgba(34,211,238,0.1)]"
   >
-    <h2 class="text-lg font-semibold text-cyan-300 mb-3">Checkliste zum Einrichten</h2>
-    <p class="text-sm text-slate-400 mb-6">
-      {{ doneCount() }} von {{ steps.length }} Schritten erledigt.
+    <h2 class="text-xl font-semibold text-cyan-300 mb-2">1 · Cloud oder lokal?</h2>
+    <p class="text-base text-slate-300 mb-6">
+      Kappe die Internetverbindung und sieh, wohin deine Fragen fließen.
     </p>
 
-    <div class="flex flex-col gap-4">
-      @for (step of steps; track $index) {
+    <button
+      (click)="toggleOffline()"
+      role="switch"
+      [attr.aria-checked]="offline()"
+      [class]="
+        offline()
+          ? 'px-5 py-3 rounded-full border-2 border-emerald-400 bg-emerald-400/10 text-emerald-300 text-base font-semibold shadow-[0_0_20px_rgba(52,211,153,0.4)] transition-all'
+          : 'px-5 py-3 rounded-full border-2 border-cyan-400 bg-cyan-400/10 text-cyan-300 text-base font-semibold shadow-[0_0_20px_rgba(34,211,238,0.4)] transition-all'
+      "
+    >
+      {{
+        offline()
+          ? '📴 Internet: AUS (zum Einschalten klicken)'
+          : '🌐 Internet: AN (zum Kappen klicken)'
+      }}
+    </button>
+
+    <div class="flex items-center gap-3 my-8">
+      <div
+        class="shrink-0 px-4 py-3 rounded-lg border border-cyan-500/50 bg-slate-900 text-base text-cyan-200 text-center"
+      >
+        💻<br />Dein Rechner
+      </div>
+
+      <div class="relative flex-1 h-1 rounded-full bg-slate-700">
+        @if (!offline()) {
+          <span class="packet" style="animation-delay: 0s"></span>
+          <span class="packet" style="animation-delay: 0.65s"></span>
+          <span class="packet" style="animation-delay: 1.3s"></span>
+        } @else {
+          <span class="absolute left-1/2 -translate-x-1/2 -top-5 text-2xl">✂️</span>
+        }
+      </div>
+
+      <div
+        [class]="
+          offline()
+            ? 'shrink-0 px-4 py-3 rounded-lg border border-slate-700 bg-slate-900 text-base text-slate-500 text-center opacity-40 transition-opacity'
+            : 'shrink-0 px-4 py-3 rounded-lg border border-slate-600 bg-slate-900 text-base text-slate-200 text-center transition-opacity'
+        "
+      >
+        ☁️<br />Server
+      </div>
+    </div>
+
+    <div class="grid gap-3 sm:grid-cols-2 mb-6">
+      <div
+        [class]="
+          offline()
+            ? 'p-3 rounded-md border border-red-500/40 bg-red-500/5 text-base text-red-300'
+            : 'p-3 rounded-md border border-slate-700 text-base text-slate-300'
+        "
+      >
+        {{
+          offline()
+            ? '🔴 Cloud-KI: keine Verbindung, keine Antwort'
+            : '🟢 Cloud-KI: deine Frage reist zu fremden Servern'
+        }}
+      </div>
+      <div
+        [class]="
+          offline()
+            ? 'p-3 rounded-md border border-emerald-400/50 bg-emerald-400/10 text-base text-emerald-300 shadow-[0_0_20px_rgba(52,211,153,0.25)]'
+            : 'p-3 rounded-md border border-slate-700 text-base text-slate-300'
+        "
+      >
+        {{
+          offline()
+            ? '🟢 Lokale KI: antwortet trotzdem, nichts verlässt den Rechner'
+            : '🟢 Lokale KI: bereit, braucht das Netz gar nicht'
+        }}
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      @for (row of comparison; track row.topic) {
+        <div class="grid grid-cols-3 gap-3 p-3 rounded-md border border-slate-700">
+          <p class="text-base font-medium text-slate-200">{{ row.topic }}</p>
+          <p class="text-sm text-slate-400">☁️ {{ row.cloud }}</p>
+          <p class="text-sm text-cyan-300">💻 {{ row.local }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- 2: HARDWARE-LABOR -->
+  <section
+    class="p-6 rounded-xl bg-slate-800/50 border border-slate-700 shadow-[0_0_25px_rgba(34,211,238,0.1)]"
+  >
+    <h2 class="text-xl font-semibold text-cyan-300 mb-2">2 · Das Hardware-Labor</h2>
+    <p class="text-base text-slate-300 mb-6">
+      Ein Sprachmodell ist eine riesige Datei aus Zahlen, den Parametern. Sie muss komplett in den
+      Speicher passen. Stell deinen Rechner ein und sieh, was läuft.
+    </p>
+
+    <div class="grid gap-6 sm:grid-cols-2 mb-6">
+      <label class="block">
+        <span class="flex justify-between text-base text-slate-200 mb-2">
+          <span>Arbeitsspeicher (RAM)</span>
+          <span class="text-cyan-300 font-mono">{{ ram() }} GB</span>
+        </span>
+        <input
+          type="range"
+          min="4"
+          max="128"
+          step="4"
+          [value]="ram()"
+          (input)="onRam($event)"
+          class="w-full accent-cyan-400"
+        />
+      </label>
+
+      <label class="block">
+        <span class="flex justify-between text-base text-slate-200 mb-2">
+          <span>Grafikspeicher (VRAM)</span>
+          <span class="text-cyan-300 font-mono">{{ vram() }} GB</span>
+        </span>
+        <input
+          type="range"
+          min="0"
+          max="48"
+          step="2"
+          [value]="vram()"
+          (input)="onVram($event)"
+          class="w-full accent-cyan-400"
+        />
+      </label>
+    </div>
+
+    <p class="text-base text-slate-200 mb-2">Genauigkeit der Zahlen (Quantisierung)</p>
+    <div class="flex flex-wrap gap-3 mb-2">
+      @for (q of quants; track q.bits; let i = $index) {
         <button
-          (click)="toggle($index)"
-          class="flex items-start gap-3 text-left p-3 rounded-md border border-slate-700 hover:border-cyan-500/40 transition-colors"
+          (click)="quantIndex.set(i)"
+          [class]="
+            quantIndex() === i
+              ? 'px-4 py-2 rounded-md border-2 border-cyan-300 bg-cyan-400/15 text-cyan-200 text-base font-semibold shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all'
+              : 'px-4 py-2 rounded-md border-2 border-slate-600 text-slate-300 text-base hover:border-cyan-500/50 transition-all'
+          "
         >
-          <div
-            class="w-6 h-6 mt-0.5 shrink-0 rounded-md border-2 flex items-center justify-center text-sm transition-all"
-            [class.bg-cyan-400]="checked()[$index]"
-            [class.border-cyan-300]="checked()[$index]"
-            [class.text-slate-950]="checked()[$index]"
-            [class.shadow-\[0_0_15px_rgba\(34\,211\,238\,0\.5\)\]]="checked()[$index]"
-            [class.border-slate-600]="!checked()[$index]"
-          >
-            @if (checked()[$index]) {
-              ✓
-            }
-          </div>
-          <div>
-            <p
-              class="text-base font-medium"
-              [class.text-cyan-300]="checked()[$index]"
-              [class.text-slate-200]="!checked()[$index]"
-            >
-              {{ step.title }}
-            </p>
-            <p class="text-sm text-slate-400 mt-1">{{ step.description }}</p>
-          </div>
+          {{ q.label }}
         </button>
       }
     </div>
-  </div>
+    <p class="text-sm text-slate-400 mb-6">{{ quant().hint }}</p>
+
+    <div class="p-4 rounded-lg border border-cyan-500/40 bg-cyan-400/5 mb-6">
+      <p class="text-2xl font-bold text-cyan-300">{{ rank().icon }} {{ rank().title }}</p>
+      <p class="text-base text-slate-300 mt-1">{{ rank().text }}</p>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      @for (r of results(); track r.model.paramsB) {
+        <div class="p-3 rounded-md border border-slate-700">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <p class="text-base font-medium text-slate-200">
+              {{ r.model.paramsB }} Mrd. Parameter
+              <span class="text-sm text-slate-400">· braucht ca. {{ r.need }} GB</span>
+            </p>
+            <span [class]="statusInfo[r.status].badge">{{ statusInfo[r.status].label }}</span>
+          </div>
+          <div class="h-2 rounded-full bg-slate-700 mt-2 overflow-hidden">
+            <div
+              class="bar-fill h-full rounded-full"
+              [class]="statusInfo[r.status].bar"
+              [style.width.%]="r.percent"
+            ></div>
+          </div>
+          <p class="text-sm text-slate-400 mt-2">{{ r.model.description }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- 3: INSTALLATION -->
+  <section
+    class="p-6 rounded-xl bg-slate-800/50 border border-slate-700 shadow-[0_0_25px_rgba(34,211,238,0.1)]"
+  >
+    <h2 class="text-xl font-semibold text-cyan-300 mb-2">3 · Installations-Mission</h2>
+    <p class="text-base text-slate-300 mb-4">
+      Vier Schritte bis zur eigenen KI. Führe sie der Reihe nach aus. Das Terminal unten ist eine
+      vereinfachte Simulation, die echten Ausgaben sehen leicht anders aus.
+    </p>
+
+    <p class="text-sm text-slate-400 mb-2">
+      {{ doneCount() }} von {{ steps.length }} Missionen erledigt
+    </p>
+    <div class="h-3 rounded-full bg-slate-700 overflow-hidden mb-6">
+      <div
+        class="bar-fill h-full rounded-full bg-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.7)]"
+        [style.width.%]="(doneCount() / steps.length) * 100"
+      ></div>
+    </div>
+
+    <div class="flex flex-col gap-4 mb-6">
+      @for (step of steps; track $index; let i = $index) {
+        <div
+          [class]="
+            done()[i]
+              ? 'p-4 rounded-md border border-emerald-400/50 bg-emerald-400/5'
+              : 'p-4 rounded-md border border-slate-700'
+          "
+        >
+          <p class="text-base font-medium text-slate-200">{{ i + 1 }} · {{ step.title }}</p>
+          <p class="text-sm text-slate-400 mt-1 mb-3">{{ step.description }}</p>
+          <div class="flex flex-wrap items-center gap-3">
+            <code
+              class="px-3 py-1 rounded bg-slate-950 border border-slate-700 text-base text-cyan-300 font-mono"
+              >{{ step.command }}</code
+            >
+            <button
+              (click)="run(i)"
+              [disabled]="busy() || done()[i] || !isUnlocked(i)"
+              [class]="
+                done()[i]
+                  ? 'px-4 py-2 rounded-md text-base border border-emerald-400 text-emerald-300'
+                  : isUnlocked(i) && !busy()
+                    ? 'px-4 py-2 rounded-md text-base font-semibold border-2 border-cyan-300 text-cyan-200 bg-cyan-400/10 shadow-[0_0_15px_rgba(34,211,238,0.4)] hover:bg-cyan-400/20 transition-all'
+                    : 'px-4 py-2 rounded-md text-base border border-slate-600 text-slate-500'
+              "
+            >
+              {{ done()[i] ? '✓ Erledigt' : isUnlocked(i) ? '▶ Ausführen' : '🔒 Gesperrt' }}
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="rounded-lg border border-slate-700 bg-slate-950 overflow-hidden">
+      <div class="flex items-center gap-2 px-4 py-2 border-b border-slate-800 bg-slate-900">
+        <span class="w-3 h-3 rounded-full bg-red-400"></span>
+        <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
+        <span class="w-3 h-3 rounded-full bg-green-400"></span>
+        <span class="ml-2 text-sm text-slate-400">PowerShell</span>
+      </div>
+      <div class="p-4 min-h-40 font-mono text-base whitespace-pre-wrap break-words">
+        @if (log().length === 0 && !busy()) {
+          <p class="text-slate-500">Warte auf deinen ersten Befehl ...</p>
+        }
+        @for (line of log(); track $index) {
+          @if (line.kind === 'cmd') {
+            <p class="text-cyan-300">
+              <span class="text-emerald-400">PS C:\&gt;</span> {{ line.text }}
+            </p>
+          } @else {
+            <p class="text-slate-300">{{ line.text }}</p>
+          }
+        }
+        @if (busy()) {
+          <span class="cursor"></span>
+        }
+      </div>
+    </div>
+
+    @if (allDone()) {
+      <div
+        class="celebrate mt-6 p-5 rounded-lg border-2 border-emerald-400 bg-emerald-400/10 shadow-[0_0_30px_rgba(52,211,153,0.5)]"
+      >
+        <p class="text-2xl font-bold text-emerald-300">🎉 Deine KI lebt!</p>
+        <p class="text-base text-slate-200 mt-1">
+          Ein Modell steckt jetzt auf deinem Rechner. Ab hier ist sie für immer deine: ohne Abo,
+          ohne Konto, ohne dass ein Byte nach draußen muss.
+        </p>
+      </div>
+    }
+
+    <button
+      (click)="reset()"
+      [disabled]="busy()"
+      class="mt-4 px-4 py-2 rounded-md border border-slate-600 text-base text-slate-300 hover:border-cyan-500/50 transition-colors"
+    >
+      ↺ Mission neu starten
+    </button>
+  </section>
+
+  <!-- 4: ANGULAR-API -->
+  <section
+    class="p-6 rounded-xl bg-slate-800/50 border border-slate-700 shadow-[0_0_25px_rgba(34,211,238,0.1)]"
+  >
+    <h2 class="text-xl font-semibold text-cyan-300 mb-2">4 · Bonus: Aus deiner App ansprechen</h2>
+    <p class="text-base text-slate-300 mb-4">
+      Ollama öffnet im Hintergrund eine kleine Schnittstelle (API) auf deinem Rechner. Damit kann
+      jede App, zum Beispiel eine Angular-App, mit deinem Modell reden:
+    </p>
+    <pre
+      class="p-4 rounded-lg bg-slate-950 border border-slate-700 text-base text-cyan-200 font-mono overflow-x-auto"
+      >{{ apiSnippet }}</pre>
+    <p class="text-sm text-slate-400 mt-3">
+      Die Adresse localhost:11434 zeigt auf deinen eigenen Rechner, die Anfrage geht also nirgendwo
+      anders hin.
+    </p>
+  </section>
+
+  <!-- 5: QUIZ -->
+  <section
+    class="p-6 rounded-xl bg-slate-800/50 border border-slate-700 shadow-[0_0_25px_rgba(34,211,238,0.1)]"
+  >
+    <h2 class="text-xl font-semibold text-cyan-300 mb-2">5 · Wissens-Check</h2>
+
+    @if (!quizFinished()) {
+      <p class="text-sm text-slate-400 mb-4">Frage {{ quizIndex() + 1 }} von {{ quiz.length }}</p>
+      <p class="text-base text-slate-200 mb-4">{{ question().question }}</p>
+
+      <div class="flex flex-col gap-3">
+        @for (option of question().options; track $index; let i = $index) {
+          <button (click)="choose(i)" [disabled]="selected() !== null" [class]="optionStyle(i)">
+            {{ option }}
+          </button>
+        }
+      </div>
+
+      @if (selected() !== null) {
+        <div class="mt-4 p-4 rounded-md border border-slate-700 bg-slate-900/60">
+          <p
+            class="text-base font-semibold"
+            [class]="selected() === question().correct ? 'text-emerald-300' : 'text-amber-300'"
+          >
+            {{ selected() === question().correct ? '✓ Richtig!' : '✗ Knapp daneben.' }}
+          </p>
+          <p class="text-base text-slate-300 mt-1">{{ question().explanation }}</p>
+        </div>
+        <button
+          (click)="nextQuestion()"
+          class="mt-4 px-5 py-2 rounded-md border-2 border-cyan-300 text-base font-semibold text-cyan-200 bg-cyan-400/10 shadow-[0_0_15px_rgba(34,211,238,0.4)]"
+        >
+          {{ quizIndex() === quiz.length - 1 ? 'Ergebnis anzeigen' : 'Weiter →' }}
+        </button>
+      }
+    } @else {
+      <div
+        class="celebrate p-5 rounded-lg border-2 border-cyan-300 bg-cyan-400/10 shadow-[0_0_30px_rgba(34,211,238,0.4)]"
+      >
+        <p class="text-2xl font-bold text-cyan-300">{{ score() }} von {{ quiz.length }} richtig</p>
+        <p class="text-base text-slate-200 mt-1">{{ scoreText() }}</p>
+      </div>
+      <button
+        (click)="restartQuiz()"
+        class="mt-4 px-4 py-2 rounded-md border border-slate-600 text-base text-slate-300 hover:border-cyan-500/50 transition-colors"
+      >
+        ↺ Nochmal spielen
+      </button>
+    }
+  </section>
 </div>

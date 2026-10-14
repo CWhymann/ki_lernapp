@@ -1,0 +1,106 @@
+.hero-glow {
+  animation: heroPulse 4s ease-in-out infinite;
+}
+
+@keyframes heroPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 25px rgba(34, 211, 238, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 45px rgba(34, 211, 238, 0.32);
+  }
+}
+
+.scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.6), transparent);
+  animation: scan 5s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scan {
+  from {
+    top: 0;
+  }
+  to {
+    top: 100%;
+  }
+}
+
+.packet {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  border-radius: 9999px;
+  background: #22d3ee;
+  box-shadow: 0 0 12px #22d3ee;
+  animation: fly 2s linear infinite;
+}
+
+@keyframes fly {
+  from {
+    left: 0;
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 1;
+  }
+  to {
+    left: calc(100% - 14px);
+    opacity: 0;
+  }
+}
+
+.bar-fill {
+  transition:
+    width 0.4s ease,
+    background-color 0.3s;
+}
+
+.cursor {
+  display: inline-block;
+  width: 10px;
+  height: 1.1em;
+  background: #22d3ee;
+  vertical-align: text-bottom;
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.celebrate {
+  animation: pop 0.6s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-glow,
+  .scanline,
+  .packet,
+  .cursor,
+  .celebrate {
+    animation: none;
+  }
+}
