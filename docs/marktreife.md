@@ -45,10 +45,31 @@
 - Zahlungsabwicklung (Stripe oder Paddle).
 - Kostenloser Einstieg mit Bezahlschranke.
 - Zugriffsschutz für bezahlte Inhalte.
-- Echte KI-Anbindung ganz am Schluss.
+- Echte KI-Anbindung ganz am Schluss. Siehe Abschnitt 8, hier ist die Reihenfolge zu klären.
 
 ## 8. Offene Entscheidungen
 
 - Welches Kapitel wird zuerst vollständig ausgebaut.
 - Die Paragrafen des Barrierefreiheitsgesetzes.
 - Preis und Modell: Einmalkauf, Abo oder einzelne Kapitel.
+
+### Art der App (Entscheidung des Nutzers)
+
+- Die App ist keine reine Lern-App über KI, sondern eine App über den Umgang mit KI.
+- Sie funktioniert als Lektüre und als Lern-App zugleich.
+- Die Kapitel zur KI sind das Hintergrundwissen. Die Aufgaben bringen die Anwendung.
+- Nicht nur "über" die KI, sondern "mit" der KI: Die KI ist in der App vorhanden, damit man sie gleich anwenden kann. Nicht nur gezeigt, wie sie funktioniert.
+- Die Themen beschränken sich nicht auf wenige Bereiche. Sie sollen realistisch wirken.
+- Zielgruppen: jung und alt.
+- Nicht alle bekommen dieselben Aufgaben. Die Aufgaben decken sehr unterschiedliche Situationen ab.
+- Die Erklärungen sind dem Alter und der Lebenssituation angepasst.
+- Ziel: allen das Leben erleichtern.
+- Die bisherigen fünf Punkte und der Bereich "Vorerst nicht umsetzen" bleiben bestehen.
+
+### Vorschläge von Claude (noch nicht beschlossen)
+
+- Start mit Lebenssituation: Schule, Ausbildung, Beruf, Familie oder Ruhestand. Aufgaben und Sprache passen sich an.
+- Aufgabenbibliothek mit echten Alltagsfällen: einen Behördenbrief formulieren, ein Rezept umplanen, eine Hausaufgabe erklären lassen, eine Reise vorbereiten.
+- Jede Aufgabe zeigt: was die KI gut kann, wo sie sich irrt, wie man besser nachfragt.
+- Erkennen von Falschinfos und Betrug als eigener Bereich, besonders für Kinder und ältere Menschen.
+- Fortschritt pro Lebensbereich, damit man sieht, was man schon kann.
