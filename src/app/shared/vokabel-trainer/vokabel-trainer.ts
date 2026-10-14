@@ -6,9 +6,9 @@ export interface Vokabel {
 }
 
 /**
- * Mischt eine Kopie der Liste mit dem Fisher-Yates-Verfahren.
- * @param liste Ausgangsliste, bleibt unverändert.
- * @returns Neue, gemischte Liste.
+ * Returns a shuffled copy of the list using the Fisher-Yates algorithm.
+ * @param liste Source list, left unchanged.
+ * @returns New shuffled list.
  */
 function mischen<T>(liste: T[]): T[] {
   const kopie = [...liste];
@@ -44,7 +44,7 @@ export class VokabelTrainer {
   });
 
   /**
-   * Startet den Trainer neu und mischt alle Begriffe.
+   * Restarts the trainer and shuffles all terms.
    */
   start() {
     this.runde.set(mischen(this.karten()));
@@ -57,15 +57,15 @@ export class VokabelTrainer {
   }
 
   /**
-   * Dreht die aktuelle Karte zwischen Begriff und Erklärung um.
+   * Flips the current card between term and explanation.
    */
   umdrehen() {
     this.umgedreht.update((wert) => !wert);
   }
 
   /**
-   * Speichert die Einschätzung und geht zur nächsten Karte.
-   * @param kennt true, wenn der Begriff gewusst wurde.
+   * Saves the self-assessment and moves to the next card.
+   * @param kennt True if the term was known.
    */
   bewerten(kennt: boolean) {
     const karte = this.aktuelle();
@@ -79,7 +79,7 @@ export class VokabelTrainer {
   }
 
   /**
-   * Geht zur nächsten Karte. Am Ende einer Runde kommen die noch offenen Begriffe erneut.
+   * Moves to the next card. At the end of a round, the remaining terms are shown again.
    */
   private weiter() {
     this.umgedreht.set(false);

@@ -114,16 +114,16 @@ export class Prompting {
   });
 
   /**
-   * Wählt das Beispiel für den Vergleich aus.
-   * @param id Kennung des gewählten Beispiels.
+   * Selects the example for the comparison.
+   * @param id Identifier of the selected example.
    */
   chooseExample(id: Example['id']) {
     this.exampleChoice.set(id);
   }
 
   /**
-   * Speichert die gewählte Antwort und zählt richtige Antworten.
-   * @param index Position der gewählten Option.
+   * Stores the selected answer and counts correct answers.
+   * @param index Position of the selected option.
    */
   choose(index: number) {
     if (this.selected() !== null) return;
@@ -134,7 +134,7 @@ export class Prompting {
   }
 
   /**
-   * Geht zur nächsten Frage oder zeigt das Ergebnis.
+   * Moves to the next question or shows the result.
    */
   nextQuestion() {
     if (this.quizIndex() === this.quiz.length - 1) {
@@ -146,7 +146,7 @@ export class Prompting {
   }
 
   /**
-   * Setzt den Wissens-Check auf den Anfang zurück.
+   * Resets the knowledge check to the beginning.
    */
   restartQuiz() {
     this.quizIndex.set(0);
@@ -156,9 +156,9 @@ export class Prompting {
   }
 
   /**
-   * Liefert die Klassen für eine Antwortoption je nach Zustand.
-   * @param index Position der Option.
-   * @returns Tailwind-Klassen für die Option.
+   * Returns the classes for an answer option depending on its state.
+   * @param index Position of the option.
+   * @returns Tailwind classes for the option.
    */
   optionStyle(index: number): string {
     const base = 'text-left px-4 py-3 rounded-md border-2 text-base transition-all ';
