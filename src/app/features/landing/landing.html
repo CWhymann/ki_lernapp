@@ -1,0 +1,43 @@
+<section
+  class="relative isolate flex min-h-dvh items-center justify-center bg-slate-950 px-6 py-16 font-mono text-slate-100 md:px-16"
+>
+  <canvas #rain class="rain" aria-hidden="true"></canvas>
+
+  <div class="tiles" aria-hidden="true">
+    @for (lane of lanes; track $index) {
+      <div class="lane">
+        <div
+          class="lane-track"
+          [class.lane-track--right]="lane.direction === 'right'"
+          [style.--duration]="lane.duration + 's'"
+          [style.--shift]="shift"
+        >
+          @for (copy of copies; track copy) {
+            @for (tile of lane.tiles; track tile.text) {
+              <div [class]="'tile tile--' + tile.tone">{{ tile.text }}</div>
+            }
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="vignette" aria-hidden="true"></div>
+
+  <div
+    class="relative z-10 flex w-full max-w-5xl flex-col items-start gap-8 text-left md:items-center md:text-center"
+  >
+    <p class="terminal-line text-base text-emerald-300 md:text-xl">// SYSTEM: &lt;ONLINE&gt;</p>
+
+    <h1 class="glitch" data-text="KI·LERNAPP">KI·LERNAPP</h1>
+
+    <p class="max-w-2xl text-lg text-slate-300 md:text-2xl">
+      Verstehe, wie KI lernt, handelt und manchmal schummelt.
+    </p>
+
+    <div class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row">
+      <a routerLink="/geschichte" class="btn btn--primary">Geschichte starten</a>
+      <a routerLink="/dashboard" class="btn btn--ghost">Zum Dashboard</a>
+    </div>
+  </div>
+</section>
