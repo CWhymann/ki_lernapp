@@ -1,5 +1,7 @@
 import { Component, signal, computed } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { Glossary, GlossaryTerm } from '../../shared/glossary/glossary';
+import { GRUNDBEGRIFFE } from '../../shared/glossary/begriffe';
 import { Quiz, QuizQuestion, QuizResultTexts } from '../../shared/quiz/quiz';
 
 /** Words that can be selected in the attention example. */
@@ -13,7 +15,7 @@ interface AttentionZeile {
 
 @Component({
   selector: 'app-neuronale-netze',
-  imports: [DecimalPipe, Quiz],
+  imports: [DecimalPipe, Quiz, Glossary],
   templateUrl: './neuronale-netze.html',
   styleUrl: './neuronale-netze.css',
 })
@@ -59,6 +61,10 @@ export class NeuronaleNetze {
       anteil: Math.round(gewichte[i] * 100),
     }));
   });
+
+  glossar: GlossaryTerm[] = GRUNDBEGRIFFE.filter((term: GlossaryTerm) =>
+    ['Modell', 'Parameter', 'Token'].includes(term.name),
+  );
 
   /**
    * Selects the word whose attention is shown.
