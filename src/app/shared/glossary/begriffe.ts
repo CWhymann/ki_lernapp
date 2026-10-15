@@ -15,7 +15,7 @@ export const GRUNDBEGRIFFE: GlossaryTerm[] = [
   {
     name: 'Parameter',
     explanation:
-      'Die Zahlen, in denen ein Modell sein Wissen speichert. "8 Mrd." heißt 8 Milliarden davon. Mehr Parameter bedeuten meist bessere Antworten, aber auch mehr Speicherbedarf.',
+      '"8 Mrd." heißt 8 Milliarden Zahlen, in denen ein Modell sein Wissen speichert. Mehr Parameter bedeuten meist bessere Antworten, aber auch mehr Speicherbedarf.',
   },
   {
     name: 'Kontextfenster',
@@ -26,5 +26,15 @@ export const GRUNDBEGRIFFE: GlossaryTerm[] = [
     name: 'Temperatur',
     explanation:
       'Ein Wert, der steuert, wie zufällig eine Antwort ausfällt. Niedrig heißt eher gleichbleibend und vorhersehbar, hoch heißt abwechslungsreicher, aber unberechenbarer.',
+  },
+  {
+    name: 'Trainingsdaten',
+    explanation:
+      'Die Texte und Beispiele, mit denen eine KI lernt. Was in diesen Daten fehlt oder schief ist, übernimmt die KI in ihre Antworten.',
+  },
+  {
+    name: 'Bias',
+    explanation:
+      'Eine systematische Schieflage in den Antworten einer KI, zum Beispiel wenn bestimmte Berufe immer mit demselben Geschlecht verknüpft werden. Sie stammt meist aus den Trainingsdaten.',
   },
 ];

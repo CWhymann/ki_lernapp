@@ -1,4 +1,6 @@
 import { Component, signal, computed } from '@angular/core';
+import { Glossary, GlossaryTerm } from '../../shared/glossary/glossary';
+import { GRUNDBEGRIFFE } from '../../shared/glossary/begriffe';
 import { Quiz, QuizQuestion, QuizResultTexts } from '../../shared/quiz/quiz';
 
 interface BiasExample {
@@ -9,7 +11,7 @@ interface BiasExample {
 
 @Component({
   selector: 'app-bias',
-  imports: [Quiz],
+  imports: [Quiz, Glossary],
   templateUrl: './bias.html',
   styleUrl: './bias.css',
 })
@@ -39,6 +41,10 @@ export class Bias {
   dropdownOpen = signal(false);
 
   selectedExample = computed(() => this.examples[this.selectedIndex()]);
+
+  glossar: GlossaryTerm[] = GRUNDBEGRIFFE.filter((term: GlossaryTerm) =>
+    ['Bias', 'Trainingsdaten', 'Modell'].includes(term.name),
+  );
 
   /**
    * Opens or closes the role dropdown.
