@@ -1,11 +1,11 @@
 <section
-  class="relative isolate min-h-dvh bg-slate-950 font-mono text-slate-100"
+  class="relative isolate flex min-h-dvh flex-col bg-slate-950 font-mono text-slate-100"
   [class]="'story story--' + szene().ton"
 >
   <div class="story-grid" aria-hidden="true"></div>
 
   <div
-    class="relative z-10 mx-auto flex min-h-dvh w-full max-w-5xl flex-col gap-6 px-6 py-6 md:px-12 md:py-10"
+    class="relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-6 pt-6 md:px-12 md:pt-10"
   >
     <header class="flex items-center justify-between gap-4 text-sm md:text-base">
       <a routerLink="/" class="story-link">&larr; Start</a>
@@ -18,64 +18,78 @@
       }
     </div>
 
-    <main class="flex flex-1 flex-col justify-center py-6" aria-live="polite">
-      @for (eintrag of szenen; track eintrag.id; let i = $index) {
-        @if (i === index()) {
-          <article class="scene flex flex-col gap-6">
-            <p class="label text-sm font-bold uppercase tracking-widest md:text-base">
-              // {{ eintrag.kapitel }}
-            </p>
+    <main class="flex flex-1 flex-col py-6">
+      @for (eintrag of [szene()]; track eintrag.id) {
+        <article class="scene flex flex-col gap-6">
+          <p class="label text-sm font-bold uppercase tracking-widest md:text-base">
+            // {{ eintrag.kapitel }}
+          </p>
 
-            <h1 class="title">{{ eintrag.titel }}</h1>
+          <h1 class="title">{{ eintrag.titel }}</h1>
 
-            <div
-              class="flex max-w-3xl flex-col gap-4 text-base leading-relaxed text-slate-200 md:text-xl"
-            >
-              @for (absatz of eintrag.erzaehlung; track absatz) {
-                <p>{{ absatz }}</p>
-              }
-            </div>
-
-            @if (eintrag.video) {
-              <aside class="video-box max-w-3xl">
-                <p class="video-tag">Laut Video</p>
-                <p class="mt-2 text-base leading-relaxed text-slate-200 md:text-lg">
-                  {{ eintrag.video }}
-                </p>
-              </aside>
+          <div
+            class="flex max-w-3xl flex-col gap-4 text-base leading-relaxed text-slate-200 md:text-xl"
+          >
+            @for (absatz of text().erzaehlung; track $index) {
+              <p>
+                <span class="sr-only">{{ absatz.voll }}</span>
+                <span aria-hidden="true"
+                  >{{ absatz.getippt }}<span class="rest">{{ absatz.offen }}</span></span
+                >
+              </p>
             }
+          </div>
 
-            <aside class="term max-w-3xl">
-              <p class="term-name">{{ eintrag.begriff.name }}</p>
-              <p class="mt-1 text-base leading-relaxed text-slate-300">
-                {{ eintrag.begriff.text }}
+          @if (text().video; as video) {
+            <aside class="video-box max-w-3xl">
+              <p class="video-tag">Laut Video</p>
+              <p class="mt-2 text-base leading-relaxed text-slate-200 md:text-lg">
+                <span class="sr-only">{{ video.voll }}</span>
+                <span aria-hidden="true"
+                  >{{ video.getippt }}<span class="rest">{{ video.offen }}</span></span
+                >
               </p>
             </aside>
+          }
 
-            @if (eintrag.quellen) {
-              <nav class="max-w-3xl" aria-label="Quellen">
-                <p class="term-name">Quellen</p>
-                <ul class="mt-2 flex flex-col gap-2 text-base">
-                  @for (quelle of eintrag.quellen; track quelle.url) {
-                    <li>
-                      <a
-                        [href]="quelle.url"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="story-link"
-                        >{{ quelle.label }}</a
-                      >
-                    </li>
-                  }
-                </ul>
-              </nav>
-            }
-          </article>
-        }
+          <aside class="term max-w-3xl">
+            <p class="term-name">{{ eintrag.begriff.name }}</p>
+            <p class="mt-1 text-base leading-relaxed text-slate-300">
+              <span class="sr-only">{{ text().begriff.voll }}</span>
+              <span aria-hidden="true"
+                >{{ text().begriff.getippt
+                }}<span class="rest">{{ text().begriff.offen }}</span></span
+              >
+            </p>
+          </aside>
+
+          @if (eintrag.quellen) {
+            <nav class="max-w-3xl" aria-label="Quellen">
+              <p class="term-name">Quellen</p>
+              <ul class="mt-2 flex flex-col gap-2 text-base">
+                @for (quelle of eintrag.quellen; track quelle.url) {
+                  <li>
+                    <a
+                      [href]="quelle.url"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="story-link"
+                      >{{ quelle.label }}</a
+                    >
+                  </li>
+                }
+              </ul>
+            </nav>
+          }
+        </article>
       }
     </main>
+  </div>
 
-    <footer class="flex flex-col-reverse gap-4 sm:flex-row sm:justify-between">
+  <footer class="sticky bottom-0 z-20 border-t border-slate-800 bg-slate-950/95 backdrop-blur">
+    <div
+      class="mx-auto flex w-full max-w-5xl flex-col-reverse gap-4 px-6 py-4 sm:flex-row sm:justify-between md:px-12"
+    >
       <button
         type="button"
         (click)="zurueck()"
@@ -100,6 +114,6 @@
           Weiter
         </button>
       }
-    </footer>
-  </div>
+    </div>
+  </footer>
 </section>

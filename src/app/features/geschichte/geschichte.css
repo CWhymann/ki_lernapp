@@ -73,6 +73,10 @@
   animation: scene-in 0.45s ease-out both;
 }
 
+.rest {
+  visibility: hidden;
+}
+
 .label {
   margin: 0;
   color: var(--tone);
