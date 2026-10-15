@@ -28,6 +28,87 @@
   animation: puls 1.6s ease-in-out infinite;
 }
 
+.agent {
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.2s ease;
+}
+
+.agent:active {
+  transform: scale(0.97);
+}
+
+.agent:focus-visible .agent-svg {
+  outline: 2px solid #fff;
+  outline-offset: 6px;
+  border-radius: 12px;
+}
+
+.agent-svg {
+  filter: drop-shadow(0 0 20px rgba(167, 139, 250, 0.25));
+}
+
+.agent-koerper {
+  transform-box: view-box;
+  transform-origin: 200px 150px;
+}
+
+.agent:is(:hover, :focus-visible) .agent-koerper {
+  animation: zittern 0.12s linear infinite;
+}
+
+.agent-arm {
+  transform-box: view-box;
+}
+
+.agent-arm--links {
+  transform-origin: 172px 108px;
+  animation: tentakel-links 2.4s ease-in-out infinite;
+}
+
+.agent-arm--rechts {
+  transform-origin: 228px 108px;
+  animation: tentakel-rechts 2.4s ease-in-out infinite;
+}
+
+.agent-tentakel {
+  transform-box: view-box;
+  animation: tentakel-unten 1.8s ease-in-out infinite;
+}
+
+.agent-tentakel--links {
+  transform-origin: 185px 156px;
+}
+
+.agent-tentakel--rechts {
+  transform-origin: 215px 156px;
+  animation-delay: 0.5s;
+}
+
+.agent:is(:hover, :focus-visible) .agent-arm--links {
+  animation: tentakel-wild-links 0.8s ease-in-out infinite;
+}
+
+.agent:is(:hover, :focus-visible) .agent-arm--rechts {
+  animation: tentakel-wild-rechts 0.8s ease-in-out infinite;
+}
+
+.agent:is(:hover, :focus-visible) .agent-tentakel {
+  animation-duration: 0.6s;
+}
+
+.agent-kern {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: kern 1.6s ease-in-out infinite;
+}
+
+.agent-antenne {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: puls 1s ease-in-out infinite;
+}
+
 .agent-auge {
   transform-box: fill-box;
   transform-origin: center;
@@ -38,9 +119,20 @@
   animation-delay: 0.6s;
 }
 
+.agent:is(:hover, :focus-visible) .agent-auge {
+  animation-duration: 0.5s;
+}
+
 .agent-laser {
-  stroke-dasharray: 12 8;
-  animation: laser-fluss 1s linear infinite;
+  opacity: 0.2;
+  stroke-dasharray: 10 10;
+  transition: opacity 0.3s ease;
+  animation: laser-fluss 1.4s linear infinite;
+}
+
+.agent:is(:hover, :focus-visible) .agent-laser {
+  opacity: 1;
+  animation-duration: 0.45s;
 }
 
 .agent-ziel {
@@ -61,14 +153,43 @@
   animation-delay: 1.2s;
 }
 
+.agent:is(:hover, :focus-visible) .agent-ziel {
+  animation: ziel-treffer 0.5s ease-out infinite;
+}
+
+.agent-funke {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: funke 1.8s ease-in-out infinite;
+}
+
+.agent-funke--zwei {
+  animation-delay: 0.5s;
+}
+
+.agent-funke--drei {
+  animation-delay: 1s;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .pfad-puls,
   .pfad-karte,
+  .agent,
+  .agent-koerper,
+  .agent-arm,
+  .agent-tentakel,
+  .agent-kern,
+  .agent-antenne,
   .agent-auge,
   .agent-laser,
-  .agent-ziel {
+  .agent-ziel,
+  .agent-funke {
     animation: none;
     transition: none;
+  }
+
+  .agent-laser {
+    opacity: 1;
   }
 }
 
@@ -94,8 +215,112 @@
   }
 }
 
+@keyframes kern {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.4);
+    filter: brightness(1.6);
+  }
+}
+
 @keyframes laser-fluss {
   to {
     stroke-dashoffset: -20;
+  }
+}
+
+@keyframes tentakel-links {
+  0%,
+  100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+}
+
+@keyframes tentakel-rechts {
+  0%,
+  100% {
+    transform: rotate(6deg);
+  }
+  50% {
+    transform: rotate(-8deg);
+  }
+}
+
+@keyframes tentakel-wild-links {
+  0%,
+  100% {
+    transform: rotate(-22deg) scaleY(0.95);
+  }
+  50% {
+    transform: rotate(18deg) scaleY(1.05);
+  }
+}
+
+@keyframes tentakel-wild-rechts {
+  0%,
+  100% {
+    transform: rotate(22deg) scaleY(0.95);
+  }
+  50% {
+    transform: rotate(-18deg) scaleY(1.05);
+  }
+}
+
+@keyframes tentakel-unten {
+  0%,
+  100% {
+    transform: skewX(-6deg);
+  }
+  50% {
+    transform: skewX(6deg);
+  }
+}
+
+@keyframes zittern {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(-1.5px, 1px) rotate(-0.6deg);
+  }
+  50% {
+    transform: translate(1px, -1px) rotate(0.5deg);
+  }
+  75% {
+    transform: translate(-1px, -0.5px) rotate(-0.4deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+@keyframes ziel-treffer {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.7);
+    opacity: 0.5;
+  }
+}
+
+@keyframes funke {
+  0%,
+  100% {
+    transform: scale(0.4) rotate(0deg);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.2) rotate(45deg);
+    opacity: 1;
   }
 }

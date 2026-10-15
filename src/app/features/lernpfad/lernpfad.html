@@ -18,13 +18,12 @@
     </p>
   </header>
 
-  <figure class="flex flex-col items-center gap-2">
-    <svg
-      viewBox="0 0 400 210"
-      class="w-full max-w-xl"
-      role="img"
-      aria-label="Ein Agent zeigt mit vier Laserstrahlen auf die vier Stufen des Lernpfads"
-    >
+  <figure
+    class="agent flex flex-col items-center gap-3"
+    tabindex="0"
+    aria-label="Dein Agent zeigt mit Laserstrahlen auf die vier Stufen. Bewege die Maus über ihn oder wähle ihn mit der Tastatur aus."
+  >
+    <svg viewBox="0 0 400 230" class="agent-svg w-full max-w-xl" aria-hidden="true">
       <defs>
         <filter id="pfad-glow" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="3" result="blur" />
@@ -36,10 +35,10 @@
       </defs>
 
       <line
-        x1="50"
-        y1="192"
-        x2="350"
-        y2="192"
+        x1="30"
+        y1="218"
+        x2="370"
+        y2="218"
         stroke="#334155"
         stroke-width="2"
         stroke-dasharray="4 6"
@@ -49,19 +48,29 @@
         <line
           class="agent-laser"
           x1="182"
-          y1="57"
+          y1="62"
           x2="50"
-          y2="186"
-          stroke="#ff2d95"
+          y2="209"
+          stroke="#22d3ee"
           stroke-width="2.5"
           stroke-linecap="round"
         />
         <line
           class="agent-laser"
           x1="182"
-          y1="57"
+          y1="62"
           x2="150"
-          y2="186"
+          y2="209"
+          stroke="#39ff88"
+          stroke-width="2.5"
+          stroke-linecap="round"
+        />
+        <line
+          class="agent-laser"
+          x1="218"
+          y1="62"
+          x2="250"
+          y2="209"
           stroke="#ff2d95"
           stroke-width="2.5"
           stroke-linecap="round"
@@ -69,94 +78,175 @@
         <line
           class="agent-laser"
           x1="218"
-          y1="57"
-          x2="250"
-          y2="186"
-          stroke="#22d3ee"
-          stroke-width="2.5"
-          stroke-linecap="round"
-        />
-        <line
-          class="agent-laser"
-          x1="218"
-          y1="57"
+          y1="62"
           x2="350"
-          y2="186"
-          stroke="#22d3ee"
+          y2="209"
+          stroke="#a78bfa"
           stroke-width="2.5"
           stroke-linecap="round"
         />
       </g>
 
-      <g filter="url(#pfad-glow)">
-        <line x1="200" y1="28" x2="200" y2="14" stroke="#22d3ee" stroke-width="2" />
-        <circle class="agent-ziel" cx="200" cy="12" r="4" fill="#ff2d95" />
-        <rect
-          x="160"
-          y="28"
-          width="80"
-          height="62"
-          rx="14"
-          fill="#0f172a"
-          stroke="#22d3ee"
-          stroke-width="2"
-        />
-        <circle class="agent-auge" cx="182" cy="57" r="7" fill="#22d3ee" />
-        <circle class="agent-auge agent-auge--zwei" cx="218" cy="57" r="7" fill="#22d3ee" />
-        <rect
-          x="172"
-          y="96"
-          width="56"
-          height="44"
-          rx="10"
-          fill="#0f172a"
-          stroke="#22d3ee"
-          stroke-width="2"
-        />
-        <circle class="agent-ziel" cx="200" cy="118" r="5" fill="#39ff88" />
-      </g>
-
-      <g>
+      <g class="agent-ziele">
         <circle
           class="agent-ziel"
           cx="50"
-          cy="192"
-          r="10"
+          cy="218"
+          r="9"
           fill="#0f172a"
-          stroke="#ff2d95"
-          stroke-width="2"
+          stroke="#22d3ee"
+          stroke-width="2.5"
         />
         <circle
           class="agent-ziel"
           cx="150"
-          cy="192"
-          r="10"
+          cy="218"
+          r="9"
           fill="#0f172a"
-          stroke="#ff2d95"
-          stroke-width="2"
+          stroke="#39ff88"
+          stroke-width="2.5"
         />
         <circle
           class="agent-ziel"
           cx="250"
-          cy="192"
-          r="10"
+          cy="218"
+          r="9"
           fill="#0f172a"
-          stroke="#22d3ee"
-          stroke-width="2"
+          stroke="#ff2d95"
+          stroke-width="2.5"
         />
         <circle
           class="agent-ziel"
           cx="350"
-          cy="192"
-          r="10"
+          cy="218"
+          r="9"
+          fill="#0f172a"
+          stroke="#a78bfa"
+          stroke-width="2.5"
+        />
+      </g>
+
+      <g class="agent-koerper" filter="url(#pfad-glow)">
+        <g class="agent-arm agent-arm--links">
+          <path
+            d="M172 108 C140 110 118 130 112 165 S96 200 84 196"
+            fill="none"
+            stroke="#22d3ee"
+            stroke-width="9"
+            stroke-linecap="round"
+          />
+          <path
+            d="M172 108 C140 110 118 130 112 165 S96 200 84 196"
+            fill="none"
+            stroke="#0f172a"
+            stroke-width="3"
+            stroke-linecap="round"
+            opacity="0.6"
+          />
+        </g>
+
+        <g class="agent-arm agent-arm--rechts">
+          <path
+            d="M228 108 C260 110 282 130 288 165 S304 200 316 196"
+            fill="none"
+            stroke="#a78bfa"
+            stroke-width="9"
+            stroke-linecap="round"
+          />
+          <path
+            d="M228 108 C260 110 282 130 288 165 S304 200 316 196"
+            fill="none"
+            stroke="#0f172a"
+            stroke-width="3"
+            stroke-linecap="round"
+            opacity="0.6"
+          />
+        </g>
+
+        <g class="agent-tentakel agent-tentakel--links">
+          <path
+            d="M185 156 C178 180 168 196 160 210"
+            fill="none"
+            stroke="#39ff88"
+            stroke-width="6"
+            stroke-linecap="round"
+          />
+        </g>
+
+        <g class="agent-tentakel agent-tentakel--rechts">
+          <path
+            d="M215 156 C222 180 232 196 240 210"
+            fill="none"
+            stroke="#fbbf24"
+            stroke-width="6"
+            stroke-linecap="round"
+          />
+        </g>
+
+        <rect
+          x="170"
+          y="100"
+          width="60"
+          height="56"
+          rx="12"
+          fill="#0f172a"
+          stroke="#a78bfa"
+          stroke-width="2"
+        />
+        <circle class="agent-kern" cx="200" cy="128" r="6" fill="#fbbf24" />
+
+        <line x1="200" y1="34" x2="200" y2="18" stroke="#22d3ee" stroke-width="2" />
+        <circle class="agent-antenne" cx="200" cy="14" r="5" fill="#ff2d95" />
+
+        <rect
+          x="160"
+          y="34"
+          width="80"
+          height="60"
+          rx="16"
           fill="#0f172a"
           stroke="#22d3ee"
           stroke-width="2"
         />
+        <circle class="agent-auge" cx="182" cy="62" r="8" fill="#22d3ee" />
+        <circle class="agent-auge agent-auge--zwei" cx="218" cy="62" r="8" fill="#22d3ee" />
+        <rect x="186" y="78" width="28" height="4" rx="2" fill="#39ff88" />
+      </g>
+
+      <g class="agent-funken">
+        <g transform="translate(118 46)">
+          <path
+            class="agent-funke"
+            d="M0 -6 L1.5 -1.5 L6 0 L1.5 1.5 L0 6 L-1.5 1.5 L-6 0 L-1.5 -1.5 Z"
+            fill="#fbbf24"
+          />
+        </g>
+        <g transform="translate(286 52)">
+          <path
+            class="agent-funke agent-funke--zwei"
+            d="M0 -6 L1.5 -1.5 L6 0 L1.5 1.5 L0 6 L-1.5 1.5 L-6 0 L-1.5 -1.5 Z"
+            fill="#39ff88"
+          />
+        </g>
+        <g transform="translate(70 120)">
+          <path
+            class="agent-funke agent-funke--drei"
+            d="M0 -5 L1.2 -1.2 L5 0 L1.2 1.2 L0 5 L-1.2 1.2 L-5 0 L-1.2 -1.2 Z"
+            fill="#22d3ee"
+          />
+        </g>
+        <g transform="translate(330 118)">
+          <path
+            class="agent-funke"
+            d="M0 -5 L1.2 -1.2 L5 0 L1.2 1.2 L0 5 L-1.2 1.2 L-5 0 L-1.2 -1.2 Z"
+            fill="#ff2d95"
+          />
+        </g>
       </g>
     </svg>
     <figcaption class="text-sm text-slate-400 text-center">
-      Dein Agent zeigt dir den Weg, Stufe für Stufe.
+      Dein Agent zeigt dir den Weg. Bewege die Maus über ihn oder tippe die Tab-Taste, dann legt er
+      los.
     </figcaption>
   </figure>
 
