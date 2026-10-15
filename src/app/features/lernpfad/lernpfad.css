@@ -48,6 +48,17 @@
   filter: drop-shadow(0 0 20px rgba(167, 139, 250, 0.25));
 }
 
+.agent-ring {
+  transform-box: view-box;
+  transform-origin: 200px 128px;
+  animation: ring-drehen 14s linear infinite;
+}
+
+.agent:is(:hover, :focus-visible) .agent-ring {
+  animation-duration: 3s;
+  opacity: 0.8;
+}
+
 .agent-koerper {
   transform-box: view-box;
   transform-origin: 200px 150px;
@@ -123,37 +134,79 @@
   animation-duration: 0.5s;
 }
 
+.agent-lid {
+  transform-box: fill-box;
+  transform-origin: top;
+  transform: scaleY(0);
+  animation: blinzeln 5s ease-in-out infinite;
+}
+
+.agent-lid--rechts {
+  animation-delay: 0.08s;
+}
+
 .agent-laser {
-  opacity: 0.2;
+  opacity: 0.25;
   stroke-dasharray: 10 10;
-  transition: opacity 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    stroke-width 0.3s ease;
   animation: laser-fluss 1.4s linear infinite;
 }
 
 .agent:is(:hover, :focus-visible) .agent-laser {
-  opacity: 1;
+  opacity: 0.7;
   animation-duration: 0.45s;
+}
+
+.lernpfad-root:has(.pfad-stufe-1:hover) .agent-laser-1,
+.lernpfad-root:has(.pfad-stufe-2:hover) .agent-laser-2,
+.lernpfad-root:has(.pfad-stufe-3:hover) .agent-laser-3,
+.lernpfad-root:has(.pfad-stufe-4:hover) .agent-laser-4 {
+  opacity: 1;
+  stroke-width: 4;
+  animation-duration: 0.25s;
 }
 
 .agent-ziel {
   transform-box: fill-box;
   transform-origin: center;
+  transition: transform 0.2s ease;
   animation: puls 1.6s ease-in-out infinite;
 }
 
-.agent-ziel:nth-child(2) {
+.agent-ziel-2 {
   animation-delay: 0.4s;
 }
 
-.agent-ziel:nth-child(3) {
+.agent-ziel-3 {
   animation-delay: 0.8s;
 }
 
-.agent-ziel:nth-child(4) {
+.agent-ziel-4 {
   animation-delay: 1.2s;
 }
 
 .agent:is(:hover, :focus-visible) .agent-ziel {
+  animation: ziel-treffer 0.5s ease-out infinite;
+}
+
+.agent:is(:hover, :focus-visible) .agent-ziel-2 {
+  animation-delay: 0.12s;
+}
+
+.agent:is(:hover, :focus-visible) .agent-ziel-3 {
+  animation-delay: 0.25s;
+}
+
+.agent:is(:hover, :focus-visible) .agent-ziel-4 {
+  animation-delay: 0.37s;
+}
+
+.lernpfad-root:has(.pfad-stufe-1:hover) .agent-ziel-1,
+.lernpfad-root:has(.pfad-stufe-2:hover) .agent-ziel-2,
+.lernpfad-root:has(.pfad-stufe-3:hover) .agent-ziel-3,
+.lernpfad-root:has(.pfad-stufe-4:hover) .agent-ziel-4 {
   animation: ziel-treffer 0.5s ease-out infinite;
 }
 
@@ -175,12 +228,14 @@
   .pfad-puls,
   .pfad-karte,
   .agent,
+  .agent-ring,
   .agent-koerper,
   .agent-arm,
   .agent-tentakel,
   .agent-kern,
   .agent-antenne,
   .agent-auge,
+  .agent-lid,
   .agent-laser,
   .agent-ziel,
   .agent-funke {
@@ -200,6 +255,23 @@
   }
   50% {
     opacity: 1;
+  }
+}
+
+@keyframes ring-drehen {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes blinzeln {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(0);
+  }
+  96% {
+    transform: scaleY(1);
   }
 }
 

@@ -1,4 +1,4 @@
-<div class="relative max-w-6xl flex flex-col gap-10">
+<div class="lernpfad-root relative max-w-6xl flex flex-col gap-10">
   <div class="pfad-raster" aria-hidden="true"></div>
 
   <header
@@ -44,9 +44,21 @@
         stroke-dasharray="4 6"
       />
 
+      <circle
+        class="agent-ring"
+        cx="200"
+        cy="128"
+        r="82"
+        fill="none"
+        stroke="#22d3ee"
+        stroke-width="1.5"
+        stroke-dasharray="6 10"
+        opacity="0.35"
+      />
+
       <g class="agent-laser-gruppe" filter="url(#pfad-glow)">
         <line
-          class="agent-laser"
+          class="agent-laser agent-laser-1"
           x1="182"
           y1="62"
           x2="50"
@@ -56,7 +68,7 @@
           stroke-linecap="round"
         />
         <line
-          class="agent-laser"
+          class="agent-laser agent-laser-2"
           x1="182"
           y1="62"
           x2="150"
@@ -66,7 +78,7 @@
           stroke-linecap="round"
         />
         <line
-          class="agent-laser"
+          class="agent-laser agent-laser-3"
           x1="218"
           y1="62"
           x2="250"
@@ -76,7 +88,7 @@
           stroke-linecap="round"
         />
         <line
-          class="agent-laser"
+          class="agent-laser agent-laser-4"
           x1="218"
           y1="62"
           x2="350"
@@ -89,7 +101,7 @@
 
       <g class="agent-ziele">
         <circle
-          class="agent-ziel"
+          class="agent-ziel agent-ziel-1"
           cx="50"
           cy="218"
           r="9"
@@ -98,7 +110,7 @@
           stroke-width="2.5"
         />
         <circle
-          class="agent-ziel"
+          class="agent-ziel agent-ziel-2"
           cx="150"
           cy="218"
           r="9"
@@ -107,7 +119,7 @@
           stroke-width="2.5"
         />
         <circle
-          class="agent-ziel"
+          class="agent-ziel agent-ziel-3"
           cx="250"
           cy="218"
           r="9"
@@ -116,7 +128,7 @@
           stroke-width="2.5"
         />
         <circle
-          class="agent-ziel"
+          class="agent-ziel agent-ziel-4"
           cx="350"
           cy="218"
           r="9"
@@ -210,6 +222,22 @@
         />
         <circle class="agent-auge" cx="182" cy="62" r="8" fill="#22d3ee" />
         <circle class="agent-auge agent-auge--zwei" cx="218" cy="62" r="8" fill="#22d3ee" />
+        <rect
+          class="agent-lid agent-lid--links"
+          x="174"
+          y="54"
+          width="16"
+          height="16"
+          fill="#0f172a"
+        />
+        <rect
+          class="agent-lid agent-lid--rechts"
+          x="210"
+          y="54"
+          width="16"
+          height="16"
+          fill="#0f172a"
+        />
         <rect x="186" y="78" width="28" height="4" rx="2" fill="#39ff88" />
       </g>
 
@@ -245,14 +273,13 @@
       </g>
     </svg>
     <figcaption class="text-sm text-slate-400 text-center">
-      Dein Agent zeigt dir den Weg. Bewege die Maus über ihn oder tippe die Tab-Taste, dann legt er
-      los.
+      Dein Agent zeigt dir den Weg. Fahr mit der Maus über eine Stufe, dann feuert er auf sie.
     </figcaption>
   </figure>
 
   <div class="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
     @for (stufe of stufen; track stufe.nummer) {
-      <section class="flex flex-col gap-4 min-w-0">
+      <section class="pfad-stufe pfad-stufe-{{ stufe.nummer }} flex flex-col gap-4 min-w-0">
         <header class="p-4 rounded-xl border bg-slate-900/70" [class]="stufe.farbe.rahmen">
           <p class="text-sm uppercase tracking-widest" [class]="stufe.farbe.text">
             Stufe {{ stufe.nummer }}
