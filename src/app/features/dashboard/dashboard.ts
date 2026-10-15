@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 interface ChapterCard {
-  path: string;
+  path?: string;
+  bald?: boolean;
   title: string;
   description: string;
   icon: string;
@@ -57,6 +58,36 @@ export class Dashboard {
       title: 'KI einrichten',
       description: 'Wie installiert und nutzt man KI auf dem eigenen Rechner?',
       icon: '⚙️',
+    },
+    {
+      title: 'News',
+      description: 'Alles rund um KI, tagesaktuell.',
+      icon: '📰',
+      bald: true,
+    },
+    {
+      title: 'Modelle',
+      description: 'Welches KI-Modell kann was und wofür ist es gedacht?',
+      icon: '🤖',
+      bald: true,
+    },
+    {
+      title: 'Nerd-Ecke',
+      description: 'Quantenphysik und weitere Nerd-Themen rund um Technik und KI.',
+      icon: '⚛️',
+      bald: true,
+    },
+    {
+      title: 'KI-Agenten',
+      description: 'Wie arbeiten KI-Agenten selbstständig und wo liegen ihre Grenzen?',
+      icon: '🦾',
+      bald: true,
+    },
+    {
+      title: 'Datenschutz & Sicherheit',
+      description: 'Was darf man einer KI anvertrauen und wie erkennt man Deepfakes?',
+      icon: '🔒',
+      bald: true,
     },
   ];
 }
