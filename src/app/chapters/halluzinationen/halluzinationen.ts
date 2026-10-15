@@ -1,4 +1,6 @@
 import { Component, signal } from '@angular/core';
+import { Glossary, GlossaryTerm } from '../../shared/glossary/glossary';
+import { GRUNDBEGRIFFE } from '../../shared/glossary/begriffe';
 import { Quiz, QuizQuestion, QuizResultTexts } from '../../shared/quiz/quiz';
 
 interface Claim {
@@ -9,7 +11,7 @@ interface Claim {
 
 @Component({
   selector: 'app-halluzinationen',
-  imports: [Quiz],
+  imports: [Quiz, Glossary],
   templateUrl: './halluzinationen.html',
   styleUrl: './halluzinationen.css',
 })
@@ -40,6 +42,10 @@ export class Halluzinationen {
   ];
 
   answered = signal<Record<number, boolean>>({});
+
+  glossar: GlossaryTerm[] = GRUNDBEGRIFFE.filter((term: GlossaryTerm) =>
+    ['Modell', 'Kontextfenster'].includes(term.name),
+  );
 
   /**
    * Stores whether the guess for a claim was correct.
