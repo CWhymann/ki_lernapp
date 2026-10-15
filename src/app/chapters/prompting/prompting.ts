@@ -1,13 +1,7 @@
 import { Component, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Quiz, QuizQuestion, QuizResultTexts } from '../../shared/quiz/quiz';
 import { Vokabel, VokabelTrainer } from '../../shared/vokabel-trainer/vokabel-trainer';
-
-interface QuizQuestion {
-  question: string;
-  options: string[];
-  correct: number;
-  explanation: string;
-}
 
 interface Example {
   id: 'schwach' | 'stark';
@@ -16,7 +10,7 @@ interface Example {
 
 @Component({
   selector: 'app-prompting',
-  imports: [FormsModule, VokabelTrainer],
+  imports: [FormsModule, VokabelTrainer, Quiz],
   templateUrl: './prompting.html',
   styleUrl: './prompting.css',
 })
@@ -24,6 +18,9 @@ export class Prompting {
   userPrompt = signal('');
   feedback = signal<string | null>(null);
 
+  /**
+   * Checks the entered prompt for length and context and sets the feedback text.
+   */
   checkPrompt() {
     const text = this.userPrompt().trim();
 
@@ -52,6 +49,9 @@ export class Prompting {
     }
   }
 
+  /**
+   * Clears the prompt field and the feedback text.
+   */
   clearPrompt() {
     this.userPrompt.set('');
     this.feedback.set(null);
@@ -134,21 +134,46 @@ export class Prompting {
       correct: 1,
       explanation: 'Je klarer du Kontext, Ziel und Format nennst, desto weniger muss die KI raten.',
     },
+    {
+      question: 'Was ist ein Systemprompt?',
+      options: [
+        'Eine Anweisung, die für ein ganzes Gespräch oder eine App gilt',
+        'Eine Fehlermeldung des Rechners',
+        'Der Name eines KI-Modells',
+      ],
+      correct: 0,
+      explanation:
+        'Ein Systemprompt legt Grundanweisungen fest, die vorab gelten und nicht bei jeder Frage neu gesagt werden müssen.',
+    },
+    {
+      question: 'Was bringt ein Beispiel (Few-Shot) in einem Prompt?',
+      options: [
+        'Die KI übernimmt das Muster und den Stil',
+        'Die KI wird schneller',
+        'Die KI vergisst den Kontext',
+      ],
+      correct: 0,
+      explanation:
+        'Mit einem Beispiel zeigst du der KI, wie die Antwort aussehen soll. Sie übernimmt Stil und Aufbau.',
+    },
+    {
+      question: 'Welche Rolle hilft, wenn du eine Antwort aus einer bestimmten Sicht willst?',
+      options: [
+        'Du bist ein erfahrener Reiseberater',
+        'Antworte schnell',
+        'Schreib in Großbuchstaben',
+      ],
+      correct: 0,
+      explanation:
+        'Eine Rolle wie "Du bist ein erfahrener Reiseberater" gibt der KI eine Perspektive und passende Wörter.',
+    },
   ];
 
-  quizIndex = signal(0);
-  selected = signal<number | null>(null);
-  score = signal(0);
-  quizFinished = signal(false);
-
-  question = computed(() => this.quiz[this.quizIndex()]);
-
-  scoreText = computed(() => {
-    const score = this.score();
-    if (score === this.quiz.length) return 'Sehr gut. Du weißt, worauf es beim Prompt ankommt.';
-    if (score >= 2) return 'Gut. Schau dir den Vergleich noch einmal an.';
-    return 'Probier den Vergleich aus und lies die Erklärungen zu den Fragen.';
-  });
+  quizResult: QuizResultTexts = {
+    perfekt: 'Sehr gut. Du weißt, worauf es beim Prompt ankommt.',
+    gut: 'Gut. Schau dir den Vergleich noch einmal an.',
+    schwach: 'Probier den Vergleich aus und lies die Erklärungen zu den Fragen.',
+  };
 
   /**
    * Selects the example for the comparison.
@@ -156,59 +181,5 @@ export class Prompting {
    */
   chooseExample(id: Example['id']) {
     this.exampleChoice.set(id);
-  }
-
-  /**
-   * Stores the selected answer and counts correct answers.
-   * @param index Position of the selected option.
-   */
-  choose(index: number) {
-    if (this.selected() !== null) return;
-    this.selected.set(index);
-    if (index === this.question().correct) {
-      this.score.update((value) => value + 1);
-    }
-  }
-
-  /**
-   * Moves to the next question or shows the result.
-   */
-  nextQuestion() {
-    if (this.quizIndex() === this.quiz.length - 1) {
-      this.quizFinished.set(true);
-    } else {
-      this.quizIndex.update((value) => value + 1);
-      this.selected.set(null);
-    }
-  }
-
-  /**
-   * Resets the knowledge check to the beginning.
-   */
-  restartQuiz() {
-    this.quizIndex.set(0);
-    this.selected.set(null);
-    this.score.set(0);
-    this.quizFinished.set(false);
-  }
-
-  /**
-   * Returns the classes for an answer option depending on its state.
-   * @param index Position of the option.
-   * @returns Tailwind classes for the option.
-   */
-  optionStyle(index: number): string {
-    const base = 'text-left px-4 py-3 rounded-md border-2 text-base transition-all ';
-    const selected = this.selected();
-    if (selected === null) {
-      return base + 'border-slate-600 text-slate-200 hover:border-cyan-500/60';
-    }
-    if (index === this.question().correct) {
-      return base + 'border-emerald-400 bg-emerald-400/10 text-emerald-300';
-    }
-    if (index === selected) {
-      return base + 'border-red-400 bg-red-400/10 text-red-300';
-    }
-    return base + 'border-slate-700 text-slate-500';
   }
 }
