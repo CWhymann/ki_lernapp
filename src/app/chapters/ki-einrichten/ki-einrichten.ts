@@ -1,5 +1,6 @@
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { Glossary, GlossaryTerm } from '../../shared/glossary/glossary';
+import { Quiz, QuizQuestion, QuizResultTexts } from '../../shared/quiz/quiz';
 
 interface ComparisonRow {
   topic: string;
@@ -52,16 +53,9 @@ interface LogLine {
   text: string;
 }
 
-interface QuizQuestion {
-  question: string;
-  options: string[];
-  correct: number;
-  explanation: string;
-}
-
 @Component({
   selector: 'app-ki-einrichten',
-  imports: [Glossary],
+  imports: [Glossary, Quiz],
   templateUrl: './ki-einrichten.html',
   styleUrl: './ki-einrichten.css',
 })
@@ -230,6 +224,7 @@ export class KiEinrichten {
   onVram(event: Event) {
     this.vram.set(Number((event.target as HTMLInputElement).value));
   }
+
   steps: TerminalStep[] = [
     {
       title: 'Ollama installieren und prüfen',
@@ -336,6 +331,7 @@ export class KiEinrichten {
   private sleep(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
+
   apiSnippet = `const response = await fetch('http://localhost:11434/api/generate', {
   method: 'POST',
   body: JSON.stringify({ model: 'llama3.2', prompt: 'Hallo!', stream: false }),
@@ -385,6 +381,7 @@ console.log(data.response);`;
         'Die Adresse für den eigenen Rechner. Anfragen an localhost verlassen deinen Rechner nicht.',
     },
   ];
+
   quiz: QuizQuestion[] = [
     {
       question: 'Du schickst eine Frage an dein lokales Modell. Wohin gehen deine Daten?',
@@ -422,57 +419,9 @@ console.log(data.response);`;
     },
   ];
 
-  quizIndex = signal(0);
-  selected = signal<number | null>(null);
-  score = signal(0);
-  quizFinished = signal(false);
-
-  question = computed(() => this.quiz[this.quizIndex()]);
-
-  scoreText = computed(() => {
-    const score = this.score();
-    if (score === this.quiz.length) return 'Perfekt! Du hast das Setup komplett verstanden.';
-    if (score >= 2)
-      return 'Stark! Nur ein kleiner Rest, den du nochmal im Hardware-Labor testen kannst.';
-    return 'Spiel das Hardware-Labor nochmal durch, dann sitzt es.';
-  });
-
-  choose(index: number) {
-    if (this.selected() !== null) return;
-    this.selected.set(index);
-    if (index === this.question().correct) {
-      this.score.update((value) => value + 1);
-    }
-  }
-
-  nextQuestion() {
-    if (this.quizIndex() === this.quiz.length - 1) {
-      this.quizFinished.set(true);
-    } else {
-      this.quizIndex.update((value) => value + 1);
-      this.selected.set(null);
-    }
-  }
-
-  restartQuiz() {
-    this.quizIndex.set(0);
-    this.selected.set(null);
-    this.score.set(0);
-    this.quizFinished.set(false);
-  }
-
-  optionStyle(index: number): string {
-    const base = 'text-left px-4 py-3 rounded-md border-2 text-base transition-all ';
-    const selected = this.selected();
-    if (selected === null) {
-      return base + 'border-slate-600 text-slate-200 hover:border-cyan-500/60';
-    }
-    if (index === this.question().correct) {
-      return base + 'border-emerald-400 bg-emerald-400/10 text-emerald-300';
-    }
-    if (index === selected) {
-      return base + 'border-red-400 bg-red-400/10 text-red-300';
-    }
-    return base + 'border-slate-700 text-slate-500';
-  }
+  quizResult: QuizResultTexts = {
+    perfekt: 'Perfekt! Du hast das Setup komplett verstanden.',
+    gut: 'Stark! Nur ein kleiner Rest, den du nochmal im Hardware-Labor testen kannst.',
+    schwach: 'Spiel das Hardware-Labor nochmal durch, dann sitzt es.',
+  };
 }

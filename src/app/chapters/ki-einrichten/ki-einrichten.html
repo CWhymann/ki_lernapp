@@ -316,54 +316,7 @@
     </p>
   </section>
 
-  <section
-    class="p-6 rounded-xl bg-slate-800/50 border border-slate-700 shadow-[0_0_25px_rgba(34,211,238,0.1)]"
-  >
-    <h2 class="text-xl font-semibold text-cyan-300 mb-2">5 · Wissens-Check</h2>
+  <app-quiz [fragen]="quiz" [ergebnis]="quizResult" titel="5 · Wissens-Check" />
 
-    @if (!quizFinished()) {
-      <p class="text-sm text-slate-400 mb-4">Frage {{ quizIndex() + 1 }} von {{ quiz.length }}</p>
-      <p class="text-base text-slate-200 mb-4">{{ question().question }}</p>
-
-      <div class="flex flex-col gap-3">
-        @for (option of question().options; track $index; let i = $index) {
-          <button (click)="choose(i)" [disabled]="selected() !== null" [class]="optionStyle(i)">
-            {{ option }}
-          </button>
-        }
-      </div>
-
-      @if (selected() !== null) {
-        <div class="mt-4 p-4 rounded-md border border-slate-700 bg-slate-900/60">
-          <p
-            class="text-base font-semibold"
-            [class]="selected() === question().correct ? 'text-emerald-300' : 'text-amber-300'"
-          >
-            {{ selected() === question().correct ? '✓ Richtig!' : '✗ Knapp daneben.' }}
-          </p>
-          <p class="text-base text-slate-300 mt-1">{{ question().explanation }}</p>
-        </div>
-        <button
-          (click)="nextQuestion()"
-          class="mt-4 px-5 py-2 rounded-md border-2 border-cyan-300 text-base font-semibold text-cyan-200 bg-cyan-400/10 shadow-[0_0_15px_rgba(34,211,238,0.4)]"
-        >
-          {{ quizIndex() === quiz.length - 1 ? 'Ergebnis anzeigen' : 'Weiter →' }}
-        </button>
-      }
-    } @else {
-      <div
-        class="celebrate p-5 rounded-lg border-2 border-cyan-300 bg-cyan-400/10 shadow-[0_0_30px_rgba(34,211,238,0.4)]"
-      >
-        <p class="text-2xl font-bold text-cyan-300">{{ score() }} von {{ quiz.length }} richtig</p>
-        <p class="text-base text-slate-200 mt-1">{{ scoreText() }}</p>
-      </div>
-      <button
-        (click)="restartQuiz()"
-        class="mt-4 px-4 py-2 rounded-md border border-slate-600 text-base text-slate-300 hover:border-cyan-500/50 transition-colors"
-      >
-        ↺ Nochmal spielen
-      </button>
-    }
-  </section>
   <app-glossary [terms]="glossary" />
 </div>
