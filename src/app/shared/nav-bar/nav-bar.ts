@@ -12,18 +12,24 @@ export class NavBar {
 
   chapters = [
     { path: '/prompting', label: 'Prompting' },
-    { path: '/training', label: 'Training' },
+    { path: '/ki-einrichten', label: 'KI einrichten' },
     { path: '/tokens', label: 'Tokens' },
+    { path: '/training', label: 'Training' },
+    { path: '/neuronale-netze', label: 'Neuronale Netze' },
     { path: '/halluzinationen', label: 'Halluzinationen' },
     { path: '/bias', label: 'Bias' },
-    { path: '/neuronale-netze', label: 'Neuronale Netze' },
-    { path: '/ki-einrichten', label: 'KI einrichten' },
   ];
 
+  /**
+   * Opens or closes the mobile menu.
+   */
   toggleMenu() {
     this.isOpen.update((v) => !v);
   }
 
+  /**
+   * Closes the mobile menu.
+   */
   closeMenu() {
     this.isOpen.set(false);
   }
