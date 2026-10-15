@@ -1,0 +1,80 @@
+<section
+  class="rounded-xl border border-cyan-500/30 bg-slate-900/70 p-5 shadow-[0_0_30px_rgba(34,211,238,0.12)] md:p-8"
+>
+  <h2 class="mb-4 text-lg font-semibold text-cyan-300">{{ titel() }}</h2>
+
+  @if (!beendet()) {
+    <div class="mb-6 flex gap-2" aria-hidden="true">
+      @for (eintrag of runde(); track $index; let i = $index) {
+        <span [class]="segmentStyle(i)"></span>
+      }
+    </div>
+
+    <p class="mb-2 text-sm text-slate-400">Frage {{ index() + 1 }} von {{ gesamt() }}</p>
+    <p class="mb-6 text-lg font-semibold text-slate-100">{{ aufgabe().question }}</p>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      @for (option of aufgabe().options; track $index; let i = $index) {
+        <button
+          type="button"
+          (click)="waehlen(i)"
+          [disabled]="auswahl() !== null"
+          [class]="optionStyle(i)"
+        >
+          <span
+            class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-current text-sm font-bold"
+            >{{ buchstabe(i) }}</span
+          >
+                    <span class="min-w-0 wrap-break-word">{{ option }}</span>
+        </button>
+      }
+    </div>
+
+    @if (auswahl() !== null) {
+      <div
+        class="feedback mt-6 rounded-md border border-slate-700 bg-slate-950/70 p-4"
+        role="status"
+      >
+        <p
+          class="text-base font-semibold"
+          [class]="auswahl() === aufgabe().correct ? 'text-emerald-300' : 'text-pink-300'"
+        >
+          {{ auswahl() === aufgabe().correct ? 'Richtig!' : 'Knapp daneben.' }}
+        </p>
+        <p class="mt-1 text-base text-slate-300">{{ aufgabe().explanation }}</p>
+      </div>
+
+      <button
+        type="button"
+        (click)="weiter()"
+        class="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-md border-2 border-cyan-300 bg-cyan-400/10 px-6 py-3 text-base font-bold text-cyan-200 transition-colors hover:bg-cyan-400/20 sm:w-auto"
+      >
+        {{ index() === gesamt() - 1 ? 'Ergebnis anzeigen' : 'Weiter' }}
+      </button>
+    }
+  } @else {
+    <p class="text-sm uppercase tracking-widest text-slate-400">Ergebnis</p>
+    <p class="mt-2 text-5xl font-bold text-cyan-300">{{ punkte() }} / {{ gesamt() }}</p>
+    <p class="mt-4 text-base text-slate-200">{{ ergebnisText() }}</p>
+
+    <div class="mt-6 flex flex-col gap-4 sm:flex-row">
+      <button
+        type="button"
+        (click)="neueRunde()"
+        class="inline-flex min-h-12 items-center justify-center rounded-md border-2 border-cyan-300 bg-cyan-400/10 px-6 py-3 text-base font-bold text-cyan-200 transition-colors hover:bg-cyan-400/20"
+      >
+        Neue Runde
+      </button>
+
+      @if (falsche().length > 0) {
+        <button
+          type="button"
+          (click)="falscheWiederholen()"
+          class="inline-flex min-h-12 items-center justify-center rounded-md border-2 border-pink-400 bg-pink-400/10 px-6 py-3 text-base font-bold text-pink-300 transition-colors hover:bg-pink-400/20"
+        >
+          Falsche wiederholen
+        </button>
+      }
+    </div>
+  }
+</section>
