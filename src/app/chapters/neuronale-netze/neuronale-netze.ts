@@ -2,6 +2,15 @@ import { Component, signal, computed } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Quiz, QuizQuestion, QuizResultTexts } from '../../shared/quiz/quiz';
 
+/** Words that can be selected in the attention example. */
+type AttentionWort = 'sie' | 'müde';
+
+/** One row of the attention bars. */
+interface AttentionZeile {
+  wort: string;
+  anteil: number;
+}
+
 @Component({
   selector: 'app-neuronale-netze',
   imports: [DecimalPipe, Quiz],
@@ -31,6 +40,33 @@ export class NeuronaleNetze {
   });
 
   outputActive = computed(() => this.weightedSum() >= this.threshold);
+
+  attentionWoerter = ['Die', 'Katze', 'sitzt', 'weil', 'sie', 'müde', 'ist'];
+  waehlbareWoerter: AttentionWort[] = ['sie', 'müde'];
+
+  /** Illustrative attention weights per selected word, in the order of attentionWoerter. */
+  attentionGewichte: Record<AttentionWort, number[]> = {
+    sie: [0.02, 0.7, 0.08, 0.05, 0.03, 0.1, 0.02],
+    müde: [0.03, 0.2, 0.07, 0.1, 0.3, 0.1, 0.2],
+  };
+
+  selectedWort = signal<AttentionWort>('sie');
+
+  attentionZeilen = computed<AttentionZeile[]>(() => {
+    const gewichte = this.attentionGewichte[this.selectedWort()];
+    return this.attentionWoerter.map((wort, i) => ({
+      wort,
+      anteil: Math.round(gewichte[i] * 100),
+    }));
+  });
+
+  /**
+   * Selects the word whose attention is shown.
+   * @param wort The selected word.
+   */
+  waehleWort(wort: AttentionWort) {
+    this.selectedWort.set(wort);
+  }
 
   quiz: QuizQuestion[] = [
     {
@@ -99,11 +135,32 @@ export class NeuronaleNetze {
       explanation:
         'Die Eingänge werden gewichtet, addiert und mit dem Schwellenwert verglichen. Daraus ergibt sich, ob das Output-Neuron feuert.',
     },
+    {
+      question: 'Was macht Attention in einem Transformer?',
+      options: [
+        'Jedes Wort gewichtet, wie wichtig andere Wörter für seine Bedeutung sind',
+        'Sie zählt die Buchstaben eines Textes',
+        'Sie löscht unwichtige Wörter aus dem Text',
+      ],
+      correct: 0,
+      explanation:
+        'Attention bestimmt, auf welche anderen Wörter ein Wort schaut, um seine Bedeutung im Satz zu verstehen.',
+    },
+    {
+      question: 'Auf welcher Bauweise beruhen heutige Sprachmodelle wie ChatGPT oder Claude?',
+      options: [
+        'Auf dem Transformer',
+        'Auf einem Stromwandler im Rechner',
+        'Auf einem Bildbearbeitungsprogramm',
+      ],
+      correct: 0,
+      explanation: 'Der Transformer mit Attention ist die Grundlage moderner Sprachmodelle.',
+    },
   ];
 
   quizResult: QuizResultTexts = {
-    perfekt: 'Perfekt. Du verstehst, wie Gewichte und Schwellenwert zusammenspielen.',
-    gut: 'Gut. Probier die Schaltung oben mit verschiedenen Kombinationen aus.',
-    schwach: 'Schau dir die Schaltung oben noch einmal an und lies die Erklärungen zu den Fragen.',
+    perfekt: 'Perfekt. Du verstehst Gewichte, Schwellenwert und Attention.',
+    gut: 'Gut. Probier die Schaltung und die Attention-Übung mit verschiedenen Wörtern aus.',
+    schwach: 'Schau dir die Schaltung und die Attention-Übung oben noch einmal an.',
   };
 }

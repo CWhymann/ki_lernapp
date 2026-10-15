@@ -62,6 +62,96 @@
       </p>
     </div>
 
+    <div
+      class="p-6 rounded-xl bg-slate-800/50 border border-slate-700 shadow-[0_0_25px_rgba(34,211,238,0.1)]"
+    >
+      <h2 class="text-lg font-semibold text-cyan-300 mb-3">Worauf schaut die KI?</h2>
+      <p class="text-sm text-slate-400 mb-4">
+        Wähle ein Wort aus. Die Balken zeigen, wie stark die KI bei diesem Wort auf jedes andere
+        Wort des Satzes schaut.
+      </p>
+
+      <p class="text-lg text-slate-100 mb-4">
+        @for (wort of attentionWoerter; track $index) {
+          <span
+            class="px-1 rounded"
+            [class.text-cyan-300]="wort === selectedWort()"
+            [class.font-bold]="wort === selectedWort()"
+            >{{ wort }}</span
+          >{{ $last ? '.' : ' ' }}
+        }
+      </p>
+
+      <div class="flex flex-wrap gap-2 mb-6">
+        @for (wort of waehlbareWoerter; track wort) {
+          <button
+            (click)="waehleWort(wort)"
+            [attr.aria-pressed]="selectedWort() === wort"
+            class="px-4 py-2 rounded-md border-2 text-base transition-all"
+            [class.border-cyan-300]="selectedWort() === wort"
+            [class.bg-cyan-400/10]="selectedWort() === wort"
+            [class.text-cyan-200]="selectedWort() === wort"
+            [class.border-slate-600]="selectedWort() !== wort"
+            [class.text-slate-300]="selectedWort() !== wort"
+          >
+            {{ wort }}
+          </button>
+        }
+      </div>
+
+      <div class="flex flex-col gap-3">
+        @for (zeile of attentionZeilen(); track zeile.wort) {
+          <div class="grid grid-cols-[6rem_1fr_3rem] items-center gap-3">
+            <span class="text-base text-slate-200 wrap-break-word">{{ zeile.wort }}</span>
+            <div class="h-3 rounded-full bg-slate-900">
+              <div
+                class="h-full rounded-full bg-cyan-400 transition-all"
+                [style.width.%]="zeile.anteil"
+              ></div>
+            </div>
+            <span class="text-sm text-slate-400 text-right">{{ zeile.anteil }}%</span>
+          </div>
+        }
+      </div>
+
+      <p class="mt-6 text-sm text-slate-400 border-t border-slate-700 pt-4">
+        Die Zahlen sind vereinfacht. Sie zeigen das Prinzip: "sie" bezieht sich auf "Katze", weil
+        die KI den Zusammenhang über den ganzen Satz verfolgt.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="text-lg font-semibold text-cyan-300 mb-4">Die Bauweise dahinter: Transformer</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-5 rounded-xl bg-slate-900/70 border border-slate-700">
+          <p class="text-sm uppercase tracking-widest text-cyan-400 mb-2">1 · Zahlen</p>
+          <p class="text-base text-slate-200">
+            Jedes Token wird in eine Reihe von Zahlen umgewandelt. Zusätzlich bekommt es eine
+            Positionsangabe, damit die KI die Reihenfolge der Wörter kennt.
+          </p>
+        </div>
+        <div class="p-5 rounded-xl bg-slate-900/70 border border-slate-700">
+          <p class="text-sm uppercase tracking-widest text-cyan-400 mb-2">2 · Attention</p>
+          <p class="text-base text-slate-200">
+            Jedes Token schaut auf alle anderen Tokens des Textes und entscheidet, welche für seine
+            Bedeutung wichtig sind. Genau das zeigt die Übung oben.
+          </p>
+        </div>
+        <div class="p-5 rounded-xl bg-slate-900/70 border border-slate-700">
+          <p class="text-sm uppercase tracking-widest text-cyan-400 mb-2">3 · Schichten</p>
+          <p class="text-base text-slate-200">
+            Diese Schritte wiederholen sich in vielen Schichten hintereinander. Jede Schicht
+            verfeinert das Verständnis, bis die Antwort entsteht.
+          </p>
+        </div>
+      </div>
+      <p class="mt-4 text-base text-slate-300">
+        Der Transformer wurde 2017 vorgestellt und ist die Bauweise, auf der heutige Sprachmodelle
+        beruhen. Das Prinzip aus den Gewichten oben bleibt dabei gleich: Verbindungen werden
+        gewichtet und angepasst. Nur die Verbindungen sind hier viel zahlreicher.
+      </p>
+    </div>
+
     <app-quiz [fragen]="quiz" [ergebnis]="quizResult" />
   </div>
 </div>
