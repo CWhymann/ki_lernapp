@@ -55,6 +55,21 @@
       </p>
     </div>
 
+    <section class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+      <h2 class="text-lg font-semibold text-cyan-300 mb-3">Das Kontextfenster</h2>
+      <p class="text-base text-slate-300 mb-4">
+        Ein Modell kann nur eine begrenzte Menge an Tokens auf einmal berücksichtigen. Diese Grenze
+        nennt man Kontextfenster. Dazu gehören deine Nachricht, die bisherigen Antworten und oft
+        auch Hinweise, die dem Modell vorab gegeben wurden.
+      </p>
+      <p class="text-base text-slate-300">
+        Ist ein Gespräch sehr lang, wird der älteste Teil nicht mehr berücksichtigt. Deshalb
+        vergisst eine KI bei langen Chats manchmal Details vom Anfang.
+      </p>
+    </section>
+
     <app-quiz [fragen]="quiz" [ergebnis]="quizResult" />
+
+    <app-glossary [terms]="glossar" />
   </div>
 </div>

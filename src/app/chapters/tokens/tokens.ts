@@ -1,10 +1,12 @@
 import { Component, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Glossary, GlossaryTerm } from '../../shared/glossary/glossary';
+import { GRUNDBEGRIFFE } from '../../shared/glossary/begriffe';
 import { Quiz, QuizQuestion, QuizResultTexts } from '../../shared/quiz/quiz';
 
 @Component({
   selector: 'app-tokens',
-  imports: [FormsModule, Quiz],
+  imports: [FormsModule, Quiz, Glossary],
   templateUrl: './tokens.html',
   styleUrl: './tokens.css',
 })
@@ -32,6 +34,10 @@ export class Tokens {
 
   tokenCount = computed(() => this.tokenList().length);
   wordCount = computed(() => (this.inputText().match(/[\wäöüßÄÖÜ]+/g) ?? []).length);
+
+  glossar: GlossaryTerm[] = GRUNDBEGRIFFE.filter((term) =>
+    ['Token', 'Kontextfenster', 'Modell'].includes(term.name),
+  );
 
   quiz: QuizQuestion[] = [
     {
@@ -103,6 +109,9 @@ export class Tokens {
     schwach: 'Schau dir den Satz oben noch einmal an und lies die Erklärung zu den Fragen.',
   };
 
+  /**
+   * Clears the text field.
+   */
   clearText() {
     this.inputText.set('');
   }
