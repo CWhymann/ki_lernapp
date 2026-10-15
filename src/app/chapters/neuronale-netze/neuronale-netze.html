@@ -14,50 +14,54 @@
     Gewichten.
   </p>
 
-  <div
-    class="p-6 rounded-xl bg-slate-800/50 border border-slate-700 shadow-[0_0_25px_rgba(34,211,238,0.1)]"
-  >
-    <h2 class="text-lg font-semibold text-cyan-300 mb-3">Probier es aus</h2>
-    <p class="text-sm text-slate-400 mb-6">
-      Aktiviere Input-Neuronen und beobachte, ob das Output-Neuron genug Signal bekommt, um zu
-      feuern.
-    </p>
+  <div class="flex flex-col gap-8">
+    <div
+      class="p-6 rounded-xl bg-slate-800/50 border border-slate-700 shadow-[0_0_25px_rgba(34,211,238,0.1)]"
+    >
+      <h2 class="text-lg font-semibold text-cyan-300 mb-3">Probier es aus</h2>
+      <p class="text-sm text-slate-400 mb-6">
+        Aktiviere Input-Neuronen und beobachte, ob das Output-Neuron genug Signal bekommt, um zu
+        feuern.
+      </p>
 
-    <div class="flex items-center justify-between gap-8">
-      <div class="flex flex-col gap-6">
-        @for (active of inputs(); track $index) {
-          <button
-            (click)="toggleInput($index)"
-            class="w-14 h-14 rounded-full border-2 flex items-center justify-center text-sm font-semibold transition-all"
-            [class.bg-cyan-400]="active"
-            [class.border-cyan-300]="active"
-            [class.text-slate-950]="active"
-            [class.bg-slate-900]="!active"
-            [class.border-slate-600]="!active"
-            [class.text-slate-400]="!active"
-          >
-            {{ weights[$index] }}
-          </button>
-        }
+      <div class="flex items-center justify-between gap-8">
+        <div class="flex flex-col gap-6">
+          @for (active of inputs(); track $index) {
+            <button
+              (click)="toggleInput($index)"
+              class="w-14 h-14 rounded-full border-2 flex items-center justify-center text-sm font-semibold transition-all"
+              [class.bg-cyan-400]="active"
+              [class.border-cyan-300]="active"
+              [class.text-slate-950]="active"
+              [class.bg-slate-900]="!active"
+              [class.border-slate-600]="!active"
+              [class.text-slate-400]="!active"
+            >
+              {{ weights[$index] }}
+            </button>
+          }
+        </div>
+
+        <div class="flex-1 h-px bg-linear-to-r from-slate-600 to-cyan-500/50"></div>
+
+        <div
+          class="w-20 h-20 rounded-full border-2 flex items-center justify-center text-base font-semibold transition-all"
+          [class.bg-cyan-400]="outputActive()"
+          [class.border-cyan-300]="outputActive()"
+          [class.text-slate-950]="outputActive()"
+          [class.bg-slate-900]="!outputActive()"
+          [class.border-slate-600]="!outputActive()"
+          [class.text-slate-400]="!outputActive()"
+        >
+          {{ outputActive() ? 'AN' : 'AUS' }}
+        </div>
       </div>
 
-      <div class="flex-1 h-px bg-linear-to-r from-slate-600 to-cyan-500/50"></div>
-
-      <div
-        class="w-20 h-20 rounded-full border-2 flex items-center justify-center text-base font-semibold transition-all"
-        [class.bg-cyan-400]="outputActive()"
-        [class.border-cyan-300]="outputActive()"
-        [class.text-slate-950]="outputActive()"
-        [class.bg-slate-900]="!outputActive()"
-        [class.border-slate-600]="!outputActive()"
-        [class.text-slate-400]="!outputActive()"
-      >
-        {{ outputActive() ? 'AN' : 'AUS' }}
-      </div>
+      <p class="mt-6 text-sm text-slate-400 border-t border-slate-700 pt-4">
+        Summe der Signale: {{ weightedSum() | number: '1.1-1' }} / Schwellenwert: {{ threshold }}
+      </p>
     </div>
 
-    <p class="mt-6 text-sm text-slate-400 border-t border-slate-700 pt-4">
-      Summe der Signale: {{ weightedSum() | number: '1.1-1' }} / Schwellenwert: {{ threshold }}
-    </p>
+    <app-quiz [fragen]="quiz" [ergebnis]="quizResult" />
   </div>
 </div>
