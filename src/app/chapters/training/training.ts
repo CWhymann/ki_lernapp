@@ -1,5 +1,7 @@
 import { Component, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Glossary, GlossaryTerm } from '../../shared/glossary/glossary';
+import { GRUNDBEGRIFFE } from '../../shared/glossary/begriffe';
 import { Quiz, QuizQuestion, QuizResultTexts } from '../../shared/quiz/quiz';
 
 interface DataOption {
@@ -9,7 +11,7 @@ interface DataOption {
 
 @Component({
   selector: 'app-training',
-  imports: [FormsModule, Quiz],
+  imports: [FormsModule, Quiz, Glossary],
   templateUrl: './training.html',
   styleUrl: './training.css',
 })
@@ -44,6 +46,10 @@ export class Training {
     this.dataChoice() === 'viel'
       ? 'Die KI übernimmt die Fehler gleich mit. Mehr davon macht sie nicht besser, sondern nur sicherer im Falschen.'
       : 'Die Regel wird klarer erkannt, weil jedes Beispiel stimmt. Qualität schlägt Menge.',
+  );
+
+  glossar: GlossaryTerm[] = GRUNDBEGRIFFE.filter((term: GlossaryTerm) =>
+    ['Modell', 'Parameter'].includes(term.name),
   );
 
   quiz: QuizQuestion[] = [
