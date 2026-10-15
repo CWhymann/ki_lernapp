@@ -1,12 +1,6 @@
 import { Component, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-interface QuizQuestion {
-  question: string;
-  options: string[];
-  correct: number;
-  explanation: string;
-}
+import { Quiz, QuizQuestion, QuizResultTexts } from '../../shared/quiz/quiz';
 
 interface DataOption {
   id: 'viel' | 'gut';
@@ -15,7 +9,7 @@ interface DataOption {
 
 @Component({
   selector: 'app-training',
-  imports: [FormsModule],
+  imports: [FormsModule, Quiz],
   templateUrl: './training.html',
   styleUrl: './training.css',
 })
@@ -85,22 +79,65 @@ export class Training {
       explanation:
         'Am Anfang lernt die KI viel Neues. Später kennt sie die Muster schon, und jedes weitere Beispiel bringt wenig.',
     },
+    {
+      question: 'Was erkennt eine KI beim Training?',
+      options: [
+        'Statistische Muster in vielen Beispielen',
+        'Den Sinn hinter jedem Beispiel wie ein Mensch',
+        'Nur die Reihenfolge der Beispiele',
+      ],
+      correct: 0,
+      explanation:
+        'Die KI lernt nicht wie ein Mensch, sondern erkennt Muster in den Beispieldaten.',
+    },
+    {
+      question: 'Was passiert, wenn die Trainingsdaten einseitig sind?',
+      options: [
+        'Die KI gleicht das automatisch aus',
+        'Die KI übernimmt die Einseitigkeit',
+        'Die KI wird dadurch schneller',
+      ],
+      correct: 1,
+      explanation:
+        'Die KI kennt nur, was in den Daten steckt. Einseitige Daten führen zu einseitigen Ergebnissen.',
+    },
+    {
+      question: 'Was bedeutet "verallgemeinern"?',
+      options: [
+        'Beispiele auswendig lernen',
+        'Gelernte Muster auf neue, unbekannte Fälle anwenden',
+        'Alle Daten zu einem Beispiel zusammenfassen',
+      ],
+      correct: 1,
+      explanation:
+        'Eine gute KI erkennt Muster und kann sie auch auf Fälle anwenden, die im Training nicht vorkamen.',
+    },
+    {
+      question: 'Welche Aussage über Trainingsdaten stimmt?',
+      options: [
+        'Mehr Daten machen schlechte Daten gut',
+        'Qualität schlägt Quantität',
+        'Ab 100 Beispielen ist jede KI perfekt',
+      ],
+      correct: 1,
+      explanation:
+        'Fehlerhafte oder einseitige Daten führen zu einer schlechten KI, egal wie viele es sind.',
+    },
+    {
+      question:
+        'Die Trefferquote liegt schon bei 90 Prozent. Was bringen weitere Daten jetzt noch?',
+      options: ['Meist nur noch wenig', 'Sofort 100 Prozent', 'Die Trefferquote sinkt immer'],
+      correct: 0,
+      explanation:
+        'Die Kurve flacht ab: Am Anfang bringt jedes Beispiel viel, später kaum noch etwas.',
+    },
   ];
 
-  quizIndex = signal(0);
-  selected = signal<number | null>(null);
-  score = signal(0);
-  quizFinished = signal(false);
-
-  question = computed(() => this.quiz[this.quizIndex()]);
-
-  scoreText = computed(() => {
-    const score = this.score();
-    if (score === this.quiz.length)
-      return 'Sehr gut. Menge allein reicht nicht, das hast du verstanden.';
-    if (score >= 2) return 'Gut. Schau dir den zweiten Abschnitt noch einmal an.';
-    return 'Probier den Bereich mit der Auswahl aus und dann die Frage nochmal.';
-  });
+  quizResult: QuizResultTexts = {
+    perfekt: 'Sehr gut. Menge allein reicht nicht, das hast du verstanden.',
+    gut: 'Gut. Schau dir den zweiten Abschnitt noch einmal an.',
+    schwach: 'Probier den Bereich mit der Auswahl aus und dann die Runde nochmal.',
+  };
 
   /**
    * Selects the starting situation in the second section.
@@ -108,59 +145,5 @@ export class Training {
    */
   chooseData(id: DataOption['id']) {
     this.dataChoice.set(id);
-  }
-
-  /**
-   * Stores the selected answer and counts correct answers.
-   * @param index Position of the selected option.
-   */
-  choose(index: number) {
-    if (this.selected() !== null) return;
-    this.selected.set(index);
-    if (index === this.question().correct) {
-      this.score.update((value) => value + 1);
-    }
-  }
-
-  /**
-   * Moves to the next question or shows the result.
-   */
-  nextQuestion() {
-    if (this.quizIndex() === this.quiz.length - 1) {
-      this.quizFinished.set(true);
-    } else {
-      this.quizIndex.update((value) => value + 1);
-      this.selected.set(null);
-    }
-  }
-
-  /**
-   * Resets the knowledge check to the beginning.
-   */
-  restartQuiz() {
-    this.quizIndex.set(0);
-    this.selected.set(null);
-    this.score.set(0);
-    this.quizFinished.set(false);
-  }
-
-  /**
-   * Returns the classes for an answer option depending on its state.
-   * @param index Position of the option.
-   * @returns Tailwind classes for the option.
-   */
-  optionStyle(index: number): string {
-    const base = 'text-left px-4 py-3 rounded-md border-2 text-base transition-all ';
-    const selected = this.selected();
-    if (selected === null) {
-      return base + 'border-slate-600 text-slate-200 hover:border-cyan-500/60';
-    }
-    if (index === this.question().correct) {
-      return base + 'border-emerald-400 bg-emerald-400/10 text-emerald-300';
-    }
-    if (index === selected) {
-      return base + 'border-red-400 bg-red-400/10 text-red-300';
-    }
-    return base + 'border-slate-700 text-slate-500';
   }
 }
