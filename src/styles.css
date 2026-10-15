@@ -6,3 +6,31 @@ body {
   padding: 0;
   background-color: #020617;
 }
+
+.theme-cyan {
+  --color-cyan-200: #a5f3fc;
+  --color-cyan-300: #67e8f9;
+  --color-cyan-400: #22d3ee;
+  --color-cyan-500: #06b6d4;
+}
+
+.theme-emerald {
+  --color-cyan-200: #a7f3d0;
+  --color-cyan-300: #6ee7b7;
+  --color-cyan-400: #34d399;
+  --color-cyan-500: #10b981;
+}
+
+.theme-pink {
+  --color-cyan-200: #fbcfe8;
+  --color-cyan-300: #ff7ab8;
+  --color-cyan-400: #ff2d95;
+  --color-cyan-500: #e0187a;
+}
+
+.theme-violet {
+  --color-cyan-200: #ddd6fe;
+  --color-cyan-300: #c4b5fd;
+  --color-cyan-400: #a78bfa;
+  --color-cyan-500: #8b5cf6;
+}
