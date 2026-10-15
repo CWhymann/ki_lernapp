@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Landing } from './features/landing/landing';
 import { Dashboard } from './features/dashboard/dashboard';
 import { Geschichte } from './features/geschichte/geschichte';
+import { Lernpfad } from './features/lernpfad/lernpfad';
 import { Shell } from './shared/shell/shell';
 import { Prompting } from './chapters/prompting/prompting';
 import { Training } from './chapters/training/training';
@@ -19,6 +20,7 @@ export const routes: Routes = [
     component: Shell,
     children: [
       { path: 'dashboard', component: Dashboard },
+      { path: 'lernpfad', component: Lernpfad },
       { path: 'prompting', component: Prompting },
       { path: 'training', component: Training },
       { path: 'tokens', component: Tokens },
