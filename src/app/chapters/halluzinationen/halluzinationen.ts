@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { Glossary, GlossaryTerm } from '../../shared/glossary/glossary';
 import { GRUNDBEGRIFFE } from '../../shared/glossary/begriffe';
 import { Quiz, QuizQuestion, QuizResultTexts } from '../../shared/quiz/quiz';
@@ -7,6 +7,18 @@ interface Claim {
   text: string;
   isTrue: boolean;
   explanation: string;
+}
+
+interface WordChoice {
+  word: string;
+  percent: number;
+}
+
+interface NextWordCase {
+  id: 'bekannt' | 'unbekannt';
+  label: string;
+  start: string;
+  choices: WordChoice[];
 }
 
 @Component({
@@ -43,6 +55,59 @@ export class Halluzinationen {
 
   answered = signal<Record<number, boolean>>({});
 
+  nextWordCases: NextWordCase[] = [
+    {
+      id: 'bekannt',
+      label: 'Bekannte Frage',
+      start: 'Wer schrieb das Drama "Faust"? Die Antwort beginnt mit:',
+      choices: [
+        { word: 'Goethe', percent: 94 },
+        { word: 'Schiller', percent: 3 },
+        { word: 'Lessing', percent: 2 },
+        { word: 'Kafka', percent: 1 },
+      ],
+    },
+    {
+      id: 'unbekannt',
+      label: 'Unbekannte Frage',
+      start:
+        'Wie hieß 1923 der Bürgermeister der kleinen Gemeinde Brunnenau? Die Antwort beginnt mit:',
+      choices: [
+        { word: 'Müller', percent: 24 },
+        { word: 'Schmidt', percent: 22 },
+        { word: 'Weber', percent: 20 },
+        { word: 'Wagner', percent: 18 },
+        { word: 'Fischer', percent: 16 },
+      ],
+    },
+  ];
+
+  caseChoice = signal<NextWordCase['id']>('bekannt');
+
+  pickedWord = signal<string | null>(null);
+
+  currentCase = computed(
+    () =>
+      this.nextWordCases.find((option) => option.id === this.caseChoice()) ?? this.nextWordCases[0],
+  );
+
+  wordNote = computed(() => {
+    const picked = this.pickedWord();
+    if (picked === null) return null;
+
+    const current = this.currentCase();
+
+    if (current.id === 'unbekannt') {
+      return `"${picked}" klingt als Antwort genauso sicher wie jedes andere Wort in der Liste. Kein Wort liegt klar vorn: Die KI kennt die Antwort nicht, muss aber trotzdem eines setzen. Genau so entsteht eine Halluzination.`;
+    }
+
+    if (picked === current.choices[0].word) {
+      return 'Ein Wort liegt klar vorn. Hier steckt das Wissen im Modell, und die Antwort stimmt.';
+    }
+
+    return `"${picked}" ist hier sehr unwahrscheinlich. Meist setzt die KI das wahrscheinlichste Wort, ein Rest Zufall kann aber auch ein anderes treffen. Deshalb kann dieselbe Frage mal richtig und mal falsch beantwortet werden.`;
+  });
+
   glossar: GlossaryTerm[] = GRUNDBEGRIFFE.filter((term: GlossaryTerm) =>
     ['Modell', 'Kontextfenster'].includes(term.name),
   );
@@ -73,6 +138,23 @@ export class Halluzinationen {
    */
   wasCorrect(index: number): boolean {
     return this.answered()[index] === true;
+  }
+
+  /**
+   * Switches to another question and clears the picked word.
+   * @param id Identifier of the selected question.
+   */
+  chooseCase(id: NextWordCase['id']) {
+    this.caseChoice.set(id);
+    this.pickedWord.set(null);
+  }
+
+  /**
+   * Stores the word the user picked as the next word.
+   * @param word The picked word.
+   */
+  pickWord(word: string) {
+    this.pickedWord.set(word);
   }
 
   quiz: QuizQuestion[] = [
@@ -140,6 +222,28 @@ export class Halluzinationen {
       correct: 1,
       explanation:
         'Auch Zitate können erfunden sein. Bei wichtigen Zitaten lohnt sich immer die Prüfung an der Originalquelle.',
+    },
+    {
+      question: 'Was passiert, wenn der KI eine Information fehlt?',
+      options: [
+        'Sie fragt einen Menschen um Rat',
+        'Sie setzt trotzdem ein Wort, das plausibel klingt',
+        'Sie bricht die Antwort immer ab',
+      ],
+      correct: 1,
+      explanation:
+        'Die KI muss immer ein nächstes Wort wählen. Fehlt das Wissen, entsteht Text, der passt, aber nicht stimmt.',
+    },
+    {
+      question: 'Was ist der Unterschied zwischen Wissenslücke und Halluzination?',
+      options: [
+        'Die Wissenslücke ist die fehlende Information, die Halluzination die erfundene Antwort darauf',
+        'Beides ist dasselbe',
+        'Eine Halluzination gibt es nur bei Bildern',
+      ],
+      correct: 0,
+      explanation:
+        'Eine Lücke im Wissen ist normal. Zum Fehler wird sie erst, wenn die KI sie mit erfundenem Text füllt, statt sie zuzugeben.',
     },
   ];
 

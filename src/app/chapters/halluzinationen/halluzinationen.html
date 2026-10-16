@@ -57,6 +57,112 @@
       </div>
     </div>
 
+    <section class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+      <h2 class="text-lg font-semibold text-cyan-300 mb-3">Wie wählt die KI das nächste Wort?</h2>
+      <p class="text-base text-slate-300 mb-2">
+        Eine KI schreibt Wort für Wort. Zu jedem möglichen nächsten Wort rechnet sie eine
+        Wahrscheinlichkeit aus und setzt dann eines davon. Sie prüft dabei nicht, ob der Satz
+        stimmt, sondern nur, welches Wort am besten passt.
+      </p>
+      <p class="text-sm text-slate-400 mb-4">
+        Wähle eine Frage und klick das Wort an, das die KI als Nächstes setzt.
+      </p>
+
+      <div class="flex flex-col gap-3 sm:flex-row mb-4">
+        @for (option of nextWordCases; track option.id) {
+          <button
+            (click)="chooseCase(option.id)"
+            [attr.aria-pressed]="caseChoice() === option.id"
+            [class]="
+              caseChoice() === option.id
+                ? 'flex-1 px-4 py-3 rounded-md border-2 border-cyan-300 bg-cyan-400/10 text-base font-semibold text-cyan-200'
+                : 'flex-1 px-4 py-3 rounded-md border-2 border-slate-600 text-base text-slate-300 hover:border-cyan-500/50 transition-colors'
+            "
+          >
+            {{ option.label }}
+          </button>
+        }
+      </div>
+
+      <p class="text-base text-slate-200 mb-3">
+        {{ currentCase().start }} <span class="text-cyan-300">...</span>
+      </p>
+
+      <div class="flex flex-col gap-2">
+        @for (choice of currentCase().choices; track choice.word) {
+          <button
+            (click)="pickWord(choice.word)"
+            [attr.aria-pressed]="pickedWord() === choice.word"
+            [class]="
+              pickedWord() === choice.word
+                ? 'relative block w-full text-left px-4 py-3 rounded-md border-2 border-cyan-300'
+                : 'relative block w-full text-left px-4 py-3 rounded-md border border-slate-600 hover:border-cyan-500/50 transition-colors'
+            "
+          >
+            <span
+              class="absolute inset-y-0 left-0 rounded-md bg-cyan-400/20 transition-all"
+              [style.width.%]="choice.percent"
+            ></span>
+            <span class="relative flex justify-between gap-3 text-base text-slate-200">
+              <span>{{ choice.word }}</span>
+              <span>{{ choice.percent }}%</span>
+            </span>
+          </button>
+        }
+      </div>
+
+      @if (wordNote(); as note) {
+        <div class="mt-4 p-4 rounded-md border border-slate-700 bg-slate-900/60">
+          <p class="text-base text-slate-200">{{ note }}</p>
+        </div>
+      }
+    </section>
+
+    <section class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+      <h2 class="text-lg font-semibold text-cyan-300 mb-3">Wissenslücke oder Halluzination?</h2>
+      <p class="text-base text-slate-300 mb-4">
+        Keine KI weiß alles. Eine Lücke im Wissen ist normal und kein Fehler. Zum Problem wird sie
+        erst, wenn die KI die Lücke mit erfundenem Text füllt, statt sie zuzugeben.
+      </p>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div class="p-4 rounded-md border border-slate-700 bg-slate-900/60">
+          <h3 class="text-base font-semibold text-emerald-300 mb-2">Wissenslücke</h3>
+          <p class="text-base text-slate-300 mb-3">
+            Die Information steckt nicht im Modell, zum Beispiel weil sie nach dem Ende des
+            Trainings entstanden ist, privat ist oder zu selten vorkommt.
+          </p>
+          <p class="p-3 rounded-md border border-slate-700 text-base text-slate-200 mb-3">
+            "Dazu habe ich keine verlässlichen Informationen."
+          </p>
+          <p class="text-base text-slate-300">
+            Das ist eine ehrliche Antwort. Du weißt, dass du anderswo nachsehen musst.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-md border border-slate-700 bg-slate-900/60">
+          <h3 class="text-base font-semibold text-orange-400 mb-2">Halluzination</h3>
+          <p class="text-base text-slate-300 mb-3">
+            Dieselbe Lücke, aber die KI setzt trotzdem ein Wort, das plausibel klingt.
+          </p>
+          <p class="p-3 rounded-md border border-slate-700 text-base text-slate-200 mb-3">
+            "Der Bürgermeister hieß Müller."
+          </p>
+          <p class="text-base text-slate-300">
+            Das ist der Fehler: Aus der Lücke wird eine falsche Aussage, die genauso sicher klingt
+            wie eine richtige.
+          </p>
+        </div>
+      </div>
+
+      <h3 class="text-base font-semibold text-cyan-200 mt-6 mb-2">Was du tun kannst</h3>
+      <ul class="list-disc pl-5 text-base text-slate-300 flex flex-col gap-1">
+        <li>Wichtige Fakten, Namen, Zahlen und Zitate gegen eine verlässliche Quelle prüfen.</li>
+        <li>Die KI nach ihrer Quelle fragen und die Quelle selbst öffnen.</li>
+        <li>Im Prompt erlauben: "Wenn du etwas nicht weißt, sag es."</li>
+      </ul>
+    </section>
+
     <app-quiz [fragen]="quiz" [ergebnis]="quizResult" />
 
     <app-glossary [terms]="glossar" />
