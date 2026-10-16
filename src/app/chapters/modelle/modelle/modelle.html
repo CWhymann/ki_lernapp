@@ -1,0 +1,193 @@
+<div class="max-w-3xl">
+  <h1 class="text-2xl font-bold text-cyan-300 mb-4">Modelle</h1>
+
+  <p class="text-base text-slate-300 mb-4">
+    Ein Modell ist das Ergebnis des Trainings: das fertig trainierte Programm, das Eingaben in
+    Ausgaben umwandelt. Es gibt nicht die eine KI, sondern viele Modelle mit unterschiedlichen
+    Stärken. Manche schreiben Text, andere erzeugen Bilder, Video oder Sprache. Multimodale Modelle
+    verstehen mehrere Arten von Eingaben gleichzeitig, zum Beispiel Text und Bilder.
+  </p>
+
+  <p class="text-base text-slate-300 mb-8">
+    Stand: Oktober 2026. Neue Modelle erscheinen alle paar Wochen, deshalb ändern sich Namen und
+    Preise schnell. Die Fragen, nach denen du auswählst, bleiben gleich: Welche Aufgabe, wie schwer,
+    wie oft und wohin dürfen die Daten?
+  </p>
+
+  <div class="flex flex-col gap-8">
+    <div
+      class="p-6 rounded-xl bg-slate-800/50 border border-slate-700 shadow-[0_0_25px_rgba(34,211,238,0.1)]"
+    >
+      <h2 class="text-lg font-semibold text-cyan-300 mb-3">Welches Modell für welche Aufgabe?</h2>
+      <p class="text-sm text-slate-400 mb-4">
+        Wähle eine Aufgabe und sieh, welcher Modelltyp dafür gebaut ist und welche Modelle es
+        aktuell gibt.
+      </p>
+
+      <div class="grid gap-3 sm:grid-cols-2">
+        @for (task of tasks; track task.id) {
+          <button
+            (click)="chooseTask(task.id)"
+            [attr.aria-pressed]="taskChoice() === task.id"
+            [class]="
+              taskChoice() === task.id
+                ? 'px-4 py-3 rounded-md border-2 border-cyan-300 bg-cyan-400/10 text-base font-semibold text-cyan-200 text-left'
+                : 'px-4 py-3 rounded-md border-2 border-slate-600 text-base text-slate-300 hover:border-cyan-500/50 transition-colors text-left'
+            "
+          >
+            {{ task.label }}
+          </button>
+        }
+      </div>
+
+      <div class="mt-4 p-4 rounded-md border border-slate-700 bg-slate-900/60">
+        <h3 class="text-base font-semibold text-cyan-300 mb-2">{{ selectedTask().type }}</h3>
+        <p class="text-base text-slate-200 mb-3">{{ selectedTask().explanation }}</p>
+        <p class="text-sm text-slate-400 mb-1">Beispiele (Stand Oktober 2026)</p>
+        <p class="text-base text-slate-200 mb-3">{{ selectedTask().examples }}</p>
+        <p class="text-base text-slate-300">{{ selectedTask().note }}</p>
+
+        @if (selectedTask().id === 'offline') {
+          <a
+            routerLink="/ki-einrichten"
+            class="inline-block mt-3 px-4 py-2 rounded-md bg-cyan-500/20 border border-cyan-400 text-cyan-300 hover:bg-cyan-500/30 transition-colors"
+          >
+            Zum Kapitel "KI einrichten"
+          </a>
+        }
+      </div>
+    </div>
+
+    <section class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+      <h2 class="text-lg font-semibold text-cyan-300 mb-3">Groß, mittel oder leicht?</h2>
+      <p class="text-base text-slate-300 mb-2">
+        Die Hersteller bieten ihre Modelle in Stufen an. Große Modelle sind stärker, aber langsamer
+        und teurer. Kleine sind schnell und günstig. Gerechnet wird pro Token, wie im Kapitel
+        Tokens.
+      </p>
+      <p class="text-sm text-slate-400 mb-4">
+        Stell die beiden Regler ein und sieh, welche Stufe sich lohnt.
+      </p>
+
+      <div class="flex flex-col gap-5">
+        <div>
+          <label for="difficulty" class="block text-base text-slate-200 mb-2">
+            Wie schwierig ist die Aufgabe?
+          </label>
+          <input
+            id="difficulty"
+            type="range"
+            min="1"
+            max="3"
+            step="1"
+            [(ngModel)]="difficulty"
+            class="w-full accent-cyan-400"
+          />
+          <div class="flex justify-between text-sm text-slate-500 mt-1">
+            <span>einfach</span>
+            <span>mittel</span>
+            <span>schwer</span>
+          </div>
+        </div>
+
+        <div>
+          <label for="volume" class="block text-base text-slate-200 mb-2">
+            Wie viele Anfragen sind es?
+          </label>
+          <input
+            id="volume"
+            type="range"
+            min="1"
+            max="3"
+            step="1"
+            [(ngModel)]="volume"
+            class="w-full accent-cyan-400"
+          />
+          <div class="flex justify-between text-sm text-slate-500 mt-1">
+            <span>einzelne</span>
+            <span>regelmäßig</span>
+            <span>sehr viele</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5 p-4 rounded-md border border-cyan-500/30 bg-slate-900/60">
+        <h3 class="text-base font-semibold text-cyan-300 mb-2">{{ recommendedTier().name }}</h3>
+        <p class="text-base text-slate-200 mb-3">{{ recommendedTier().strength }}</p>
+        <p class="text-sm text-slate-400 mb-1">Beispiele (Stand Oktober 2026)</p>
+        <p class="text-base text-slate-200 mb-3">{{ recommendedTier().examples }}</p>
+        <p class="text-sm text-slate-400 mb-1">Preisrahmen</p>
+        <p class="text-base text-slate-200">{{ recommendedTier().price }}</p>
+
+        @if (mixNote(); as note) {
+          <p class="mt-3 text-base text-slate-300 border-t border-slate-700 pt-3">{{ note }}</p>
+        }
+      </div>
+
+      <p class="text-sm text-slate-400 mt-3">
+        Listenpreise der Hersteller pro Million Eingabe-Tokens. Sie ändern sich häufig.
+      </p>
+    </section>
+
+    <section class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+      <h2 class="text-lg font-semibold text-cyan-300 mb-3">Offen oder geschlossen?</h2>
+      <p class="text-base text-slate-300 mb-4">
+        Ein geschlossenes Modell nutzt du beim Anbieter. Ein offenes Modell kannst du herunterladen
+        und selbst betreiben.
+      </p>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div class="p-4 rounded-md border border-slate-700 bg-slate-900/60">
+          <h3 class="text-base font-semibold text-cyan-300 mb-1">Geschlossene Modelle</h3>
+          <p class="text-sm text-slate-400 mb-3">Claude, GPT, Gemini</p>
+          <p class="text-base text-slate-200 mb-1">Vorteile</p>
+          <ul class="list-disc pl-5 text-base text-slate-300 mb-3 flex flex-col gap-1">
+            <li>Liegen bei schwierigen Aufgaben aktuell meist vorn.</li>
+            <li>Kein Aufwand: App öffnen oder Schnittstelle nutzen.</li>
+          </ul>
+          <p class="text-base text-slate-200 mb-1">Nachteile</p>
+          <ul class="list-disc pl-5 text-base text-slate-300 flex flex-col gap-1">
+            <li>Deine Eingaben gehen an den Anbieter.</li>
+            <li>Laufende Kosten und du kannst das Modell nicht verändern.</li>
+          </ul>
+        </div>
+
+        <div class="p-4 rounded-md border border-slate-700 bg-slate-900/60">
+          <h3 class="text-base font-semibold text-emerald-300 mb-1">Offene Modelle</h3>
+          <p class="text-sm text-slate-400 mb-3">DeepSeek V4, Qwen 3.5, Llama 4, Mistral</p>
+          <p class="text-base text-slate-200 mb-1">Vorteile</p>
+          <ul class="list-disc pl-5 text-base text-slate-300 mb-3 flex flex-col gap-1">
+            <li>Die Daten bleiben auf deinem Rechner oder Server.</li>
+            <li>Keine Gebühren für das Modell und du kannst es anpassen.</li>
+          </ul>
+          <p class="text-base text-slate-200 mb-1">Nachteile</p>
+          <ul class="list-disc pl-5 text-base text-slate-300 flex flex-col gap-1">
+            <li>Große Modelle brauchen starke Hardware.</li>
+            <li>Einrichtung nötig und die Lizenzen unterscheiden sich.</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="text-base text-slate-300 mt-4">
+        Wichtig: Bei den meisten "offenen" Modellen heißt das nur Open-Weight. Die gelernten
+        Gewichte sind öffentlich, die Trainingsdaten meist nicht. Echtes Open Source ist seltener.
+      </p>
+    </section>
+
+    <section class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+      <h2 class="text-lg font-semibold text-cyan-300 mb-3">So wählst du</h2>
+      <ul class="list-disc pl-5 text-base text-slate-300 flex flex-col gap-2">
+        <li>Wähle nach der Aufgabe, nicht nach dem bekanntesten Namen.</li>
+        <li>
+          Teste mit eigenen Beispielen. Ranglisten messen oft andere Aufgaben als deine, und viele
+          Werte stammen von den Herstellern selbst.
+        </li>
+        <li>Prüfe den Stand. Was heute vorn liegt, kann in einigen Wochen überholt sein.</li>
+      </ul>
+    </section>
+
+    <app-quiz [fragen]="quiz" [ergebnis]="quizResult" />
+
+    <app-glossary [terms]="glossar" />
+  </div>
+</div>
