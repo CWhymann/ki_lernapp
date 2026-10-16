@@ -59,6 +59,64 @@
     </div>
 
     <section class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+      <h2 class="text-lg font-semibold text-cyan-300 mb-3">Die Modell-Landkarte</h2>
+      <p class="text-base text-slate-300 mb-2">
+        Es gibt weit mehr als zwei Anbieter. Hier stehen die, die Stand Oktober 2026 den Markt
+        bestimmen: aus den USA, aus Frankreich und aus China. Daneben gibt es tausende weitere
+        Modelle, die zum Beispiel auf der Plattform Hugging Face zum Download liegen.
+      </p>
+      <p class="text-sm text-slate-400 mb-4">
+        Filtere nach geschlossenen Modellen (nur beim Anbieter nutzbar) oder offenen Modellen
+        (Gewichte zum Download).
+      </p>
+
+      <div class="flex flex-wrap gap-3 mb-2">
+        @for (option of filterOptions; track option.id) {
+          <button
+            (click)="setFilter(option.id)"
+            [attr.aria-pressed]="accessFilter() === option.id"
+            [class]="
+              accessFilter() === option.id
+                ? 'px-4 py-2 rounded-md border-2 border-cyan-300 bg-cyan-400/10 text-base font-semibold text-cyan-200'
+                : 'px-4 py-2 rounded-md border-2 border-slate-600 text-base text-slate-300 hover:border-cyan-500/50 transition-colors'
+            "
+          >
+            {{ option.label }}
+          </button>
+        }
+      </div>
+
+      <p class="text-sm text-slate-400 mb-4">
+        {{ visibleProviders().length }} von {{ providers.length }} Anbietern
+      </p>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        @for (provider of visibleProviders(); track provider.id) {
+          <div class="p-4 rounded-md border border-slate-700 bg-slate-900/60">
+            <div class="flex items-start justify-between gap-3 mb-1">
+              <h3 class="text-base font-semibold text-cyan-300 wrap-break-word">
+                {{ provider.name }}
+              </h3>
+              <span
+                class="shrink-0 px-2 py-0.5 rounded-full border border-slate-600 text-sm text-slate-400"
+              >
+                {{ accessLabel(provider.access) }}
+              </span>
+            </div>
+            <p class="text-sm text-slate-400 mb-3">{{ provider.country }}</p>
+
+            <p class="text-sm text-slate-400 mb-1">Aktuelle Modelle</p>
+            <p class="text-base text-slate-200 mb-3">{{ provider.models }}</p>
+            <p class="text-sm text-slate-400 mb-1">Stärke</p>
+            <p class="text-base text-slate-200 mb-3">{{ provider.strength }}</p>
+            <p class="text-sm text-slate-400 mb-1">Zugang</p>
+            <p class="text-base text-slate-300">{{ provider.usage }}</p>
+          </div>
+        }
+      </div>
+    </section>
+
+    <section class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
       <h2 class="text-lg font-semibold text-cyan-300 mb-3">Groß, mittel oder leicht?</h2>
       <p class="text-base text-slate-300 mb-2">
         Die Hersteller bieten ihre Modelle in Stufen an. Große Modelle sind stärker, aber langsamer
@@ -139,7 +197,7 @@
       <div class="grid gap-4 sm:grid-cols-2">
         <div class="p-4 rounded-md border border-slate-700 bg-slate-900/60">
           <h3 class="text-base font-semibold text-cyan-300 mb-1">Geschlossene Modelle</h3>
-          <p class="text-sm text-slate-400 mb-3">Claude, GPT, Gemini</p>
+          <p class="text-sm text-slate-400 mb-3">Claude, GPT, Gemini, Grok</p>
           <p class="text-base text-slate-200 mb-1">Vorteile</p>
           <ul class="list-disc pl-5 text-base text-slate-300 mb-3 flex flex-col gap-1">
             <li>Liegen bei schwierigen Aufgaben aktuell meist vorn.</li>
@@ -154,7 +212,7 @@
 
         <div class="p-4 rounded-md border border-slate-700 bg-slate-900/60">
           <h3 class="text-base font-semibold text-emerald-300 mb-1">Offene Modelle</h3>
-          <p class="text-sm text-slate-400 mb-3">DeepSeek V4, Qwen 3.5, Llama 4, Mistral</p>
+          <p class="text-sm text-slate-400 mb-3">DeepSeek, Qwen, Kimi, GLM, Mistral, Llama</p>
           <p class="text-base text-slate-200 mb-1">Vorteile</p>
           <ul class="list-disc pl-5 text-base text-slate-300 mb-3 flex flex-col gap-1">
             <li>Die Daten bleiben auf deinem Rechner oder Server.</li>

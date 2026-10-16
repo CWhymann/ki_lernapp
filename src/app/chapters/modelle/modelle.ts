@@ -24,6 +24,25 @@ interface Tier {
   price: string;
 }
 
+type Access = 'geschlossen' | 'offen' | 'gemischt';
+
+type AccessFilter = 'alle' | 'geschlossen' | 'offen';
+
+interface Provider {
+  id: string;
+  name: string;
+  country: string;
+  access: Access;
+  models: string;
+  strength: string;
+  usage: string;
+}
+
+interface FilterOption {
+  id: AccessFilter;
+  label: string;
+}
+
 /**
  * Picks the model tier that fits the difficulty and the number of requests.
  * @param difficulty Difficulty of the task from 1 to 3.
@@ -50,8 +69,9 @@ export class Modelle {
       type: 'Sprachmodell',
       explanation:
         'Ein Sprachmodell (LLM) bekommt Text und liefert Text. Es schreibt, fasst zusammen, übersetzt und beantwortet Fragen.',
-      examples: 'Claude (Anthropic), GPT (OpenAI), Gemini (Google)',
-      note: 'Die drei großen Anbieter liegen bei Alltagsaufgaben nah beieinander. Probier mehrere aus.',
+      examples:
+        'Claude (Anthropic), GPT (OpenAI), Gemini (Google), Grok (xAI), Mistral Large 4, DeepSeek V4',
+      note: 'Bei Alltagsaufgaben liegen die großen Anbieter nah beieinander. Probier mehrere aus.',
     },
     {
       id: 'code',
@@ -59,7 +79,7 @@ export class Modelle {
       type: 'Sprachmodell mit Coding-Stärke',
       explanation:
         'Auch beim Programmieren arbeitet ein Sprachmodell. Es liest und schreibt Code und kann in Entwicklerwerkzeugen mehrere Schritte selbstständig erledigen.',
-      examples: 'Claude Opus 5.5 und Sonnet 5.5, GPT-6.1 Sol',
+      examples: 'Claude Opus 5.5 und Sonnet 5.5, GPT-6.1 Sol, Grok 4.7, DeepSeek V4, Kimi K3',
       note: 'Für große Projekte nimmt man oft ein Top-Modell, für kleine Aufgaben reicht die Mittelklasse.',
     },
     {
@@ -95,7 +115,7 @@ export class Modelle {
       type: 'Audio- und Sprachmodell',
       explanation:
         'Ein Sprachmodell für Audio wandelt gesprochene Sprache in Text um oder spricht Text mit synthetischer Stimme. Manche führen Gespräche in Echtzeit.',
-      examples: 'Gemini Live, Voxtral (Mistral)',
+      examples: 'Gemini Live, Voxtral (Mistral), Grok Voice 3.0',
       note: 'Für vertrauliche Aufnahmen kann ein offenes Modell auf dem eigenen Rechner sinnvoll sein.',
     },
     {
@@ -104,7 +124,7 @@ export class Modelle {
       type: 'Offenes Modell (Open-Weight)',
       explanation:
         'Bei einem offenen Modell sind die gelernten Gewichte zum Download frei. Du betreibst es selbst, deine Daten verlassen den Rechner nicht.',
-      examples: 'DeepSeek V4, Qwen 3.5, Llama 4, Mistral',
+      examples: 'DeepSeek V4, Qwen3.8, Kimi, GLM, Mistral Small 4, Llama 4',
       note: 'Große Varianten brauchen starke Hardware. Kleinere Varianten laufen auch auf normalen Rechnern.',
     },
   ];
@@ -114,6 +134,115 @@ export class Modelle {
   selectedTask = computed(
     () => this.tasks.find((task) => task.id === this.taskChoice()) ?? this.tasks[0],
   );
+
+  providers: Provider[] = [
+    {
+      id: 'anthropic',
+      name: 'Anthropic',
+      country: 'USA',
+      access: 'geschlossen',
+      models: 'Claude Fable 5.1, Opus 5.5, Sonnet 5.5, Haiku 5.5',
+      strength: 'Programmieren, lange Aufgaben, Agenten, sorgfältiges Schreiben.',
+      usage: 'Claude-App und Webseite, Schnittstelle für Entwickler.',
+    },
+    {
+      id: 'openai',
+      name: 'OpenAI',
+      country: 'USA',
+      access: 'gemischt',
+      models: 'GPT-6 Astra, GPT-6.1 Sol, GPT-6 Luna, dazu das offene gpt-oss',
+      strength: 'Allrounder mit Text, Bild und Sprache in einer App.',
+      usage: 'ChatGPT, Schnittstelle. gpt-oss zum Download.',
+    },
+    {
+      id: 'google',
+      name: 'Google',
+      country: 'USA',
+      access: 'gemischt',
+      models: 'Gemini 4 Argon (teils eingeschränkt), Gemini 3.8 Flash, offen: Gemma 4',
+      strength: 'Multimodal, Bilder, Video und lange Dokumente, eng mit Google-Diensten verzahnt.',
+      usage: 'Gemini-App, Google-Dienste, Schnittstelle. Gemma zum Download.',
+    },
+    {
+      id: 'xai',
+      name: 'xAI',
+      country: 'USA',
+      access: 'geschlossen',
+      models: 'Grok 4.7, Grok 4.6, Grok Voice 3.0',
+      strength: 'Gutes Preis-Leistungs-Verhältnis beim Programmieren, Zugriff auf Daten von X.',
+      usage: 'Grok-App und X, Schnittstelle.',
+    },
+    {
+      id: 'mistral',
+      name: 'Mistral AI',
+      country: 'Frankreich',
+      access: 'offen',
+      models: 'Mistral Large 4 (Vorschau), Medium 3.5, Small 4',
+      strength: 'Betrieb in Europa, viele Sprachen, gut zum Selbst-Hosten.',
+      usage: 'Mistral-App, Schnittstelle, Download der offenen Modelle.',
+    },
+    {
+      id: 'meta',
+      name: 'Meta',
+      country: 'USA',
+      access: 'offen',
+      models: 'Llama 4 (Scout, Maverick), inzwischen eine ältere Generation',
+      strength: 'Große Verbreitung, viele Werkzeuge und Anleitungen dafür.',
+      usage: 'Download unter der Llama-Lizenz, über Cloud-Anbieter.',
+    },
+    {
+      id: 'deepseek',
+      name: 'DeepSeek',
+      country: 'China',
+      access: 'offen',
+      models: 'DeepSeek V4 Pro, V4.1 Flash',
+      strength: 'Sehr günstig, gut beim Schlussfolgern und bei langen Texten.',
+      usage: 'Chat-App, Schnittstelle, Download unter MIT-Lizenz.',
+    },
+    {
+      id: 'qwen',
+      name: 'Alibaba (Qwen)',
+      country: 'China',
+      access: 'gemischt',
+      models: 'Qwen3.8 (Max, Flash, 27B)',
+      strength: 'Kleine Modelle, die auch auf dem eigenen Rechner laufen.',
+      usage: 'Qwen-App, Schnittstelle. Kleinere Modelle zum Download.',
+    },
+    {
+      id: 'kimi',
+      name: 'Moonshot AI (Kimi)',
+      country: 'China',
+      access: 'offen',
+      models: 'Kimi K3, K2.7 Code',
+      strength: 'Programmieren und lange Abläufe mit vielen Werkzeug-Aufrufen.',
+      usage: 'Kimi-App, Schnittstelle, Download.',
+    },
+    {
+      id: 'weitere',
+      name: 'Weitere aus China',
+      country: 'China',
+      access: 'offen',
+      models: 'GLM-5.3 (Zhipu AI), MiniMax M3',
+      strength: 'Starke offene Modelle, die mit den Großen mithalten.',
+      usage: 'Meist Download oder über Vermittler wie OpenRouter.',
+    },
+  ];
+
+  filterOptions: FilterOption[] = [
+    { id: 'alle', label: 'Alle' },
+    { id: 'geschlossen', label: 'Geschlossen' },
+    { id: 'offen', label: 'Offen (Open-Weight)' },
+  ];
+
+  accessFilter = signal<AccessFilter>('alle');
+
+  visibleProviders = computed(() => {
+    const filter = this.accessFilter();
+    if (filter === 'alle') return this.providers;
+    return this.providers.filter(
+      (provider) => provider.access === filter || provider.access === 'gemischt',
+    );
+  });
 
   tiers: Tier[] = [
     {
@@ -176,6 +305,25 @@ export class Modelle {
     this.taskChoice.set(id);
   }
 
+  /**
+   * Sets the access filter of the provider overview.
+   * @param id Identifier of the selected filter.
+   */
+  setFilter(id: AccessFilter) {
+    this.accessFilter.set(id);
+  }
+
+  /**
+   * Returns the German label for the access type of a provider.
+   * @param access Access type of the provider.
+   * @returns Text label for the access type.
+   */
+  accessLabel(access: Access): string {
+    if (access === 'geschlossen') return 'Geschlossen';
+    if (access === 'offen') return 'Offen';
+    return 'Teils offen';
+  }
+
   quiz: QuizQuestion[] = [
     {
       question: 'Was ist ein KI-Modell?',
@@ -205,6 +353,17 @@ export class Modelle {
       correct: 1,
       explanation:
         'Multimodal bezieht sich auf die Art der Daten: Text, Bild, Audio oder Dokumente zusammen.',
+    },
+    {
+      question: 'Wie sieht der Modellmarkt aus?',
+      options: [
+        'Es gibt nur wenige Modelle von zwei Firmen',
+        'Es gibt viele Anbieter aus mehreren Ländern, mit geschlossenen und offenen Modellen',
+        'Nur Modelle aus den USA sind offen',
+      ],
+      correct: 1,
+      explanation:
+        'Neben Anthropic, OpenAI und Google gibt es zum Beispiel Mistral aus Frankreich und DeepSeek, Qwen und Kimi aus China. Viele davon sind offen.',
     },
     {
       question: 'Warum nimmt man für viele einfache Anfragen oft ein leichtes Modell?',
@@ -254,7 +413,7 @@ export class Modelle {
 
   quizResult: QuizResultTexts = {
     perfekt: 'Sehr gut. Du weißt, welches Modell für welche Aufgabe gedacht ist.',
-    gut: 'Gut. Probier den Aufgaben-Finder und die beiden Regler noch einmal aus.',
+    gut: 'Gut. Probier den Aufgaben-Finder und die Modell-Landkarte noch einmal aus.',
     schwach: 'Geh die Aufgaben oben durch und lies, welcher Modelltyp dazu passt.',
   };
 }
