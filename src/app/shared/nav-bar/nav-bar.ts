@@ -16,6 +16,7 @@ export class NavBar {
     { path: '/tokens', label: 'Tokens' },
     { path: '/training', label: 'Training' },
     { path: '/neuronale-netze', label: 'Neuronale Netze' },
+    { path: '/modelle', label: 'Modelle' },
     { path: '/halluzinationen', label: 'Halluzinationen' },
     { path: '/bias', label: 'Bias' },
   ];

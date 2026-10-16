@@ -60,15 +60,15 @@ export class Dashboard {
       icon: '⚙️',
     },
     {
-      title: 'News',
-      description: 'Alles rund um KI, tagesaktuell.',
-      icon: '📰',
-      bald: true,
-    },
-    {
+      path: '/modelle',
       title: 'Modelle',
       description: 'Welches KI-Modell kann was und wofür ist es gedacht?',
       icon: '🤖',
+    },
+    {
+      title: 'News',
+      description: 'Alles rund um KI, tagesaktuell.',
+      icon: '📰',
       bald: true,
     },
     {

@@ -13,6 +13,7 @@ const KAPITEL_FARBEN: Record<string, Farbe> = {
   tokens: 'emerald',
   training: 'emerald',
   'neuronale-netze': 'emerald',
+  modelle: 'emerald',
   halluzinationen: 'pink',
   bias: 'pink',
 };

@@ -124,6 +124,13 @@ export class Lernpfad {
           schwierigkeit: 3,
           path: '/neuronale-netze',
         },
+        {
+          titel: 'Modelle',
+          beschreibung: 'Welches KI-Modell kann was und wofür?',
+          icon: '🤖',
+          schwierigkeit: 2,
+          path: '/modelle',
+        },
       ],
     },
     {
@@ -156,12 +163,6 @@ export class Lernpfad {
       farbe: FARBEN.violet,
       bald: true,
       karten: [
-        {
-          titel: 'Modelle',
-          beschreibung: 'Welches KI-Modell kann was und wofür?',
-          icon: '🤖',
-          schwierigkeit: 2,
-        },
         {
           titel: 'KI-Agenten',
           beschreibung: 'Wie arbeiten KI-Agenten selbstständig?',
