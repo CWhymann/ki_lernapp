@@ -14,9 +14,11 @@ interface LearnOption {
   label: string;
 }
 
-interface FitOption {
-  id: 'auswendig' | 'muster';
-  label: string;
+interface Scenario {
+  id: number;
+  text: string;
+  answer: LearnOption['id'];
+  reason: string;
 }
 
 @Component({
@@ -63,26 +65,64 @@ export class Training {
     { id: 'ohne', label: 'Ohne Beispiele (nur Rohdaten)' },
   ];
 
-  learnChoice = signal<LearnOption['id']>('mit');
-
-  learnResult = computed(() =>
-    this.learnChoice() === 'mit'
-      ? 'Jedes Beispiel kommt mit der richtigen Antwort, zum Beispiel ein Foto mit dem Etikett "Katze". Die KI vergleicht ihre Antwort mit der richtigen und verbessert sich. So lernt sie etwa, Bilder zu erkennen oder Spam zu sortieren. Der Fachbegriff dafür ist überwachtes Lernen.'
-      : 'Die KI bekommt nur Rohdaten und keine Antworten. Sie sucht selbst nach Ähnlichkeiten und bildet Gruppen, zum Beispiel Kunden mit ähnlichem Kaufverhalten. Was die Gruppen bedeuten, muss ein Mensch deuten. Der Fachbegriff dafür ist unüberwachtes Lernen.',
-  );
-
-  fitOptions: FitOption[] = [
-    { id: 'auswendig', label: 'Beispiele auswendig gelernt' },
-    { id: 'muster', label: 'Muster dahinter erkannt' },
+  scenarios: Scenario[] = [
+    {
+      id: 1,
+      text: 'Ein Spamfilter lernt aus Mails, die vorher als "Spam" oder "kein Spam" markiert wurden.',
+      answer: 'mit',
+      reason:
+        'Zu jeder Mail steht die richtige Antwort dabei. Die KI vergleicht ihren Tipp damit und verbessert sich. Das ist überwachtes Lernen.',
+    },
+    {
+      id: 2,
+      text: 'Ein Shop lässt eine KI Kunden mit ähnlichem Kaufverhalten in Gruppen einteilen. Niemand sagt vorher, welche Gruppen es gibt.',
+      answer: 'ohne',
+      reason:
+        'Es gibt keine vorgegebenen Antworten. Die KI findet die Gruppen selbst. Das ist unüberwachtes Lernen.',
+    },
+    {
+      id: 3,
+      text: 'Eine KI lernt, Katzen zu erkennen. Dafür bekommt sie tausende Fotos, auf denen "Katze" oder "keine Katze" steht.',
+      answer: 'mit',
+      reason:
+        'Jedes Foto trägt sein Etikett. Mit diesen Beispielen kann die KI prüfen, ob sie richtig liegt.',
+    },
+    {
+      id: 4,
+      text: 'Eine KI soll in Maschinendaten ungewöhnliche Muster finden. Niemand hat vorher Fehler markiert.',
+      answer: 'ohne',
+      reason:
+        'Ohne markierte Fehler lernt die KI, was normal aussieht, und meldet alles, was davon abweicht. Das ist unüberwachtes Lernen.',
+    },
   ];
 
-  fitChoice = signal<FitOption['id']>('muster');
+  answers = signal<Record<number, LearnOption['id']>>({});
 
-  fitResult = computed(() =>
-    this.fitChoice() === 'auswendig'
-      ? 'Bei den Übungsbeispielen liegt die KI fast immer richtig, bei neuen Fällen oft falsch. Sie hat Einzelheiten und sogar Zufälle der Beispiele auswendig gelernt. Das nennt man Überanpassung (Overfitting).'
-      : 'Bei den Übungsbeispielen und bei neuen Fällen liegt die KI ähnlich oft richtig. Sie hat das Muster dahinter erkannt und kann es verallgemeinern.',
-  );
+  trainingTime = signal(10);
+
+  /**
+   * Accuracy on the practice examples: keeps rising the longer the AI practices.
+   */
+  trainScore = computed(() => Math.round(100 * (1 - Math.exp(-this.trainingTime() / 22))));
+
+  /**
+   * Accuracy on new cases: rises at first, then drops once the AI memorizes the examples.
+   */
+  testScore = computed(() => {
+    const time = this.trainingTime();
+    const value = 88 * (1 - Math.exp(-time / 18)) - Math.max(0, time - 45) * 0.7;
+    return Math.round(Math.max(0, value));
+  });
+
+  fitNote = computed(() => {
+    const time = this.trainingTime();
+    if (time < 25)
+      return 'Beide Werte steigen: Die KI erkennt noch das Muster hinter den Beispielen.';
+    if (time <= 50) {
+      return 'Beste Phase: Bei neuen Fällen liegt die KI jetzt am häufigsten richtig. Hier wäre ein guter Zeitpunkt aufzuhören.';
+    }
+    return 'Überanpassung: Der Wert bei den Übungsbeispielen steigt weiter, bei neuen Fällen sinkt er. Die KI lernt Einzelheiten und Zufälle der Beispiele auswendig.';
+  });
 
   glossar: GlossaryTerm[] = GRUNDBEGRIFFE.filter((term: GlossaryTerm) =>
     ['Modell', 'Parameter'].includes(term.name),
@@ -190,18 +230,11 @@ export class Training {
   }
 
   /**
-   * Selects the learning type in the section about learning with and without examples.
-   * @param id Identifier of the selected option.
+   * Stores the answer for one case in the section about learning with and without examples.
+   * @param scenarioId Identifier of the case.
+   * @param choice The learning type chosen for the case.
    */
-  chooseLearn(id: LearnOption['id']) {
-    this.learnChoice.set(id);
-  }
-
-  /**
-   * Selects how the AI has learned in the section about overfitting.
-   * @param id Identifier of the selected option.
-   */
-  chooseFit(id: FitOption['id']) {
-    this.fitChoice.set(id);
+  answer(scenarioId: number, choice: LearnOption['id']) {
+    this.answers.update((current) => ({ ...current, [scenarioId]: choice }));
   }
 }

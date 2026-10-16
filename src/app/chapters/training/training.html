@@ -78,57 +78,97 @@
 
     <section class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
       <h2 class="text-lg font-semibold text-cyan-300 mb-3">Mit oder ohne Beispiele?</h2>
+      <p class="text-base text-slate-300 mb-2">
+        Es gibt zwei Arten zu lernen. Beim überwachten Lernen bekommt die KI zu jedem Beispiel die
+        richtige Antwort, zum Beispiel "Spam" oder "kein Spam". Beim unüberwachten Lernen bekommt
+        sie nur Rohdaten und sucht selbst nach Mustern.
+      </p>
       <p class="text-sm text-slate-400 mb-4">
-        Eine KI kann auf zwei Arten lernen. Wähle eine Art und lies, was dabei passiert.
+        Ordne jeden Fall zu: Hat die KI Beispiele mit Antwort bekommen oder nicht?
       </p>
 
-      <div class="flex flex-col gap-3 sm:flex-row">
-        @for (option of learnOptions; track option.id) {
-          <button
-            (click)="chooseLearn(option.id)"
-            [attr.aria-pressed]="learnChoice() === option.id"
-            [class]="
-              learnChoice() === option.id
-                ? 'flex-1 px-4 py-3 rounded-md border-2 border-cyan-300 bg-cyan-400/10 text-base font-semibold text-cyan-200'
-                : 'flex-1 px-4 py-3 rounded-md border-2 border-slate-600 text-base text-slate-300 hover:border-cyan-500/50 transition-colors'
-            "
-          >
-            {{ option.label }}
-          </button>
-        }
-      </div>
+      <div class="flex flex-col gap-4">
+        @for (scenario of scenarios; track scenario.id) {
+          <div class="p-4 rounded-md border border-slate-700 bg-slate-900/60">
+            <p class="text-base text-slate-200 mb-3">{{ scenario.text }}</p>
 
-      <div class="mt-4 p-4 rounded-md border border-slate-700 bg-slate-900/60">
-        <p class="text-base text-slate-200">{{ learnResult() }}</p>
+            <div class="flex flex-col gap-3 sm:flex-row">
+              @for (option of learnOptions; track option.id) {
+                <button
+                  (click)="answer(scenario.id, option.id)"
+                  [attr.aria-pressed]="answers()[scenario.id] === option.id"
+                  [class]="
+                    answers()[scenario.id] === option.id
+                      ? 'flex-1 px-4 py-3 rounded-md border-2 border-cyan-300 bg-cyan-400/10 text-base font-semibold text-cyan-200'
+                      : 'flex-1 px-4 py-3 rounded-md border-2 border-slate-600 text-base text-slate-300 hover:border-cyan-500/50 transition-colors'
+                  "
+                >
+                  {{ option.label }}
+                </button>
+              }
+            </div>
+
+            @if (answers()[scenario.id]; as given) {
+              <p
+                [class]="
+                  given === scenario.answer
+                    ? 'mt-3 text-base text-emerald-300'
+                    : 'mt-3 text-base text-amber-300'
+                "
+              >
+                {{ given === scenario.answer ? 'Richtig. ' : 'Nicht ganz. ' }}{{ scenario.reason }}
+              </p>
+            }
+          </div>
+        }
       </div>
     </section>
 
     <section class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
-      <h2 class="text-lg font-semibold text-cyan-300 mb-3">Auswendig gelernt oder verstanden?</h2>
+      <h2 class="text-lg font-semibold text-cyan-300 mb-3">Zu lange geübt?</h2>
       <p class="text-sm text-slate-400 mb-4">
-        Eine KI übt mit Beispielen und wird danach mit neuen Fällen getestet. Wähle, wie sie gelernt
-        hat.
+        Eine KI übt mit Beispielen und wird danach mit neuen Fällen getestet. Bewege den Regler und
+        vergleiche beide Werte.
       </p>
 
-      <div class="flex flex-col gap-3 sm:flex-row">
-        @for (option of fitOptions; track option.id) {
-          <button
-            (click)="chooseFit(option.id)"
-            [attr.aria-pressed]="fitChoice() === option.id"
-            [class]="
-              fitChoice() === option.id
-                ? 'flex-1 px-4 py-3 rounded-md border-2 border-cyan-300 bg-cyan-400/10 text-base font-semibold text-cyan-200'
-                : 'flex-1 px-4 py-3 rounded-md border-2 border-slate-600 text-base text-slate-300 hover:border-cyan-500/50 transition-colors'
-            "
-          >
-            {{ option.label }}
-          </button>
-        }
+      <input
+        type="range"
+        min="1"
+        max="100"
+        [(ngModel)]="trainingTime"
+        class="w-full accent-cyan-400"
+      />
+
+      <div class="flex justify-between text-sm text-slate-500 mt-1">
+        <span>kurz geübt</span>
+        <span>sehr lange geübt</span>
       </div>
 
-      <div class="mt-4 p-4 rounded-md border border-slate-700 bg-slate-900/60">
-        <p class="text-base text-slate-200">{{ fitResult() }}</p>
+      <div class="mt-6 flex flex-col gap-4">
+        <div>
+          <div class="w-full h-3 rounded-full bg-slate-900">
+            <div
+              class="h-full rounded-full bg-cyan-400 transition-all"
+              [style.width.%]="trainScore()"
+            ></div>
+          </div>
+          <p class="text-sm text-slate-300 mt-2">Bei den Übungsbeispielen: {{ trainScore() }}%</p>
+        </div>
+
+        <div>
+          <div class="w-full h-3 rounded-full bg-slate-900">
+            <div
+              class="h-full rounded-full bg-pink-400 transition-all"
+              [style.width.%]="testScore()"
+            ></div>
+          </div>
+          <p class="text-sm text-slate-300 mt-2">Bei neuen Fällen: {{ testScore() }}%</p>
+        </div>
       </div>
+
+      <p class="mt-4 text-base text-slate-200 border-t border-slate-700 pt-4">
+        {{ fitNote() }}
+      </p>
     </section>
 
     <app-quiz [fragen]="quiz" [ergebnis]="quizResult" />
