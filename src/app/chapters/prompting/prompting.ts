@@ -1,5 +1,7 @@
 import { Component, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Glossary, GlossaryTerm } from '../../shared/glossary/glossary';
+import { GRUNDBEGRIFFE } from '../../shared/glossary/begriffe';
 import { Quiz, QuizQuestion, QuizResultTexts } from '../../shared/quiz/quiz';
 import { Vokabel, VokabelTrainer } from '../../shared/vokabel-trainer/vokabel-trainer';
 
@@ -10,7 +12,7 @@ interface Example {
 
 @Component({
   selector: 'app-prompting',
-  imports: [FormsModule, VokabelTrainer, Quiz],
+  imports: [FormsModule, VokabelTrainer, Quiz, Glossary],
   templateUrl: './prompting.html',
   styleUrl: './prompting.css',
 })
@@ -107,6 +109,10 @@ export class Prompting {
     this.exampleChoice() === 'schwach'
       ? 'Die KI weiß nicht, für wen, wie lang und in welchem Format. Die Antwort kann alles sein: Rasse, Pflege, Geschichte.'
       : 'Die KI weiß jetzt, für wen, wie viel und in welcher Form. Die Antwort passt genau zu dem, was du brauchst.',
+  );
+
+  glossar: GlossaryTerm[] = GRUNDBEGRIFFE.filter((term: GlossaryTerm) =>
+    ['Token', 'Kontextfenster'].includes(term.name),
   );
 
   quiz: QuizQuestion[] = [
