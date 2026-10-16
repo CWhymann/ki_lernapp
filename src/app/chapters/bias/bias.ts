@@ -9,6 +9,25 @@ interface BiasExample {
   balancedAnswer: string;
 }
 
+interface BiasType {
+  id: number;
+  step: number;
+  station: string;
+  name: string;
+  explanation: string;
+  example: string;
+}
+
+interface Measure {
+  id: string;
+  label: string;
+  text: string;
+  who: 'Entwickler' | 'Du';
+  reduction: number;
+}
+
+const START_LEVEL = 80;
+
 @Component({
   selector: 'app-bias',
   imports: [Quiz, Glossary],
@@ -42,6 +61,110 @@ export class Bias {
 
   selectedExample = computed(() => this.examples[this.selectedIndex()]);
 
+  biasTypes: BiasType[] = [
+    {
+      id: 1,
+      step: 1,
+      station: 'Daten auswählen',
+      name: 'Auswahl-Bias',
+      explanation:
+        'Die Trainingsdaten stammen überwiegend von einer Gruppe oder einer Quelle. Was in den Daten fehlt, lernt die KI nicht oder nur schlecht.',
+      example:
+        'Eine Gesichtserkennung wird vor allem mit Fotos hellhäutiger Menschen trainiert und erkennt andere Gesichter schlechter.',
+    },
+    {
+      id: 2,
+      step: 2,
+      station: 'Daten aus der Vergangenheit',
+      name: 'Historischer Bias',
+      explanation:
+        'Die Daten sind korrekt erhoben, spiegeln aber eine Welt wider, die schon ungleich war. Die KI führt diese Ungleichheit fort.',
+      example:
+        'Eine Bewerbungs-KI lernt aus früheren Einstellungen und bevorzugt Männer, weil in der Vergangenheit mehr Männer eingestellt wurden.',
+    },
+    {
+      id: 3,
+      step: 3,
+      station: 'Daten beschriften',
+      name: 'Bewertungs-Bias',
+      explanation:
+        'Menschen, die Daten mit Etiketten versehen, bringen ihre eigene Sicht mit. Diese Sicht steckt dann in den Beispielen, aus denen die KI lernt.',
+      example:
+        'Beiträge in einem bestimmten Dialekt werden häufiger als "aggressiv" markiert, und die KI lernt diese Verknüpfung mit.',
+    },
+    {
+      id: 4,
+      step: 4,
+      station: 'Muster lernen',
+      name: 'Stereotyp-Bias',
+      explanation:
+        'Kommen bestimmte Wörter in Texten oft zusammen vor, verknüpft die KI sie fest und überträgt die Verknüpfung auf jeden Einzelfall.',
+      example:
+        '"Erzieherin" und "fürsorglich" stehen oft zusammen, also beschreibt die KI jede Erzieherin so, wie im Beispiel oben.',
+    },
+  ];
+
+  typeChoice = signal(1);
+
+  selectedType = computed(
+    () => this.biasTypes.find((type) => type.id === this.typeChoice()) ?? this.biasTypes[0],
+  );
+
+  measures: Measure[] = [
+    {
+      id: 'daten',
+      label: 'Trainingsdaten ausgleichen',
+      text: 'Mehr Beispiele aus zu selten vertretenen Gruppen sammeln und einseitige Quellen abschwächen.',
+      who: 'Entwickler',
+      reduction: 25,
+    },
+    {
+      id: 'test',
+      label: 'Ergebnisse nach Gruppen testen',
+      text: 'Die Antworten für verschiedene Gruppen vergleichen. So fallen Unterschiede auf, bevor die KI genutzt wird.',
+      who: 'Entwickler',
+      reduction: 20,
+    },
+    {
+      id: 'mensch',
+      label: 'Menschen prüfen die Antworten',
+      text: 'Fachleute lesen Stichproben und korrigieren Antworten, die Vorurteile enthalten.',
+      who: 'Entwickler',
+      reduction: 15,
+    },
+    {
+      id: 'prompt',
+      label: 'Neutral nachfragen',
+      text: 'Im Prompt ausdrücklich bitten, keine Klischees zu verwenden, und die Antwort selbst auf Vorurteile prüfen.',
+      who: 'Du',
+      reduction: 10,
+    },
+  ];
+
+  activeMeasures = signal<string[]>([]);
+
+  biasLevel = computed(() => {
+    const active = this.activeMeasures();
+    const reduction = this.measures
+      .filter((measure) => active.includes(measure.id))
+      .reduce((sum, measure) => sum + measure.reduction, 0);
+    return START_LEVEL - reduction;
+  });
+
+  biasNote = computed(() => {
+    const level = this.biasLevel();
+    if (level >= 70) {
+      return 'Ohne Gegenmaßnahmen übernimmt die KI die Schieflage der Daten fast ungefiltert.';
+    }
+    if (level >= 45) {
+      return 'Schon besser, aber die Verzerrung ist noch deutlich spürbar. Eine einzelne Maßnahme reicht nicht.';
+    }
+    if (level > 10) {
+      return 'Mehrere Maßnahmen greifen ineinander und die Verzerrung wird klein. Jede Maßnahme fängt etwas anderes ab.';
+    }
+    return 'Auch mit allen Maßnahmen bleibt ein Rest. Bias lässt sich verringern, aber nie ganz auf null bringen.';
+  });
+
   glossar: GlossaryTerm[] = GRUNDBEGRIFFE.filter((term: GlossaryTerm) =>
     ['Bias', 'Trainingsdaten', 'Modell'].includes(term.name),
   );
@@ -60,6 +183,33 @@ export class Bias {
   selectOption(index: number) {
     this.selectedIndex.set(index);
     this.dropdownOpen.set(false);
+  }
+
+  /**
+   * Selects a station in the section about where bias comes from.
+   * @param id Identifier of the selected bias type.
+   */
+  chooseType(id: number) {
+    this.typeChoice.set(id);
+  }
+
+  /**
+   * Turns a countermeasure on or off.
+   * @param id Identifier of the countermeasure.
+   */
+  toggleMeasure(id: string) {
+    this.activeMeasures.update((current) =>
+      current.includes(id) ? current.filter((entry) => entry !== id) : [...current, id],
+    );
+  }
+
+  /**
+   * Checks whether a countermeasure is switched on.
+   * @param id Identifier of the countermeasure.
+   * @returns True if the countermeasure is active.
+   */
+  isActive(id: string): boolean {
+    return this.activeMeasures().includes(id);
   }
 
   quiz: QuizQuestion[] = [
@@ -128,6 +278,25 @@ export class Bias {
       correct: 0,
       explanation:
         'Gerade bei Beschreibungen von Personen lohnt sich der Blick auf Wortwahl und Annahmen.',
+    },
+    {
+      question:
+        'Eine Bewerbungs-KI lernt aus den Einstellungen der letzten 20 Jahre und bevorzugt Männer. Welche Art Bias ist das?',
+      options: ['Historischer Bias', 'Auswahl-Bias bei der Nutzung', 'Ein Rechenfehler'],
+      correct: 0,
+      explanation:
+        'Die Daten sind korrekt, spiegeln aber eine frühere Ungleichheit wider. Die KI führt sie fort.',
+    },
+    {
+      question: 'Welche Aussage über Gegenmaßnahmen stimmt?',
+      options: [
+        'Eine einzelne Maßnahme beseitigt Bias vollständig',
+        'Mehrere Maßnahmen zusammen verringern Bias, ein Rest bleibt',
+        'Bias entsteht nur bei der Nutzung, nicht beim Training',
+      ],
+      correct: 1,
+      explanation:
+        'Jede Maßnahme fängt etwas anderes ab. Zusammen verringern sie Bias deutlich, ganz verschwindet er nicht.',
     },
   ];
 

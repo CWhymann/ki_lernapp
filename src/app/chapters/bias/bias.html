@@ -68,6 +68,95 @@
       </div>
     </div>
 
+    <section class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+      <h2 class="text-lg font-semibold text-cyan-300 mb-3">Wo entsteht Bias?</h2>
+      <p class="text-base text-slate-300 mb-2">
+        Bias schleicht sich nicht an einer Stelle ein, sondern auf dem ganzen Weg von den Daten bis
+        zum gelernten Muster. Jede Station hat ihre eigene Art von Bias.
+      </p>
+      <p class="text-sm text-slate-400 mb-4">Klick die Stationen an und lies das Beispiel.</p>
+
+      <div class="grid gap-3 sm:grid-cols-2">
+        @for (type of biasTypes; track type.id) {
+          <button
+            (click)="chooseType(type.id)"
+            [attr.aria-pressed]="typeChoice() === type.id"
+            [class]="
+              typeChoice() === type.id
+                ? 'px-4 py-3 rounded-md border-2 border-cyan-300 bg-cyan-400/10 text-base font-semibold text-cyan-200 text-left'
+                : 'px-4 py-3 rounded-md border-2 border-slate-600 text-base text-slate-300 hover:border-cyan-500/50 transition-colors text-left'
+            "
+          >
+            {{ type.step }}. {{ type.station }}
+          </button>
+        }
+      </div>
+
+      <div class="mt-4 p-4 rounded-md border border-orange-500/30 bg-slate-900/60">
+        <h3 class="text-base font-semibold text-orange-400 mb-2">{{ selectedType().name }}</h3>
+        <p class="text-base text-slate-200 mb-3">{{ selectedType().explanation }}</p>
+        <p class="text-sm text-slate-400 mb-1">Beispiel</p>
+        <p class="text-base text-slate-300">{{ selectedType().example }}</p>
+      </div>
+    </section>
+
+    <section class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+      <h2 class="text-lg font-semibold text-cyan-300 mb-3">Was hilft dagegen?</h2>
+      <p class="text-base text-slate-300 mb-2">
+        Gegen Bias gibt es kein einzelnes Mittel. Schalte die Maßnahmen ein und beobachte, wie sich
+        die Verzerrung der Antworten verändert.
+      </p>
+      <p class="text-sm text-slate-400 mb-4">
+        Vereinfachte Darstellung. Die Zahlen zeigen die Tendenz, keine Messwerte.
+      </p>
+
+      <div class="flex flex-col gap-3">
+        @for (measure of measures; track measure.id) {
+          <button
+            (click)="toggleMeasure(measure.id)"
+            [attr.aria-pressed]="isActive(measure.id)"
+            [class]="
+              isActive(measure.id)
+                ? 'w-full text-left px-4 py-3 rounded-md border-2 border-cyan-300 bg-cyan-400/10'
+                : 'w-full text-left px-4 py-3 rounded-md border-2 border-slate-600 hover:border-cyan-500/50 transition-colors'
+            "
+          >
+            <span class="flex items-center justify-between gap-3 mb-1">
+              <span
+                [class]="
+                  isActive(measure.id)
+                    ? 'text-base font-semibold text-cyan-200'
+                    : 'text-base font-semibold text-slate-200'
+                "
+              >
+                {{ isActive(measure.id) ? '✓ ' : '' }}{{ measure.label }}
+              </span>
+              <span
+                class="shrink-0 px-2 py-0.5 rounded-full border border-slate-600 text-sm text-slate-400"
+              >
+                {{ measure.who }}
+              </span>
+            </span>
+            <span class="block text-base text-slate-300">{{ measure.text }}</span>
+          </button>
+        }
+      </div>
+
+      <div class="mt-6">
+        <div class="w-full h-3 rounded-full bg-slate-900">
+          <div
+            class="h-full rounded-full bg-orange-400 transition-all"
+            [style.width.%]="biasLevel()"
+          ></div>
+        </div>
+        <p class="text-sm text-slate-300 mt-2">Verzerrung der Antworten: {{ biasLevel() }}%</p>
+      </div>
+
+      <p class="mt-4 text-base text-slate-200 border-t border-slate-700 pt-4">
+        {{ biasNote() }}
+      </p>
+    </section>
+
     <app-quiz [fragen]="quiz" [ergebnis]="quizResult" />
 
     <app-glossary [terms]="glossar" />
