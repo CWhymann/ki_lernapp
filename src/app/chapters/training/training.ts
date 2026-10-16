@@ -9,6 +9,16 @@ interface DataOption {
   label: string;
 }
 
+interface LearnOption {
+  id: 'mit' | 'ohne';
+  label: string;
+}
+
+interface FitOption {
+  id: 'auswendig' | 'muster';
+  label: string;
+}
+
 @Component({
   selector: 'app-training',
   imports: [FormsModule, Quiz, Glossary],
@@ -46,6 +56,32 @@ export class Training {
     this.dataChoice() === 'viel'
       ? 'Die KI übernimmt die Fehler gleich mit. Mehr davon macht sie nicht besser, sondern nur sicherer im Falschen.'
       : 'Die Regel wird klarer erkannt, weil jedes Beispiel stimmt. Qualität schlägt Menge.',
+  );
+
+  learnOptions: LearnOption[] = [
+    { id: 'mit', label: 'Mit Beispielen (Antwort bekannt)' },
+    { id: 'ohne', label: 'Ohne Beispiele (nur Rohdaten)' },
+  ];
+
+  learnChoice = signal<LearnOption['id']>('mit');
+
+  learnResult = computed(() =>
+    this.learnChoice() === 'mit'
+      ? 'Jedes Beispiel kommt mit der richtigen Antwort, zum Beispiel ein Foto mit dem Etikett "Katze". Die KI vergleicht ihre Antwort mit der richtigen und verbessert sich. So lernt sie etwa, Bilder zu erkennen oder Spam zu sortieren. Der Fachbegriff dafür ist überwachtes Lernen.'
+      : 'Die KI bekommt nur Rohdaten und keine Antworten. Sie sucht selbst nach Ähnlichkeiten und bildet Gruppen, zum Beispiel Kunden mit ähnlichem Kaufverhalten. Was die Gruppen bedeuten, muss ein Mensch deuten. Der Fachbegriff dafür ist unüberwachtes Lernen.',
+  );
+
+  fitOptions: FitOption[] = [
+    { id: 'auswendig', label: 'Beispiele auswendig gelernt' },
+    { id: 'muster', label: 'Muster dahinter erkannt' },
+  ];
+
+  fitChoice = signal<FitOption['id']>('muster');
+
+  fitResult = computed(() =>
+    this.fitChoice() === 'auswendig'
+      ? 'Bei den Übungsbeispielen liegt die KI fast immer richtig, bei neuen Fällen oft falsch. Sie hat Einzelheiten und sogar Zufälle der Beispiele auswendig gelernt. Das nennt man Überanpassung (Overfitting).'
+      : 'Bei den Übungsbeispielen und bei neuen Fällen liegt die KI ähnlich oft richtig. Sie hat das Muster dahinter erkannt und kann es verallgemeinern.',
   );
 
   glossar: GlossaryTerm[] = GRUNDBEGRIFFE.filter((term: GlossaryTerm) =>
@@ -151,5 +187,21 @@ export class Training {
    */
   chooseData(id: DataOption['id']) {
     this.dataChoice.set(id);
+  }
+
+  /**
+   * Selects the learning type in the section about learning with and without examples.
+   * @param id Identifier of the selected option.
+   */
+  chooseLearn(id: LearnOption['id']) {
+    this.learnChoice.set(id);
+  }
+
+  /**
+   * Selects how the AI has learned in the section about overfitting.
+   * @param id Identifier of the selected option.
+   */
+  chooseFit(id: FitOption['id']) {
+    this.fitChoice.set(id);
   }
 }

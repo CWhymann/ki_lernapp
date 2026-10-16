@@ -76,6 +76,61 @@
       </div>
     </section>
 
+    <section class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+      <h2 class="text-lg font-semibold text-cyan-300 mb-3">Mit oder ohne Beispiele?</h2>
+      <p class="text-sm text-slate-400 mb-4">
+        Eine KI kann auf zwei Arten lernen. Wähle eine Art und lies, was dabei passiert.
+      </p>
+
+      <div class="flex flex-col gap-3 sm:flex-row">
+        @for (option of learnOptions; track option.id) {
+          <button
+            (click)="chooseLearn(option.id)"
+            [attr.aria-pressed]="learnChoice() === option.id"
+            [class]="
+              learnChoice() === option.id
+                ? 'flex-1 px-4 py-3 rounded-md border-2 border-cyan-300 bg-cyan-400/10 text-base font-semibold text-cyan-200'
+                : 'flex-1 px-4 py-3 rounded-md border-2 border-slate-600 text-base text-slate-300 hover:border-cyan-500/50 transition-colors'
+            "
+          >
+            {{ option.label }}
+          </button>
+        }
+      </div>
+
+      <div class="mt-4 p-4 rounded-md border border-slate-700 bg-slate-900/60">
+        <p class="text-base text-slate-200">{{ learnResult() }}</p>
+      </div>
+    </section>
+
+    <section class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+      <h2 class="text-lg font-semibold text-cyan-300 mb-3">Auswendig gelernt oder verstanden?</h2>
+      <p class="text-sm text-slate-400 mb-4">
+        Eine KI übt mit Beispielen und wird danach mit neuen Fällen getestet. Wähle, wie sie gelernt
+        hat.
+      </p>
+
+      <div class="flex flex-col gap-3 sm:flex-row">
+        @for (option of fitOptions; track option.id) {
+          <button
+            (click)="chooseFit(option.id)"
+            [attr.aria-pressed]="fitChoice() === option.id"
+            [class]="
+              fitChoice() === option.id
+                ? 'flex-1 px-4 py-3 rounded-md border-2 border-cyan-300 bg-cyan-400/10 text-base font-semibold text-cyan-200'
+                : 'flex-1 px-4 py-3 rounded-md border-2 border-slate-600 text-base text-slate-300 hover:border-cyan-500/50 transition-colors'
+            "
+          >
+            {{ option.label }}
+          </button>
+        }
+      </div>
+
+      <div class="mt-4 p-4 rounded-md border border-slate-700 bg-slate-900/60">
+        <p class="text-base text-slate-200">{{ fitResult() }}</p>
+      </div>
+    </section>
+
     <app-quiz [fragen]="quiz" [ergebnis]="quizResult" />
 
     <app-glossary [terms]="glossar" />
