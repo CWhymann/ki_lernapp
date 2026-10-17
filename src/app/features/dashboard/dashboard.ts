@@ -66,15 +66,15 @@ export class Dashboard {
       icon: '🤖',
     },
     {
+      path: '/nerd-ecke',
+      title: 'Nerd-Ecke',
+      description: 'Quantentechnik, KI und mehr zum Ausprobieren.',
+      icon: '⚛️',
+    },
+    {
       title: 'News',
       description: 'Alles rund um KI, tagesaktuell.',
       icon: '📰',
-      bald: true,
-    },
-    {
-      title: 'Nerd-Ecke',
-      description: 'Quantenphysik und weitere Nerd-Themen rund um Technik und KI.',
-      icon: '⚛️',
       bald: true,
     },
     {

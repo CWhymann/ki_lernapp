@@ -19,6 +19,7 @@ export class NavBar {
     { path: '/modelle', label: 'Modelle' },
     { path: '/halluzinationen', label: 'Halluzinationen' },
     { path: '/bias', label: 'Bias' },
+    { path: '/nerd-ecke', label: 'Nerd-Ecke' },
   ];
 
   /**

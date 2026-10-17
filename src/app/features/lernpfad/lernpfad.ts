@@ -25,7 +25,6 @@ interface Stufe {
   titel: string;
   untertitel: string;
   farbe: Farbe;
-  bald: boolean;
   karten: PfadKarte[];
 }
 
@@ -57,7 +56,8 @@ const FARBEN = {
     text: 'text-violet-300',
     linie: 'from-violet-400 to-transparent',
     balken: 'bg-violet-400 shadow-[0_0_8px_rgba(167,139,250,0.8)]',
-    karte: 'border-violet-500/30',
+    karte:
+      'border-violet-500/30 hover:border-violet-300 hover:shadow-[0_0_20px_rgba(167,139,250,0.2)]',
   },
 } satisfies Record<string, Farbe>;
 
@@ -78,7 +78,6 @@ export class Lernpfad {
       titel: 'Einstieg',
       untertitel: 'Wie du mit KI sprichst und sie einrichtest',
       farbe: FARBEN.cyan,
-      bald: false,
       karten: [
         {
           titel: 'Prompting',
@@ -101,7 +100,6 @@ export class Lernpfad {
       titel: 'Grundlagen',
       untertitel: 'Wie eine KI aufgebaut ist und lernt',
       farbe: FARBEN.emerald,
-      bald: false,
       karten: [
         {
           titel: 'Tokens',
@@ -138,7 +136,6 @@ export class Lernpfad {
       titel: 'Vertiefung',
       untertitel: 'Wo KI danebenliegt und warum',
       farbe: FARBEN.pink,
-      bald: false,
       karten: [
         {
           titel: 'Halluzinationen',
@@ -159,9 +156,8 @@ export class Lernpfad {
     {
       nummer: 4,
       titel: 'Erweiterungen',
-      untertitel: 'Kommt bald',
+      untertitel: 'Weiterführende Themen',
       farbe: FARBEN.violet,
-      bald: true,
       karten: [
         {
           titel: 'KI-Agenten',
@@ -177,9 +173,10 @@ export class Lernpfad {
         },
         {
           titel: 'Nerd-Ecke',
-          beschreibung: 'Quantenphysik und weitere Nerd-Themen.',
+          beschreibung: 'Quantentechnik, KI und mehr zum Ausprobieren.',
           icon: '⚛️',
           schwierigkeit: 3,
+          path: '/nerd-ecke',
         },
         {
           titel: 'News',

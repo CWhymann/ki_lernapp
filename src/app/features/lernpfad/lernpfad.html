@@ -289,7 +289,7 @@
         </header>
 
         @for (karte of stufe.karten; track karte.titel; let letzte = $last) {
-          @if (stufe.bald) {
+          @if (!karte.path) {
             <div
               class="pfad-karte pfad-karte--bald relative flex gap-4 p-4 rounded-xl border border-dashed border-violet-400/40 bg-slate-900/50"
             >
