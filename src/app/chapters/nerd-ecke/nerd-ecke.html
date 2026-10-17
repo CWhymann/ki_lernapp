@@ -1,0 +1,639 @@
+<div class="nerd-root relative max-w-5xl">
+  <div class="nerd-sterne" aria-hidden="true"></div>
+  <div class="nerd-nebel" aria-hidden="true"></div>
+
+  <header
+    class="relative p-6 md:p-8 mb-8 rounded-xl border border-cyan-500/30 bg-slate-950/70 shadow-[0_0_40px_rgba(167,139,250,0.2)]"
+  >
+    <svg class="nerd-atom hidden md:block" viewBox="0 0 120 120" aria-hidden="true">
+      <g class="nerd-atom-orbits">
+        <ellipse cx="60" cy="60" rx="52" ry="18" />
+        <ellipse cx="60" cy="60" rx="52" ry="18" transform="rotate(60 60 60)" />
+        <ellipse cx="60" cy="60" rx="52" ry="18" transform="rotate(120 60 60)" />
+      </g>
+      <circle class="nerd-atom-kern" cx="60" cy="60" r="7" />
+    </svg>
+
+    <p class="font-mono text-sm tracking-widest uppercase text-cyan-400 mb-2">// Nerd-Ecke</p>
+    <h1 class="nerd-titel text-3xl md:text-5xl font-extrabold text-white mb-4 wrap-break-word">
+      Quanten, KI und das große Ganze
+    </h1>
+    <p class="text-base text-slate-300 max-w-2xl">
+      Sieben Themen rund um Quantentechnik und KI. Du kannst Qubits messen, Verschränkung testen und
+      Zahlen zu Strom und Verschlüsselung selbst erkunden. Stand der Inhalte: Oktober 2026.
+    </p>
+  </header>
+
+  <div class="relative flex flex-wrap gap-2 mb-6" role="tablist" aria-label="Themen der Nerd-Ecke">
+    @for (item of topics; track item.id) {
+      <button
+        role="tab"
+        (click)="selectTopic(item.id)"
+        [attr.aria-selected]="topic() === item.id"
+        [class]="
+          topic() === item.id
+            ? 'px-4 py-2 rounded-md border-2 border-cyan-300 bg-cyan-400/10 text-base font-semibold text-cyan-200'
+            : 'px-4 py-2 rounded-md border-2 border-slate-600 text-base text-slate-300 hover:border-cyan-500/50 transition-colors'
+        "
+      >
+        <span aria-hidden="true">{{ item.icon }}</span> {{ item.label }}
+      </button>
+    }
+  </div>
+
+  <div class="relative flex flex-col gap-8">
+    @switch (topic()) {
+      @case ('qubit') {
+        <section class="nerd-panel p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+          <h2 class="text-lg font-semibold text-cyan-300 mb-3">
+            Das Qubit: Überlagerung zum Anfassen
+          </h2>
+          <p class="text-base text-slate-300 mb-2">
+            Ein normales Bit ist 0 oder 1. Ein Qubit kann vor der Messung in einer Überlagerung
+            beider Möglichkeiten sein. Erst beim Messen kommt 0 oder 1 heraus, mit festen
+            Wahrscheinlichkeiten.
+          </p>
+          <p class="text-sm text-slate-400 mb-6">
+            Dreh den Zustand mit dem Regler und miss das Qubit. Der orange Balken zeigt, was bei
+            100 frisch vorbereiteten Qubits wirklich gemessen wurde.
+          </p>
+
+          <div class="nerd-feld grid gap-6 md:grid-cols-2 items-center p-4 sm:p-6 rounded-lg border">
+            <svg
+              viewBox="0 0 200 200"
+              class="w-full max-w-xs mx-auto"
+              role="img"
+              [attr.aria-label]="'Qubit-Zustand mit Winkel ' + shownTheta() + ' Grad'"
+            >
+              <circle class="qubit-ring" cx="100" cy="100" r="78" />
+              <ellipse class="qubit-aequator" cx="100" cy="100" rx="78" ry="24" />
+              <line class="qubit-achse" x1="100" y1="22" x2="100" y2="178" />
+              <g class="qubit-pfeil" [style.transform]="'rotate(' + shownTheta() + 'deg)'">
+                <line class="qubit-linie" x1="100" y1="100" x2="100" y2="26" />
+                <circle class="qubit-spitze" cx="100" cy="24" r="6" />
+              </g>
+              <text class="qubit-label" x="100" y="13" text-anchor="middle">|0⟩</text>
+              <text class="qubit-label" x="100" y="198" text-anchor="middle">|1⟩</text>
+            </svg>
+
+            <div>
+              <label for="qubit-regler" class="font-mono text-sm tracking-widest text-slate-400">
+                ZUSTAND (WINKEL)
+              </label>
+              <output
+                for="qubit-regler"
+                class="block font-mono text-3xl font-bold text-cyan-300 mt-1"
+              >
+                {{ shownTheta() }}°
+              </output>
+              <input
+                id="qubit-regler"
+                type="range"
+                min="0"
+                max="180"
+                step="5"
+                class="nerd-slider mt-2"
+                [value]="theta()"
+                [style.--fill]="(theta() / 180) * 100 + '%'"
+                [attr.aria-valuetext]="theta() + ' Grad'"
+                (input)="onTheta($event)"
+              />
+
+              <ul class="flex flex-col gap-3 mt-4">
+                @for (row of qubitRows(); track row.label) {
+                  <li class="flex flex-col gap-1">
+                    <div class="flex justify-between gap-3 font-mono text-sm text-slate-200">
+                      <span>{{ row.label }}</span>
+                      <span>{{ row.chance }} %</span>
+                    </div>
+                    <div class="relative h-3 rounded-full bg-slate-800">
+                      <span
+                        class="nerd-balken absolute inset-y-0 left-0 rounded-full"
+                        [style.width.%]="row.percent"
+                      ></span>
+                    </div>
+                    <div class="relative h-1.5 rounded-full bg-slate-800/60">
+                      <span
+                        class="nerd-gemessen absolute inset-y-0 left-0 rounded-full bg-orange-400"
+                        [style.width.%]="row.measured"
+                      ></span>
+                    </div>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 mt-5">
+            <button
+              (click)="measure()"
+              class="px-4 py-2 rounded-md border-2 border-cyan-300 bg-cyan-400/10 text-base font-semibold text-cyan-200 hover:bg-cyan-400/20 transition-colors"
+            >
+              Messen
+            </button>
+            <button
+              (click)="reprepare()"
+              [disabled]="collapsed() === null"
+              class="px-4 py-2 rounded-md bg-slate-900 border border-slate-700 text-base text-slate-200 hover:border-cyan-400 hover:text-cyan-300 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              Neu vorbereiten
+            </button>
+            <button
+              (click)="measureBatch()"
+              class="px-4 py-2 rounded-md bg-slate-900 border border-slate-700 text-base text-slate-200 hover:border-cyan-400 hover:text-cyan-300 transition-colors"
+            >
+              100 frische Qubits messen
+            </button>
+          </div>
+
+          @if (measureLog().length > 0) {
+            <div class="flex flex-wrap items-center gap-2 mt-4">
+              <span class="font-mono text-sm text-slate-400">Messungen:</span>
+              @for (value of measureLog(); track $index) {
+                <span
+                  class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-600 font-mono text-sm text-slate-200"
+                  >{{ value }}</span
+                >
+              }
+            </div>
+          }
+
+          <div class="mt-4 p-4 rounded-md border border-slate-700 bg-slate-900/60">
+            <p class="text-base text-slate-200">{{ qubitNote() }}</p>
+          </div>
+        </section>
+      }
+
+      @case ('verschraenkung') {
+        <section class="nerd-panel p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+          <h2 class="text-lg font-semibold text-cyan-300 mb-3">
+            Verschränkung: Zwei Qubits, ein Schicksal
+          </h2>
+          <p class="text-base text-slate-300 mb-2">
+            Bei einem verschränkten Paar ist jedes einzelne Ergebnis reiner Zufall. Aber die beiden
+            Ergebnisse passen immer zusammen. Wer zuerst misst, ist egal.
+          </p>
+          <p class="text-sm text-slate-400 mb-4">
+            Miss A und B in beliebiger Reihenfolge. Schalte dann zum Vergleich auf zwei normale
+            Münzen um.
+          </p>
+
+          <div class="flex flex-col gap-3 sm:flex-row mb-4">
+            @for (option of pairModes; track option.id) {
+              <button
+                (click)="setPairMode(option.id)"
+                [attr.aria-pressed]="pairMode() === option.id"
+                [class]="
+                  pairMode() === option.id
+                    ? 'flex-1 px-4 py-3 rounded-md border-2 border-cyan-300 bg-cyan-400/10 text-base font-semibold text-cyan-200'
+                    : 'flex-1 px-4 py-3 rounded-md border-2 border-slate-600 text-base text-slate-300 hover:border-cyan-500/50 transition-colors'
+                "
+              >
+                {{ option.label }}
+              </button>
+            }
+          </div>
+
+          <div class="nerd-feld p-4 sm:p-6 rounded-lg border">
+            <div class="flex items-center gap-2 sm:gap-4">
+              <div class="flex flex-col items-center gap-2">
+                <div
+                  class="nerd-orb nerd-orb--schwebt font-mono"
+                  [class.nerd-orb--gemessen]="pair().a !== null"
+                >
+                  {{ pair().a ?? '?' }}
+                </div>
+                <span class="font-mono text-sm text-slate-300">Qubit A</span>
+              </div>
+
+              <div class="nerd-link" [class.nerd-link--aus]="pairMode() === 'unabhaengig'"></div>
+
+              <div class="flex flex-col items-center gap-2">
+                <div
+                  class="nerd-orb nerd-orb--schwebt nerd-orb--spaet font-mono"
+                  [class.nerd-orb--gemessen]="pair().b !== null"
+                >
+                  {{ pair().b ?? '?' }}
+                </div>
+                <span class="font-mono text-sm text-slate-300">Qubit B</span>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3 mt-6">
+              <button
+                (click)="measurePair('a')"
+                [disabled]="pair().a !== null"
+                class="px-4 py-2 rounded-md border-2 border-cyan-300 bg-cyan-400/10 text-base font-semibold text-cyan-200 hover:bg-cyan-400/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                A messen
+              </button>
+              <button
+                (click)="measurePair('b')"
+                [disabled]="pair().b !== null"
+                class="px-4 py-2 rounded-md border-2 border-cyan-300 bg-cyan-400/10 text-base font-semibold text-cyan-200 hover:bg-cyan-400/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                B messen
+              </button>
+              <button
+                (click)="newPair()"
+                class="px-4 py-2 rounded-md bg-slate-900 border border-slate-700 text-base text-slate-200 hover:border-cyan-400 hover:text-cyan-300 transition-colors"
+              >
+                Neues Paar
+              </button>
+              <button
+                (click)="measureManyPairs()"
+                class="px-4 py-2 rounded-md bg-slate-900 border border-slate-700 text-base text-slate-200 hover:border-cyan-400 hover:text-cyan-300 transition-colors"
+              >
+                100 Paare messen
+              </button>
+            </div>
+
+            <p class="font-mono text-sm text-slate-300 mt-4">
+              Übereinstimmung: {{ pairStats().same }} von {{ pairStats().total }}
+              @if (pairStats().total > 0) {
+                ({{ pairStats().percent }} %)
+              }
+            </p>
+          </div>
+
+          <div class="mt-4 p-4 rounded-md border border-slate-700 bg-slate-900/60">
+            <p class="text-base text-slate-200">{{ pairNote() }}</p>
+          </div>
+
+          <p class="text-base text-slate-300 mt-4">
+            Wichtig: Damit lassen sich keine Nachrichten schneller als Licht schicken. Jedes
+            einzelne Ergebnis bleibt Zufall, die Verbindung zeigt sich erst im Vergleich beider
+            Listen. Außerdem gilt das Ganze hier für gleiche Messrichtungen. Erst bei wechselnden
+            Messrichtungen unterscheidet sich Verschränkung von zwei vorher abgesprochenen Münzen.
+          </p>
+        </section>
+      }
+
+      @case ('stand') {
+        <section class="nerd-panel p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+          <h2 class="text-lg font-semibold text-cyan-300 mb-3">Quantencomputer: Wo stehen wir?</h2>
+          <p class="text-base text-slate-300 mb-2">
+            Quantencomputer sollen bestimmte Aufgaben lösen, an denen normale Computer scheitern,
+            etwa das Simulieren von Molekülen und Materialien. Das größte Problem sind Fehler: Qubits
+            sind extrem empfindlich.
+          </p>
+          <p class="text-sm text-slate-400 mb-4">Klick einen Meilenstein an.</p>
+
+          <div class="flex flex-wrap gap-2 mb-4">
+            @for (item of milestones; track item.year; let index = $index) {
+              <button
+                (click)="selectMilestone(index)"
+                [attr.aria-pressed]="milestoneIndex() === index"
+                [class]="
+                  milestoneIndex() === index
+                    ? 'px-4 py-2 rounded-md border-2 border-cyan-300 bg-cyan-400/10 font-mono text-base font-semibold text-cyan-200'
+                    : 'px-4 py-2 rounded-md border-2 border-slate-600 font-mono text-base text-slate-300 hover:border-cyan-500/50 transition-colors'
+                "
+              >
+                {{ item.year }}
+              </button>
+            }
+          </div>
+
+          <div class="nerd-feld p-4 sm:p-6 rounded-lg border">
+            <h3 class="text-base font-semibold text-cyan-200 mb-2">
+              {{ currentMilestone().title }}
+            </h3>
+            <p class="text-base text-slate-200">{{ currentMilestone().text }}</p>
+          </div>
+
+          <h3 class="text-base font-semibold text-cyan-200 mt-8 mb-2">Fakt oder Mythos?</h3>
+          <div class="flex flex-col gap-5">
+            @for (claim of claims; track $index) {
+              <div class="border-t border-slate-700 pt-5 first:border-t-0 first:pt-0">
+                <p class="text-base text-slate-200 mb-3">{{ claim.text }}</p>
+
+                @if (!isClaimAnswered($index)) {
+                  <div class="flex gap-3">
+                    <button
+                      (click)="answerClaim($index, true)"
+                      class="px-4 py-2 rounded-md bg-slate-900 border border-slate-700 text-slate-200 hover:border-cyan-400 hover:text-cyan-300 transition-colors"
+                    >
+                      Fakt
+                    </button>
+                    <button
+                      (click)="answerClaim($index, false)"
+                      class="px-4 py-2 rounded-md bg-slate-900 border border-slate-700 text-slate-200 hover:border-cyan-400 hover:text-cyan-300 transition-colors"
+                    >
+                      Mythos
+                    </button>
+                  </div>
+                } @else {
+                  <p
+                    class="text-base"
+                    [class.text-cyan-300]="wasClaimCorrect($index)"
+                    [class.text-orange-400]="!wasClaimCorrect($index)"
+                  >
+                    {{ wasClaimCorrect($index) ? 'Richtig geraten.' : 'Falsch geraten.' }}
+                    {{ claim.explanation }}
+                  </p>
+                }
+              </div>
+            }
+          </div>
+        </section>
+      }
+
+      @case ('quanten-ki') {
+        <section class="nerd-panel p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+          <h2 class="text-lg font-semibold text-cyan-300 mb-3">Quanten und KI: Zwei Richtungen</h2>
+          <p class="text-base text-slate-300 mb-2">
+            Die beiden Felder treffen sich in zwei Richtungen. Entweder soll ein Quantencomputer die
+            KI besser machen (Quanten für KI), oder KI hilft dabei, Quantencomputer zum Laufen zu
+            bringen (KI für Quanten).
+          </p>
+          <p class="text-sm text-slate-400 mb-4">Ordne jede Aussage einer Richtung zu.</p>
+
+          <div class="flex flex-col gap-5">
+            @for (item of sorting; track $index) {
+              <div class="border-t border-slate-700 pt-5 first:border-t-0 first:pt-0">
+                <p class="text-base text-slate-200 mb-3">{{ item.text }}</p>
+
+                @if (!isSortAnswered($index)) {
+                  <div class="flex flex-col gap-3 sm:flex-row">
+                    <button
+                      (click)="answerSort($index, 'ki-fuer-quanten')"
+                      class="px-4 py-2 rounded-md bg-slate-900 border border-slate-700 text-slate-200 hover:border-cyan-400 hover:text-cyan-300 transition-colors"
+                    >
+                      KI für Quanten
+                    </button>
+                    <button
+                      (click)="answerSort($index, 'quanten-fuer-ki')"
+                      class="px-4 py-2 rounded-md bg-slate-900 border border-slate-700 text-slate-200 hover:border-cyan-400 hover:text-cyan-300 transition-colors"
+                    >
+                      Quanten für KI
+                    </button>
+                  </div>
+                } @else {
+                  <p
+                    class="text-base"
+                    [class.text-cyan-300]="wasSortCorrect($index)"
+                    [class.text-orange-400]="!wasSortCorrect($index)"
+                  >
+                    {{ wasSortCorrect($index) ? 'Richtig zugeordnet.' : 'Falsch zugeordnet.' }}
+                    {{ item.explanation }}
+                  </p>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2 mt-8">
+            <div class="p-4 rounded-md border border-slate-700 bg-slate-900/60">
+              <h3 class="text-base font-semibold text-orange-400 mb-2">Quanten für KI</h3>
+              <p class="text-base text-slate-300">
+                Für Texte, Bilder und andere Alltagsdaten ist bisher kein praktischer Vorteil
+                nachgewiesen. Ein Hindernis: Die Daten müssen erst aufwendig in den Quantencomputer
+                geladen werden. Für das Lernen über Quantensysteme selbst ist ein Vorteil gezeigt.
+              </p>
+            </div>
+            <div class="p-4 rounded-md border border-slate-700 bg-slate-900/60">
+              <h3 class="text-base font-semibold text-emerald-300 mb-2">KI für Quanten</h3>
+              <p class="text-base text-slate-300">
+                Das läuft schon. Maschinelles Lernen hilft beim Erkennen und Korrigieren von Fehlern
+                und beim Einstellen der Quantenchips.
+              </p>
+            </div>
+          </div>
+        </section>
+      }
+
+      @case ('krypto') {
+        <section class="nerd-panel p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+          <h2 class="text-lg font-semibold text-cyan-300 mb-3">
+            Quantensicher: Wie lange bleibt ein Geheimnis geheim?
+          </h2>
+          <p class="text-base text-slate-300 mb-2">
+            Ein ausreichend großer Quantencomputer könnte heutige Verschlüsselung wie RSA und
+            elliptische Kurven knacken. Den braucht es noch nicht, doch Angreifer können
+            verschlüsselte Daten schon heute mitschneiden und später entschlüsseln. Das heißt
+            "Harvest now, decrypt later".
+          </p>
+          <p class="text-sm text-slate-400 mb-4">
+            Stell ein, wie viele Jahre deine Daten geheim bleiben müssen.
+          </p>
+
+          <div class="flex flex-wrap gap-2 mb-4">
+            @for (preset of presets; track preset.label) {
+              <button
+                (click)="setYears(preset.years)"
+                class="px-4 py-2 rounded-md bg-slate-900 border border-slate-700 text-base text-slate-200 hover:border-cyan-400 hover:text-cyan-300 transition-colors"
+              >
+                {{ preset.label }}
+              </button>
+            }
+          </div>
+
+          <div class="nerd-feld p-4 sm:p-6 rounded-lg border">
+            <label for="krypto-regler" class="font-mono text-sm tracking-widest text-slate-400">
+              GEHEIM BLEIBEN FÜR
+            </label>
+            <output
+              for="krypto-regler"
+              class="block font-mono text-3xl font-bold text-cyan-300 mt-1"
+            >
+              {{ years() }} {{ years() === 1 ? 'Jahr' : 'Jahre' }} (bis {{ expiryYear() }})
+            </output>
+            <input
+              id="krypto-regler"
+              type="range"
+              min="1"
+              max="40"
+              step="1"
+              class="nerd-slider mt-2"
+              [value]="years()"
+              [style.--fill]="(years() / 40) * 100 + '%'"
+              (input)="onYears($event)"
+            />
+
+            <div class="relative mt-10 mb-10 h-3 rounded-full bg-slate-800">
+              <span
+                class="absolute inset-y-0 left-0 rounded-l-full bg-emerald-400/60"
+                [style.width.%]="bandEarly"
+              ></span>
+              <span
+                class="absolute inset-y-0 bg-amber-400/60"
+                [style.left.%]="bandEarly"
+                [style.width.%]="bandMiddle"
+              ></span>
+              <span
+                class="absolute inset-y-0 right-0 rounded-r-full bg-pink-500/60"
+                [style.left.%]="bandEarly + bandMiddle"
+              ></span>
+              <span
+                class="nerd-marker absolute -top-2 h-7 w-1 rounded-full bg-white"
+                [style.left.%]="markerPercent()"
+              ></span>
+              <span
+                class="absolute top-5 -translate-x-1/2 font-mono text-sm text-slate-300"
+                [style.left.%]="bandEarly"
+                >2030</span
+              >
+              <span
+                class="absolute -top-8 -translate-x-1/2 font-mono text-sm text-slate-300"
+                [style.left.%]="bandEarly + bandMiddle"
+                >2035</span
+              >
+            </div>
+
+            <p class="text-base font-semibold" [class]="verdict().tone">{{ verdict().title }}</p>
+            <p class="text-base text-slate-200 mt-1">{{ verdict().text }}</p>
+          </div>
+
+          <h3 class="text-base font-semibold text-cyan-200 mt-8 mb-2">Was dagegen hilft</h3>
+          <ul class="list-disc pl-5 text-base text-slate-300 flex flex-col gap-1">
+            <li>
+              Post-Quanten-Kryptografie: Verfahren, die auch Quantencomputer nicht knacken sollen. Sie
+              laufen auf normalen Computern.
+            </li>
+            <li>
+              Im August 2024 hat die US-Behörde NIST die ersten Standards veröffentlicht: ML-KEM,
+              ML-DSA und SLH-DSA. Im März 2025 kam HQC als weiteres Verfahren dazu.
+            </li>
+            <li>
+              Nach einem NIST-Entwurf sollen RSA und elliptische Kurven nach 2030 als veraltet
+              gelten und nach 2035 nicht mehr erlaubt sein.
+            </li>
+            <li>Symmetrische Verfahren wie AES-256 gelten weiterhin als sicher.</li>
+          </ul>
+        </section>
+      }
+
+      @case ('strom') {
+        <section class="nerd-panel p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+          <h2 class="text-lg font-semibold text-cyan-300 mb-3">KI und Strom</h2>
+          <p class="text-base text-slate-300 mb-2">
+            KI läuft in Rechenzentren, und die brauchen viel Strom. Die Internationale Energieagentur
+            (IEA) rechnet vor, wie stark der Bedarf wächst. Die Zahlen für 2030 und 2035 sind
+            Prognosen und hängen vom Szenario ab.
+          </p>
+          <p class="text-sm text-slate-400 mb-4">
+            Wähle ein Jahr. Die Einheit TWh steht für Terawattstunden, also Milliarden
+            Kilowattstunden.
+          </p>
+
+          <div class="flex flex-wrap gap-2 mb-4">
+            @for (item of energy; track item.year) {
+              <button
+                (click)="selectEnergy(item.year)"
+                [attr.aria-pressed]="energyYear() === item.year"
+                [class]="
+                  energyYear() === item.year
+                    ? 'px-4 py-2 rounded-md border-2 border-cyan-300 bg-cyan-400/10 font-mono text-base font-semibold text-cyan-200'
+                    : 'px-4 py-2 rounded-md border-2 border-slate-600 font-mono text-base text-slate-300 hover:border-cyan-500/50 transition-colors'
+                "
+              >
+                {{ item.year }}
+              </button>
+            }
+          </div>
+
+          <div class="nerd-feld p-4 sm:p-6 rounded-lg border">
+            <ul class="flex flex-col gap-4">
+              @for (item of energy; track item.year) {
+                <li class="flex flex-col gap-1">
+                  <div class="flex justify-between gap-3 font-mono text-sm text-slate-200">
+                    <span>{{ item.year }}{{ item.forecast ? ' (Prognose)' : '' }}</span>
+                    <span>{{ item.label }} TWh</span>
+                  </div>
+                  <div class="relative h-4 rounded-full bg-slate-800">
+                    <span
+                      class="nerd-balken absolute inset-y-0 left-0 rounded-full"
+                      [class.nerd-balken--matt]="energyYear() !== item.year"
+                      [style.width.%]="(item.twh / maxTwh) * 100"
+                    ></span>
+                  </div>
+                </li>
+              }
+            </ul>
+
+            <p class="text-base text-slate-200 mt-5">{{ currentEnergy().note }}</p>
+          </div>
+
+          <div class="nerd-feld p-4 sm:p-6 rounded-lg border mt-6">
+            <label for="strom-regler" class="font-mono text-sm tracking-widest text-slate-400">
+              GRÖSSE DES RECHENZENTRUMS
+            </label>
+            <output
+              for="strom-regler"
+              class="block font-mono text-3xl font-bold text-cyan-300 mt-1"
+            >
+              {{ households() }} Haushalte
+            </output>
+            <input
+              id="strom-regler"
+              type="range"
+              min="1"
+              max="20"
+              step="1"
+              class="nerd-slider mt-2"
+              [value]="size()"
+              [style.--fill]="((size() - 1) / 19) * 100 + '%'"
+              (input)="onSize($event)"
+            />
+            <div class="flex justify-between font-mono text-sm text-slate-400">
+              <span>1× typisch</span>
+              <span>20× größte im Bau</span>
+            </div>
+            <p class="text-base text-slate-300 mt-3">
+              Ein typisches KI-Rechenzentrum braucht laut IEA so viel Strom wie 100 000 Haushalte.
+              Die größten, die gerade gebaut werden, brauchen etwa das Zwanzigfache.
+            </p>
+          </div>
+
+          <div class="mt-6 p-4 rounded-md border border-slate-700 bg-slate-900/60">
+            <p class="text-base text-slate-200">
+              Zum Vergleich: Dein Gehirn kommt mit etwa 20 Watt aus. Es lernt nicht wie ein
+              Sprachmodell mit riesigen Datenmengen, sondern anders und mit viel weniger Energie.
+            </p>
+          </div>
+        </section>
+      }
+
+      @case ('nobel') {
+        <section class="nerd-panel p-6 rounded-xl bg-slate-800/50 border border-slate-700">
+          <h2 class="text-lg font-semibold text-cyan-300 mb-3">
+            Nobelpreise: Wenn KI und Quanten in Stockholm landen
+          </h2>
+          <p class="text-base text-slate-300 mb-2">
+            Zwei Jahre hintereinander ging der Physik-Nobelpreis an die Grundlagen dieser Themen:
+            2024 an die Wurzeln der KI, 2025 an die Wurzeln der Quantenchips. Dazu kam 2024 ein
+            Chemie-Nobelpreis für KI in der Biologie.
+          </p>
+          <p class="text-sm text-slate-400 mb-4">Wähle einen Preis.</p>
+
+          <div class="flex flex-col gap-3 sm:flex-row mb-4">
+            @for (item of prizes; track item.id) {
+              <button
+                (click)="selectPrize(item.id)"
+                [attr.aria-pressed]="prizeId() === item.id"
+                [class]="
+                  prizeId() === item.id
+                    ? 'flex-1 px-4 py-3 rounded-md border-2 border-cyan-300 bg-cyan-400/10 text-base font-semibold text-cyan-200'
+                    : 'flex-1 px-4 py-3 rounded-md border-2 border-slate-600 text-base text-slate-300 hover:border-cyan-500/50 transition-colors'
+                "
+              >
+                {{ item.year }} {{ item.field }}
+              </button>
+            }
+          </div>
+
+          <div class="nerd-feld p-4 sm:p-6 rounded-lg border">
+            <h3 class="text-base font-semibold text-cyan-200 mb-2">{{ currentPrize().names }}</h3>
+            <p class="text-base text-slate-200 mb-3">{{ currentPrize().reason }}</p>
+            <p class="text-base text-slate-300">{{ currentPrize().link }}</p>
+          </div>
+        </section>
+      }
+    }
+
+    <app-quiz [fragen]="quiz" [ergebnis]="quizResult" />
+
+    <app-glossary [terms]="glossar" />
+  </div>
+</div>
