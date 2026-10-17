@@ -21,6 +21,23 @@ interface NextWordCase {
   choices: WordChoice[];
 }
 
+interface TemperatureWord {
+  word: string;
+  logit: number;
+}
+
+interface TemperatureRow {
+  word: string;
+  percent: number;
+  label: string;
+  sampledPercent: number;
+}
+
+interface TemperaturePick {
+  word: string;
+  n: number;
+}
+
 @Component({
   selector: 'app-halluzinationen',
   imports: [Quiz, Glossary],
@@ -109,7 +126,7 @@ export class Halluzinationen {
   });
 
   glossar: GlossaryTerm[] = GRUNDBEGRIFFE.filter((term: GlossaryTerm) =>
-    ['Modell', 'Kontextfenster'].includes(term.name),
+    ['Modell', 'Kontextfenster', 'Temperatur'].includes(term.name),
   );
 
   /**
@@ -155,6 +172,161 @@ export class Halluzinationen {
    */
   pickWord(word: string) {
     this.pickedWord.set(word);
+  }
+
+  temperature = signal(1);
+
+  rollCounts = signal<Record<string, number>>({});
+
+  lastPick = signal<TemperaturePick | null>(null);
+
+  private pickNumber = 0;
+
+  temperatureWords: TemperatureWord[] = [
+    { word: 'blau', logit: 3.0 },
+    { word: 'grau', logit: 2.4 },
+    { word: 'bewölkt', logit: 2.0 },
+    { word: 'klar', logit: 1.5 },
+    { word: 'rot', logit: 0.8 },
+    { word: 'Käse', logit: 0 },
+  ];
+
+  probabilities = computed(() => {
+    const temp = this.temperature();
+    const logits = this.temperatureWords.map((entry) => entry.logit);
+
+    if (temp === 0) {
+      const top = logits.indexOf(Math.max(...logits));
+      return logits.map((_, index) => (index === top ? 1 : 0));
+    }
+
+    const scaled = logits.map((logit) => logit / temp);
+    const max = Math.max(...scaled);
+    const exps = scaled.map((value) => Math.exp(value - max));
+    const sum = exps.reduce((total, value) => total + value, 0);
+    return exps.map((value) => value / sum);
+  });
+
+  total = computed(() => Object.values(this.rollCounts()).reduce((sum, count) => sum + count, 0));
+
+  rows = computed<TemperatureRow[]>(() => {
+    const probs = this.probabilities();
+    const counts = this.rollCounts();
+    const total = this.total();
+
+    return this.temperatureWords.map((entry, index) => ({
+      word: entry.word,
+      percent: probs[index] * 100,
+      label: this.formatPercent(probs[index] * 100),
+      sampledPercent: total === 0 ? 0 : ((counts[entry.word] ?? 0) / total) * 100,
+    }));
+  });
+
+  favorite = computed(() => {
+    const probs = this.probabilities();
+    const top = probs.indexOf(Math.max(...probs));
+    return { word: this.temperatureWords[top].word, label: this.formatPercent(probs[top] * 100) };
+  });
+
+  diversityPercent = computed(() => {
+    const probs = this.probabilities();
+    const entropy = probs.reduce((sum, p) => (p > 0 ? sum - p * Math.log(p) : sum), 0);
+    return Math.round((entropy / Math.log(probs.length)) * 100);
+  });
+
+  fillPercent = computed(() => (this.temperature() / 2) * 100);
+
+  accent = computed(() => `hsl(${Math.round(190 - (this.temperature() / 2) * 170)} 95% 60%)`);
+
+  temperatureLabel = computed(() => this.temperature().toFixed(1).replace('.', ','));
+
+  mode = computed(() => {
+    const temp = this.temperature();
+    if (temp === 0) return 'Deterministisch';
+    if (temp <= 0.5) return 'Präzise';
+    if (temp <= 1.2) return 'Ausgewogen';
+    if (temp <= 1.7) return 'Kreativ';
+    return 'Chaos';
+  });
+
+  temperatureNote = computed(() => {
+    const temp = this.temperature();
+    if (temp === 0) {
+      return 'Bei 0 würfelt die KI nicht. Sie nimmt immer das wahrscheinlichste Wort, und jede Wiederholung der Frage liefert dieselbe Antwort. Ist dieses Wort falsch, bleibt es falsch.';
+    }
+    if (temp <= 0.5) {
+      return 'Das wahrscheinlichste Wort gewinnt fast jedes Mal. Antworten bleiben gleichbleibend und vorhersehbar.';
+    }
+    if (temp <= 1.2) {
+      return 'Das Wahrscheinlichste liegt vorn, aber Alternativen kommen regelmäßig vor. So klingen Antworten natürlich und abwechslungsreich.';
+    }
+    if (temp <= 1.7) {
+      return 'Die Wahrscheinlichkeiten rücken zusammen. Ungewöhnliche Wörter kommen oft vor: das bringt Abwechslung, macht Fehler aber wahrscheinlicher.';
+    }
+    return 'Fast alle Wörter haben ähnliche Chancen, auch unsinnige wie "Käse". Die Antworten werden unberechenbar, und Halluzinationen werden deutlich wahrscheinlicher.';
+  });
+
+  /**
+   * Sets the temperature from the slider and restarts the roll statistics.
+   * @param event Input event of the range slider.
+   */
+  onTemperature(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.temperature.set(Number(input.value));
+    this.rollCounts.set({});
+    this.lastPick.set(null);
+  }
+
+  /**
+   * Draws words according to the current probabilities and adds them to the statistics.
+   * @param times Number of draws.
+   */
+  roll(times: number) {
+    const probs = this.probabilities();
+    const counts = { ...this.rollCounts() };
+    let word = '';
+
+    for (let i = 0; i < times; i++) {
+      word = this.drawWord(probs);
+      counts[word] = (counts[word] ?? 0) + 1;
+    }
+
+    this.rollCounts.set(counts);
+    this.pickNumber += 1;
+    this.lastPick.set({ word, n: this.pickNumber });
+  }
+
+  /**
+   * Clears all draws and the last picked word.
+   */
+  resetRolls() {
+    this.rollCounts.set({});
+    this.lastPick.set(null);
+  }
+
+  /**
+   * Draws one word at random, weighted by the given probabilities.
+   * @param probs Probability of each word, in the order of temperatureWords.
+   * @returns The drawn word.
+   */
+  private drawWord(probs: number[]): string {
+    let remaining = Math.random();
+
+    for (let i = 0; i < probs.length; i++) {
+      remaining -= probs[i];
+      if (remaining < 0) return this.temperatureWords[i].word;
+    }
+
+    return this.temperatureWords[probs.length - 1].word;
+  }
+
+  /**
+   * Formats a percentage with one decimal and a German decimal comma.
+   * @param value Percentage between 0 and 100.
+   * @returns The formatted number.
+   */
+  private formatPercent(value: number): string {
+    return value.toFixed(1).replace('.', ',');
   }
 
   quiz: QuizQuestion[] = [

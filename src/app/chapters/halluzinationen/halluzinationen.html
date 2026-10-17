@@ -118,6 +118,142 @@
       }
     </section>
 
+    <section
+      class="temp-section p-6 rounded-xl bg-slate-800/50 border border-slate-700"
+      [style.--accent]="accent()"
+      [style.--fill]="fillPercent() + '%'"
+    >
+      <h2 class="text-lg font-semibold text-cyan-300 mb-3">
+        Temperatur: Wie mutig würfelt die KI?
+      </h2>
+      <p class="text-base text-slate-300 mb-2">
+        Zu jedem möglichen Wort hat die KI eine Wahrscheinlichkeit. Die Temperatur legt fest, wie
+        stark sie sich daran hält. Bei niedriger Temperatur gewinnt fast immer das wahrscheinlichste
+        Wort. Bei hoher Temperatur bekommen auch Außenseiter eine echte Chance.
+      </p>
+      <p class="text-sm text-slate-400 mb-4">
+        Schieb den Regler und würfle. Der orange Balken zeigt, was wirklich gezogen wurde.
+      </p>
+
+      <div class="temp-panel rounded-lg border p-4 sm:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <label for="temp-regler" class="font-mono text-sm tracking-widest text-slate-400">
+            TEMPERATUR
+          </label>
+          <span class="temp-chip px-3 py-1 rounded-full border font-mono text-sm">{{
+            mode()
+          }}</span>
+        </div>
+
+        <output for="temp-regler" class="temp-readout block font-mono text-5xl font-bold mt-2">
+          {{ temperatureLabel() }}
+        </output>
+
+        <input
+          id="temp-regler"
+          type="range"
+          min="0"
+          max="2"
+          step="0.1"
+          class="temp-slider mt-3"
+          [value]="temperature()"
+          [attr.aria-valuetext]="temperatureLabel() + ', ' + mode()"
+          (input)="onTemperature($event)"
+        />
+
+        <div class="flex justify-between font-mono text-sm text-slate-400">
+          <span>0 fest</span>
+          <span>1</span>
+          <span>2 wild</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mt-5">
+          <div class="p-3 rounded-md border border-slate-700 bg-slate-900/60">
+            <p class="font-mono text-sm text-slate-400">Zufallsgrad</p>
+            <p class="font-mono text-lg text-slate-200">{{ diversityPercent() }} %</p>
+          </div>
+          <div class="p-3 rounded-md border border-slate-700 bg-slate-900/60">
+            <p class="font-mono text-sm text-slate-400">Favorit</p>
+            <p class="font-mono text-lg text-slate-200 wrap-break-word">
+              {{ favorite().word }} {{ favorite().label }} %
+            </p>
+          </div>
+        </div>
+
+        <p class="font-mono text-base text-slate-200 mt-5 wrap-break-word">
+          &gt; Der Himmel über Berlin ist heute
+          @if (lastPick(); as pick) {
+            @for (item of [pick]; track item.n) {
+              <span class="temp-pick">{{ item.word }}</span>
+            }
+          } @else {
+            <span class="text-slate-500">?</span>
+          }
+          <span class="temp-cursor"></span>
+        </p>
+
+        <ul class="flex flex-col gap-3 mt-5">
+          @for (row of rows(); track row.word) {
+            <li class="flex flex-col gap-1">
+              <div class="flex justify-between gap-3 font-mono text-sm text-slate-200">
+                <span [class.text-orange-300]="lastPick()?.word === row.word">{{ row.word }}</span>
+                <span>{{ row.label }} %</span>
+              </div>
+              <div class="relative h-3 rounded-full bg-slate-800">
+                <span
+                  class="temp-bar absolute inset-y-0 left-0 rounded-full"
+                  [style.width.%]="row.percent"
+                ></span>
+              </div>
+              <div class="relative h-1.5 rounded-full bg-slate-800/60">
+                <span
+                  class="temp-sample absolute inset-y-0 left-0 rounded-full bg-orange-400"
+                  [style.width.%]="row.sampledPercent"
+                ></span>
+              </div>
+            </li>
+          }
+        </ul>
+
+        <p class="text-sm text-slate-400 mt-3">
+          Cyan: berechnete Wahrscheinlichkeit. Orange: tatsächlich gewürfelt. Beim Verschieben des
+          Reglers startet die Zählung neu.
+        </p>
+
+        <div class="flex flex-wrap items-center gap-3 mt-5">
+          <button
+            (click)="roll(1)"
+            class="px-4 py-2 rounded-md border-2 border-cyan-300 bg-cyan-400/10 text-base font-semibold text-cyan-200 hover:bg-cyan-400/20 transition-colors"
+          >
+            Würfeln
+          </button>
+          <button
+            (click)="roll(100)"
+            class="px-4 py-2 rounded-md bg-slate-900 border border-slate-700 text-base text-slate-200 hover:border-cyan-400 hover:text-cyan-300 transition-colors"
+          >
+            100× würfeln
+          </button>
+          <button
+            (click)="resetRolls()"
+            [disabled]="total() === 0"
+            class="px-4 py-2 rounded-md bg-slate-900 border border-slate-700 text-base text-slate-200 hover:border-cyan-400 hover:text-cyan-300 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            Leeren
+          </button>
+          <span class="font-mono text-sm text-slate-400">Würfe: {{ total() }}</span>
+        </div>
+      </div>
+
+      <div class="mt-4 p-4 rounded-md border border-slate-700 bg-slate-900/60">
+        <p class="text-base text-slate-200">{{ temperatureNote() }}</p>
+      </div>
+
+      <p class="text-base text-slate-300 mt-4">
+        Wichtig: Eine niedrige Temperatur macht Antworten gleichbleibender, aber nicht richtiger.
+        Fehlt das Wissen, wird der Fehler nur zuverlässig wiederholt.
+      </p>
+    </section>
+
     <section class="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
       <h2 class="text-lg font-semibold text-cyan-300 mb-3">Wissenslücke oder Halluzination?</h2>
       <p class="text-base text-slate-300 mb-4">
