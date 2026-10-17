@@ -66,6 +66,12 @@ export class Dashboard {
       icon: '🤖',
     },
     {
+      path: '/ki-agenten',
+      title: 'KI-Agenten',
+      description: 'Wie arbeiten KI-Agenten selbstständig und wo liegen ihre Grenzen?',
+      icon: '🦾',
+    },
+    {
       path: '/nerd-ecke',
       title: 'Nerd-Ecke',
       description: 'Quantentechnik, KI und mehr zum Ausprobieren.',
@@ -75,12 +81,6 @@ export class Dashboard {
       title: 'News',
       description: 'Alles rund um KI, tagesaktuell.',
       icon: '📰',
-      bald: true,
-    },
-    {
-      title: 'KI-Agenten',
-      description: 'Wie arbeiten KI-Agenten selbstständig und wo liegen ihre Grenzen?',
-      icon: '🦾',
       bald: true,
     },
     {

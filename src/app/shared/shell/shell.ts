@@ -17,6 +17,7 @@ const KAPITEL_FARBEN: Record<string, Farbe> = {
   halluzinationen: 'pink',
   bias: 'pink',
   'nerd-ecke': 'violet',
+  'ki-agenten': 'violet',
 };
 
 /**

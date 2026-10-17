@@ -13,6 +13,7 @@ import { NeuronaleNetze } from './chapters/neuronale-netze/neuronale-netze';
 import { KiEinrichten } from './chapters/ki-einrichten/ki-einrichten';
 import { Modelle } from './chapters/modelle/modelle';
 import { NerdEcke } from './chapters/nerd-ecke/nerd-ecke';
+import { KiAgenten } from './chapters/ki-agenten/ki-agenten';
 
 export const routes: Routes = [
   { path: '', component: Landing, pathMatch: 'full' },
@@ -32,6 +33,7 @@ export const routes: Routes = [
       { path: 'ki-einrichten', component: KiEinrichten },
       { path: 'modelle', component: Modelle },
       { path: 'nerd-ecke', component: NerdEcke },
+      { path: 'ki-agenten', component: KiAgenten },
     ],
   },
 ];

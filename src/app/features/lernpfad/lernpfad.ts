@@ -164,6 +164,7 @@ export class Lernpfad {
           beschreibung: 'Wie arbeiten KI-Agenten selbstständig?',
           icon: '🦾',
           schwierigkeit: 3,
+          path: '/ki-agenten',
         },
         {
           titel: 'Datenschutz & Sicherheit',
