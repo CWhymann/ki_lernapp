@@ -39,11 +39,6 @@
 }
 
 .kopf-motiv {
-  position: absolute;
-  top: 1rem;
-  right: 1.5rem;
-  width: 6rem;
-  height: 6rem;
   fill: none;
   stroke: var(--color-cyan-300);
   stroke-width: 2;

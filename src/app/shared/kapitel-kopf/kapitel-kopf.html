@@ -4,7 +4,11 @@
   <div class="kopf-sterne" aria-hidden="true"></div>
   <div class="kopf-nebel" aria-hidden="true"></div>
 
-  <svg class="kopf-motiv hidden md:block" viewBox="0 0 120 120" aria-hidden="true">
+  <svg
+    class="kopf-motiv mx-auto mb-4 block h-24 w-24 md:absolute md:top-4 md:right-6 md:mx-0 md:mb-0"
+    viewBox="0 0 120 120"
+    aria-hidden="true"
+  >
     @switch (daten().id) {
       @case ('prompting') {
         <path
