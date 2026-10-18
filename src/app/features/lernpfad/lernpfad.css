@@ -210,6 +210,46 @@
   animation: ziel-treffer 0.5s ease-out infinite;
 }
 
+.agent-geschoss {
+  opacity: 0;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+.lernpfad-root:has(.pfad-stufe-1:hover) .agent-geschoss-1,
+.lernpfad-root:has(.pfad-stufe-2:hover) .agent-geschoss-2,
+.lernpfad-root:has(.pfad-stufe-3:hover) .agent-geschoss-3,
+.lernpfad-root:has(.pfad-stufe-4:hover) .agent-geschoss-4 {
+  animation: geschoss 0.7s linear infinite;
+}
+
+.lernpfad-root:has(.pfad-stufe-1:hover) .agent-geschoss-1 {
+  --dx: -132px;
+  --dy: 147px;
+}
+
+.lernpfad-root:has(.pfad-stufe-2:hover) .agent-geschoss-2 {
+  --dx: -32px;
+  --dy: 147px;
+}
+
+.lernpfad-root:has(.pfad-stufe-3:hover) .agent-geschoss-3 {
+  --dx: 32px;
+  --dy: 147px;
+}
+
+.lernpfad-root:has(.pfad-stufe-4:hover) .agent-geschoss-4 {
+  --dx: 132px;
+  --dy: 147px;
+}
+
+.lernpfad-root:has(.pfad-stufe-1:hover) .agent-ziel-1,
+.lernpfad-root:has(.pfad-stufe-2:hover) .agent-ziel-2,
+.lernpfad-root:has(.pfad-stufe-3:hover) .agent-ziel-3,
+.lernpfad-root:has(.pfad-stufe-4:hover) .agent-ziel-4 {
+  filter: drop-shadow(0 0 10px currentColor);
+  stroke-width: 4;
+}
+
 .agent-funke {
   transform-box: fill-box;
   transform-origin: center;
@@ -238,13 +278,35 @@
   .agent-lid,
   .agent-laser,
   .agent-ziel,
-  .agent-funke {
+  .agent-funke,
+  .agent-geschoss {
     animation: none;
     transition: none;
   }
 
   .agent-laser {
     opacity: 1;
+  }
+
+  .agent-geschoss {
+    opacity: 0;
+  }
+}
+
+@keyframes geschoss {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx), var(--dy));
+    opacity: 0;
   }
 }
 
