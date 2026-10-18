@@ -56,3 +56,25 @@
 - Arbeitsregeln: docs/regeln.md
 - Vor jeder Antwort prüfen, nur ausführen, was beauftragt ist
 - Komplette Dateien liefern, Reihenfolge HTML, TS, CSS
+
+## Offen laut Prüfung (18.10.2026)
+
+### Marktreife, noch nicht im Code
+
+- Fortschritt speichern: Kein `localStorage` oder `sessionStorage` im Projekt. Beim nächsten Besuch startet alles neu.
+- Meta-Tags: In `index.html` stehen nur Titel, Viewport und Favicon. Description und Open-Graph-Tags fehlen für Link-Vorschauen.
+- Landingpage-Screenshots: Im Repo liegen keine Bilder, nur `favicon.ico`. Der Matrix-Effekt ist vorhanden.
+- News-Seite: Die Edge Function `rss-news` liegt nur als Code im Repo und ist nicht deployt. Eine News-Seite gibt es nicht.
+
+### Neue Themen aus plan.md
+
+- Datenschutz und Sicherheit fehlt als Kapitel. Die Route `/datenschutz` ist bereits die DSGVO-Seite, das Kapitel braucht also einen anderen Pfad.
+
+### Auffällig
+
+- `index.html` hat `lang="en"`, die App ist aber deutsch. Das betrifft Barrierefreiheit und Suche.
+- Schriftgrößen unter 14px: `ki-agenten.css` (Zeile 126, 13px) und `nerd-ecke.css` (Zeile 123, 12px).
+- `plan.md` nennt `ki-agenten` und `nerd-ecke` noch als offen. Die Seiten existieren bereits.
+- `docs/app-ziel.md` enthält dieselben Arbeitsregeln wie `docs/regeln.md` und beginnt mit den Regeln statt mit dem Ziel.
+- Die README ist noch der Standardtext der Angular CLI.
+- Offene Entscheidung: In `marktreife.md` ist noch nicht festgelegt, welches Kapitel zuerst vollständig ausgebaut wird.
