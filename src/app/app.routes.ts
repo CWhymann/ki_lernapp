@@ -3,6 +3,7 @@ import { Landing } from './features/landing/landing';
 import { Dashboard } from './features/dashboard/dashboard';
 import { Geschichte } from './features/geschichte/geschichte';
 import { Lernpfad } from './features/lernpfad/lernpfad';
+import { Impressum } from './features/impressum/impressum';
 import { Shell } from './shared/shell/shell';
 import { Prompting } from './chapters/prompting/prompting';
 import { Training } from './chapters/training/training';
@@ -34,6 +35,7 @@ export const routes: Routes = [
       { path: 'modelle', component: Modelle },
       { path: 'nerd-ecke', component: NerdEcke },
       { path: 'ki-agenten', component: KiAgenten },
+      { path: 'impressum', component: Impressum },
     ],
   },
 ];
