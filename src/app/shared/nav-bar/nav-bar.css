@@ -1,0 +1,17 @@
+.nav-panel {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-cyan-400) 45%, transparent) transparent;
+}
+
+.nav-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.nav-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nav-panel::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-cyan-400) 45%, transparent);
+  border-radius: 9999px;
+}
