@@ -36,14 +36,6 @@
   text-shadow: 0 0 24px color-mix(in srgb, var(--color-cyan-400) 55%, transparent);
 }
 
-.nerd-atom {
-  position: absolute;
-  top: 1rem;
-  right: 1.5rem;
-  width: 5.5rem;
-  height: 5.5rem;
-}
-
 .nerd-atom ellipse {
   fill: none;
   stroke: var(--color-cyan-300);

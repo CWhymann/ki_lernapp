@@ -36,14 +36,6 @@
   text-shadow: 0 0 24px color-mix(in srgb, var(--color-cyan-400) 55%, transparent);
 }
 
-.ag-radar {
-  position: absolute;
-  top: 1rem;
-  right: 1.5rem;
-  width: 6rem;
-  height: 6rem;
-}
-
 .ag-radar circle:not(.ag-radar-punkt, .ag-radar-kern) {
   fill: none;
   stroke: var(--color-cyan-300);
