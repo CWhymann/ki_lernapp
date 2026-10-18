@@ -1,7 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, map } from 'rxjs';
+import { KapitelKopf } from '../kapitel-kopf/kapitel-kopf';
+import { KAPITEL_KOEPFE } from '../kapitel-kopf/kapitel-koepfe';
 import { NavBar } from '../nav-bar/nav-bar';
 
 /** Accent colors of the learning path stages. */
@@ -21,28 +23,31 @@ const KAPITEL_FARBEN: Record<string, Farbe> = {
 };
 
 /**
- * Returns the accent color for a URL, based on the learning path stage of its chapter.
+ * Returns the route path of a URL without slash, query and fragment.
  * @param url Current router URL.
- * @returns Accent color, cyan by default.
+ * @returns Path such as "prompting".
  */
-function farbeFuerUrl(url: string): Farbe {
-  const pfad = url.split('?')[0].split('#')[0].replace(/^\//, '');
-  return KAPITEL_FARBEN[pfad] ?? 'cyan';
+function pfadFuerUrl(url: string): string {
+  return url.split('?')[0].split('#')[0].replace(/^\//, '');
 }
 
 @Component({
   selector: 'app-shell',
-  imports: [RouterOutlet, NavBar],
+  imports: [RouterOutlet, NavBar, KapitelKopf],
   templateUrl: './shell.html',
 })
 export class Shell {
   private readonly router = inject(Router);
 
-  readonly farbe = toSignal(
+  private readonly pfad = toSignal(
     this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
-      map(() => farbeFuerUrl(this.router.url)),
+      map(() => pfadFuerUrl(this.router.url)),
     ),
-    { initialValue: farbeFuerUrl(this.router.url) },
+    { initialValue: pfadFuerUrl(this.router.url) },
   );
+
+  readonly farbe = computed(() => KAPITEL_FARBEN[this.pfad()] ?? 'cyan');
+
+  readonly kopf = computed(() => KAPITEL_KOEPFE[this.pfad()] ?? null);
 }

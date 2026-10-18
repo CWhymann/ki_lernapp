@@ -1,0 +1,206 @@
+.kopf {
+  box-shadow: 0 0 40px color-mix(in srgb, var(--color-cyan-400) 20%, transparent);
+}
+
+.kopf-sterne {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1.5px 1.5px at 40px 50px, var(--color-cyan-200), transparent),
+    radial-gradient(1px 1px at 110px 140px, #ffffff, transparent),
+    radial-gradient(1.5px 1.5px at 180px 20px, var(--color-cyan-300), transparent),
+    radial-gradient(1px 1px at 250px 200px, #ffffff, transparent),
+    radial-gradient(1px 1px at 290px 80px, var(--color-cyan-200), transparent);
+  background-size: 320px 220px;
+  opacity: 0.55;
+  animation: kopf-drift 140s linear infinite;
+}
+
+.kopf-nebel {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      40rem 20rem at 10% 0%,
+      color-mix(in srgb, var(--color-cyan-400) 18%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(32rem 24rem at 100% 55%, rgb(255 45 149 / 0.1), transparent 70%);
+}
+
+.kopf-titel {
+  text-shadow: 0 0 24px color-mix(in srgb, var(--color-cyan-400) 55%, transparent);
+}
+
+.kopf-motiv {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  width: 6rem;
+  height: 6rem;
+  fill: none;
+  stroke: var(--color-cyan-300);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--color-cyan-300) 60%, transparent));
+}
+
+.m-voll {
+  fill: var(--color-cyan-400);
+  stroke: none;
+}
+
+.m-leise {
+  opacity: 0.45;
+}
+
+.m-achse {
+  opacity: 0.4;
+}
+
+.m-puls {
+  animation: kopf-puls 1.8s ease-in-out infinite;
+}
+
+.m-v1 {
+  animation-delay: 0.3s;
+}
+
+.m-v2 {
+  animation-delay: 0.6s;
+}
+
+.m-v3 {
+  animation-delay: 0.9s;
+}
+
+.m-kurve {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: kopf-zeichnen 4s ease-in-out infinite;
+}
+
+.m-schicht {
+  fill: rgb(2 6 23 / 0.85);
+  animation: kopf-schweben 4s ease-in-out infinite alternate;
+}
+
+.m-s2 {
+  animation-delay: -1.3s;
+}
+
+.m-s3 {
+  animation-delay: -2.6s;
+}
+
+.m-ring {
+  stroke-dasharray: 6 8;
+  transform-box: view-box;
+  transform-origin: 60px 60px;
+  animation: kopf-drehen 12s linear infinite;
+}
+
+.m-frage {
+  fill: var(--color-cyan-300);
+  stroke: none;
+  font: 700 52px monospace;
+  animation: kopf-flackern 3s steps(1) infinite;
+}
+
+.m-waage {
+  transform-box: view-box;
+  transform-origin: 60px 36px;
+  animation: kopf-wiegen 5s ease-in-out infinite alternate;
+}
+
+@keyframes kopf-drift {
+  to {
+    background-position:
+      -320px 220px,
+      -320px 220px,
+      -320px 220px,
+      -320px 220px,
+      -320px 220px;
+  }
+}
+
+@keyframes kopf-puls {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes kopf-zeichnen {
+  0% {
+    stroke-dashoffset: 1;
+  }
+  60%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes kopf-schweben {
+  to {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes kopf-drehen {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes kopf-flackern {
+  0%,
+  90%,
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+  92% {
+    opacity: 0.3;
+    transform: translateX(-3px);
+  }
+  95% {
+    opacity: 0.9;
+    transform: translateX(3px);
+  }
+}
+
+@keyframes kopf-wiegen {
+  from {
+    transform: rotate(-7deg);
+  }
+  to {
+    transform: rotate(7deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kopf-sterne,
+  .m-puls,
+  .m-kurve,
+  .m-schicht,
+  .m-ring,
+  .m-frage,
+  .m-waage {
+    animation: none;
+  }
+
+  .m-kurve {
+    stroke-dashoffset: 0;
+  }
+}

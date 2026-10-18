@@ -1,0 +1,82 @@
+<header
+  class="kopf relative isolate max-w-3xl mb-8 p-6 md:p-8 rounded-xl border border-cyan-500/30 bg-slate-950/70"
+>
+  <div class="kopf-sterne" aria-hidden="true"></div>
+  <div class="kopf-nebel" aria-hidden="true"></div>
+
+  <svg class="kopf-motiv hidden md:block" viewBox="0 0 120 120" aria-hidden="true">
+    @switch (daten().id) {
+      @case ('prompting') {
+        <path
+          d="M16 22h88a6 6 0 0 1 6 6v46a6 6 0 0 1-6 6H56l-20 18V80H16a6 6 0 0 1-6-6V28a6 6 0 0 1 6-6z"
+        />
+        <circle class="m-voll m-puls" cx="40" cy="51" r="5" />
+        <circle class="m-voll m-puls m-v1" cx="60" cy="51" r="5" />
+        <circle class="m-voll m-puls m-v2" cx="80" cy="51" r="5" />
+      }
+      @case ('ki-einrichten') {
+        <rect x="34" y="34" width="52" height="52" rx="6" />
+        <rect class="m-voll m-puls" x="48" y="48" width="24" height="24" rx="3" />
+        <path
+          class="m-puls m-v1"
+          d="M46 34V16M60 34V16M74 34V16M46 86v18M60 86v18M74 86v18M34 46H16M34 60H16M34 74H16M86 46h18M86 60h18M86 74h18"
+        />
+      }
+      @case ('tokens') {
+        <rect class="m-voll m-puls" x="12" y="30" width="30" height="16" rx="4" />
+        <rect class="m-voll m-puls m-v1" x="48" y="30" width="18" height="16" rx="4" />
+        <rect class="m-voll m-puls m-v2" x="72" y="30" width="36" height="16" rx="4" />
+        <rect class="m-voll m-puls m-v1" x="12" y="54" width="22" height="16" rx="4" />
+        <rect class="m-voll m-puls m-v2" x="40" y="54" width="40" height="16" rx="4" />
+        <rect class="m-voll m-puls m-v3" x="86" y="54" width="22" height="16" rx="4" />
+        <rect class="m-voll m-puls m-v2" x="12" y="78" width="36" height="16" rx="4" />
+        <rect class="m-voll m-puls m-v3" x="54" y="78" width="20" height="16" rx="4" />
+      }
+      @case ('training') {
+        <path class="m-achse" d="M16 100V16M16 100h92" />
+        <path class="m-kurve" pathLength="1" d="M20 92C40 88 50 60 66 46S96 28 106 24" />
+        <circle class="m-voll m-puls" cx="106" cy="24" r="4" />
+      }
+      @case ('neuronale-netze') {
+        <path
+          class="m-leise"
+          d="M20 28L60 40M20 28L60 80M20 60L60 40M20 60L60 80M20 92L60 40M20 92L60 80M60 40L100 60M60 80L100 60"
+        />
+        <circle class="m-voll m-puls" cx="20" cy="28" r="6" />
+        <circle class="m-voll m-puls m-v1" cx="20" cy="60" r="6" />
+        <circle class="m-voll m-puls m-v2" cx="20" cy="92" r="6" />
+        <circle class="m-voll m-puls m-v2" cx="60" cy="40" r="6" />
+        <circle class="m-voll m-puls m-v3" cx="60" cy="80" r="6" />
+        <circle class="m-voll m-puls m-v3" cx="100" cy="60" r="7" />
+      }
+      @case ('modelle') {
+        <path class="m-schicht m-s3" d="M60 62L104 82L60 102L16 82z" />
+        <path class="m-schicht m-s2" d="M60 42L104 62L60 82L16 62z" />
+        <path class="m-schicht m-s1" d="M60 22L104 42L60 62L16 42z" />
+      }
+      @case ('halluzinationen') {
+        <circle cx="60" cy="60" r="44" />
+        <circle class="m-ring" cx="60" cy="60" r="30" />
+        <text class="m-frage" x="60" y="78" text-anchor="middle">?</text>
+      }
+      @case ('bias') {
+        <path d="M60 100V30M38 100h44" />
+        <g class="m-waage">
+          <path d="M20 36h80" />
+          <path d="M20 36L8 68h24zM100 36L88 68h24z" />
+        </g>
+        <circle class="m-voll" cx="60" cy="28" r="5" />
+      }
+    }
+  </svg>
+
+  <p class="md:pr-28 font-mono text-sm tracking-widest uppercase text-cyan-400 mb-2">
+    {{ daten().kicker }}
+  </p>
+  <h1
+    class="kopf-titel md:pr-28 text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-white mb-4 wrap-break-word"
+  >
+    {{ daten().titel }}
+  </h1>
+  <p class="text-base text-slate-300 max-w-2xl">{{ daten().text }}</p>
+</header>
