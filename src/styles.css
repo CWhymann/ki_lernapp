@@ -34,3 +34,44 @@ body {
   --color-cyan-400: #a78bfa;
   --color-cyan-500: #8b5cf6;
 }
+
+.hero-glow {
+  animation: heroPulse 4s ease-in-out infinite;
+}
+
+@keyframes heroPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 25px rgba(34, 211, 238, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 45px rgba(34, 211, 238, 0.32);
+  }
+}
+
+.scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.6), transparent);
+  animation: scan 5s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scan {
+  from {
+    top: 0;
+  }
+  to {
+    top: calc(100% - 2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-glow,
+  .scanline {
+    animation: none;
+  }
+}
