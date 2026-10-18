@@ -40,12 +40,14 @@
   </div>
 
   <div class="mt-auto flex flex-col gap-1 border-t border-cyan-500/20 pt-4">
-    <a
-      routerLink="/impressum"
-      routerLinkActive="bg-cyan-500/10 text-cyan-300 border-cyan-400"
-      class="px-4 py-2 rounded-md text-base text-slate-400 border border-transparent hover:text-cyan-300 hover:border-cyan-500/30 transition-colors"
-      >Impressum</a
-    >
+    @for (link of legal; track link.path) {
+      <a
+        [routerLink]="link.path"
+        routerLinkActive="bg-cyan-500/10 text-cyan-300 border-cyan-400"
+        class="px-4 py-1 rounded-md text-base text-slate-400 border border-transparent hover:text-cyan-300 hover:border-cyan-500/30 transition-colors"
+        >{{ link.label }}</a
+      >
+    }
   </div>
 </nav>
 
@@ -90,13 +92,15 @@
     </div>
 
     <div class="mt-6 flex flex-col gap-2 border-t border-cyan-500/20 pt-4">
-      <a
-        routerLink="/impressum"
-        (click)="closeMenu()"
-        routerLinkActive="bg-cyan-500/10 text-cyan-300 border-cyan-400"
-        class="px-4 py-3 rounded-xl text-base text-slate-300 border border-transparent hover:text-cyan-300 hover:border-cyan-500/30 transition-colors"
-        >Impressum</a
-      >
+      @for (link of legal; track link.path) {
+        <a
+          [routerLink]="link.path"
+          (click)="closeMenu()"
+          routerLinkActive="bg-cyan-500/10 text-cyan-300 border-cyan-400"
+          class="px-4 py-3 rounded-xl text-base text-slate-300 border border-transparent hover:text-cyan-300 hover:border-cyan-500/30 transition-colors"
+          >{{ link.label }}</a
+        >
+      }
     </div>
   </div>
 }

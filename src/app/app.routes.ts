@@ -4,6 +4,9 @@ import { Dashboard } from './features/dashboard/dashboard';
 import { Geschichte } from './features/geschichte/geschichte';
 import { Lernpfad } from './features/lernpfad/lernpfad';
 import { Impressum } from './features/impressum/impressum';
+import { Datenschutz } from './features/datenschutz/datenschutz';
+import { Widerruf } from './features/widerruf/widerruf';
+import { Agb } from './features/agb/agb';
 import { Shell } from './shared/shell/shell';
 import { Prompting } from './chapters/prompting/prompting';
 import { Training } from './chapters/training/training';
@@ -36,6 +39,9 @@ export const routes: Routes = [
       { path: 'nerd-ecke', component: NerdEcke },
       { path: 'ki-agenten', component: KiAgenten },
       { path: 'impressum', component: Impressum },
+      { path: 'datenschutz', component: Datenschutz },
+      { path: 'widerruf', component: Widerruf },
+      { path: 'agb', component: Agb },
     ],
   },
 ];

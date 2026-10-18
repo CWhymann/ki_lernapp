@@ -23,6 +23,13 @@ export class NavBar {
     { path: '/nerd-ecke', label: 'Nerd-Ecke' },
   ];
 
+  legal = [
+    { path: '/impressum', label: 'Impressum' },
+    { path: '/datenschutz', label: 'Datenschutz' },
+    { path: '/widerruf', label: 'Widerruf' },
+    { path: '/agb', label: 'AGB' },
+  ];
+
   /**
    * Opens or closes the mobile menu.
    */
